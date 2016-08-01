@@ -32,7 +32,7 @@ Enemy::Enemy() {
 
 Enemy::~Enemy() {
 	if (_ended) {
-		_map->setHealthRelative(-1);
+
 	}
 	ParticleEmit::emit(x, y, 50, Color(255, 0, 0, 255));
 }

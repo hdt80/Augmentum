@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Logger.h"
+#include "Ship.h"
 
 bool isEnemy(Object* o) { return dynamic_cast<Enemy*>(o) != nullptr; }
 bool isTower(Object* o) { return dynamic_cast<Tower*>(o) != nullptr; }
@@ -22,14 +23,10 @@ std::string getType(Object* o) {
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
-Map::Map() : _wave(0), _waveTime(0), _waveDelay(WAVE_DELAY),
-	_health(MAP_HEALTH), _maxHealth(_health) {
+Map::Map() {
+	_selected = new Ship(this, 0.0f, 0.0f, 10, Stats());
 
-	_enemyPath.addPoint(0, 50);
-	_enemyPath.addPoint(50, 50);
-	_enemyPath.addPoint(50, 400);
-	_enemyPath.addPoint(400, 400);
-
+	objects.push_back(_selected);
 }
 
 Map::~Map() {
@@ -45,13 +42,6 @@ Map::~Map() {
 
 // The diff is provided in milliseconds
 void Map::update(int diff) {
-	//CORE_INFO("Diff: %fs | waveTime: %fs", diff * 0.000001f, _waveTime);
-	if (_waveTime >= _waveDelay) {
-		spawnWave();
-		_waveTime = 0;
-	}
-	_waveTime += diff * 0.000001f;
-
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->update(diff);
 		if (objects[i]->isToRemove() || !inMap(objects[i])) {
@@ -91,39 +81,6 @@ void Map::calcCollisions() {
 	}
 }
 
-// Spawn a new wave
-void Map::spawnWave() { 
-	CORE_INFO("Spawning wave %i", ++_wave);
-	Stats enemyStats;
-	enemyStats["speed"] = 50;
-	objects.push_back(new Enemy(this, 10.0f, enemyStats, &_enemyPath, 20));
-}
-
-// Spawn a tower at (x, y)
-void Map::spawnTower(float x, float y) {
-	CORE_INFO("Spawning tower at (%g, %g)", x, y);
-	Stats towerStats;
-	towerStats["range"] = 200;
-	towerStats["fireRate"] = 1.0f;
-	towerStats["damage"] = 1.0f;
-	towerStats["speed"] = 0.0f;
-	towerStats["projSpeed"] = 500.0f;
-	Tower* t = new Tower(this, x, y, towerStats);
-	t->setSkillTree(SkillTrees::basicTree);
-	objects.push_back(t);
-}
-
-// Return the Object at (x, y)
-// If no Object is there return nullptr 
-Tower* Map::towerAt(float x, float y) {
-	for (unsigned int i = 0; i < objects.size(); ++i) {
-		if (objects[i]->contains(x, y) && isTower(objects[i])) {
-			return dynamic_cast<Tower*>(objects[i]);
-		}
-	}
-	return nullptr;
-}
-
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
 	return getObjectsInRange(t->getX(), t->getY(), r);
 }
@@ -149,11 +106,6 @@ std::vector<Enemy*> Map::getEnemiesInRange(float x, float y, float r) {
 }
 
 bool Map::inMap(Object* o) {
-	return (o->getX() > 0 || o->getX() < _width ||
-			o->getY() > 0 || o->getY() < _height);
-}
-
-// Tower t is shooting at e, so spawn a projectile and begin tracking it
-void Map::shoot(Tower* t, Projectile* p) {
-	objects.push_back(p);
+	return (o->getX() > 0 || o->getX() < _size.X ||
+			o->getY() > 0 || o->getY() < _size.Y);
 }

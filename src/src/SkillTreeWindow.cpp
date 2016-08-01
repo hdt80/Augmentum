@@ -34,9 +34,10 @@ void SkillTreeWindow::keyEvent(sf::Event& e) {
 }
 
 void SkillTreeWindow::mouseEvent(sf::Event& e) {
+	// Node clicked on
     SkillNode* node = _tree->getNode(e.mouseButton.x, e.mouseButton.y);
-    node->print();
     if (node) {
+		node->print();
         CORE_INFO("Clicked on \'%s\'", node->name().c_str());
         if (node->unlocked()) {
             node->incPoints();

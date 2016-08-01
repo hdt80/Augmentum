@@ -1,22 +1,19 @@
 #ifndef _MAP_H
 #define _MAP_H
 
-#include "Path.h"
 #include "Tower.h"
 #include "Enemy.h"
 #include "Projectile.h"
-#include "Color.h"
 
 #include <vector>
 #include <string>
-
-#define WAVE_DELAY 30 // Time between each wave in seconds
-#define MAP_HEALTH 10 // Enemies that can reach the end before you lose
 
 extern bool isEnemy(Object* o);
 extern bool isTower(Object* o);
 extern bool isProjectile(Object* o);
 extern std::string getType(Object* o);
+
+class Ship;
 
 class Map {
 public:
@@ -25,41 +22,30 @@ public:
 
 	void update(int diff);
 	void calcCollisions();
-	void spawnWave();
-	void spawnTower(float x, float y);
-	void shoot(Tower* shooter, Projectile* p);
 
-	Path* getPath() { return &_enemyPath; }
-	int getHealth() { return _health; }
-	int getMaxHealth() { return _maxHealth; }
+	void setSize(int w, int h) { _size.X = w; _size.Y = h;}
 
-	void setSize(int w, int h) { _width = w; _height = h;}
-	void setHealthRelative(int i) { _health += i; }
-
-	Tower* towerAt(float x, float y);
+	// If the Object is within the bounds of this Map
 	bool inMap(Object* o);
 
+	Ship* getSelected() { return _selected; }
+
+	// Get all Objects within a radius of a point
 	std::vector<Object*> getObjectsInRange(Target* t, float range);
 	std::vector<Object*> getObjectsInRange(float x, float y, float range);
-
 	std::vector<Enemy*> getEnemiesInRange(float x, float y, float range);
 
+	// All the Objects that exist in the world
 	std::vector<Object*> objects;
 
+	// Object marked for removal
 	std::vector<Object*> toRemove;
 
 protected:
-	Path _enemyPath; // Path enemies follow
+	Vector2 _size;
+	Vector2 _origin; // (0, 0)
 
-	int _width;
-	int _height;
-
-	int _wave;		// Current wave number
-	float _waveTime;// Time passed since last wave
-	int _waveDelay;	// Time between each wave
-
-	int _health;
-	int _maxHealth;
+	Ship* _selected;
 };
 
 #endif

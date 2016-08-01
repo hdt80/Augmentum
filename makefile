@@ -1,6 +1,6 @@
 # Compilers
 CXX = g++
-CXX = clang++
+#CXX = clang++
 CC = gcc
 
 UNAME := $(shell uname)
@@ -45,12 +45,17 @@ $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 run:
 	./$(EXEDIR)/$(OUTPUT_NAME)
 
+# Run gdb
+.PHONY: debug
 debug:
 	gdb ./$(EXEDIR)/$(OUTPUT_NAME)
+
+# Run valgrind
+.PHONY: val
 val:
 	valgrind ./$(EXEDIR)/$(OUTPUT_NAME)
 	
 # Cleaning everything up
 .PHONY: clean
 clean:
-	rm $(BUILDDIR)/*.o && rm $(EXEDIR)/$(OUTPUT_NAME).exe
+	rm $(BUILDDIR)/*.o && rm $(EXEDIR)/$(OUTPUT_NAME)

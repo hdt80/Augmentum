@@ -5,7 +5,6 @@
 #include "Map.h"
 #include "Particle.h"
 #include "Vector2.h"
-#include <memory>
 
 class GameWindow : public Window {
 public:
@@ -24,26 +23,18 @@ public:
 	virtual void keyEvent(sf::Event& e);
 	virtual void mouseEvent(sf::Event& e);
 
-	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 	virtual void render(sf::RenderWindow& window);
 
 	std::vector<ParticleEmitter*> emitters;
 
-	Tower* getSelected() { return _selected; }
-	std::shared_ptr<Tower> getSel() { return _sel; }
-
 protected:
 	// Rendering submethods
 	void renderMap(sf::RenderWindow&);
-	void renderSelected(sf::RenderWindow&);
+	//void renderSelected(sf::RenderWindow&);
 
 	sf::Font _font;
 
 	Map _map;
-
-	// Tower we've selected with our mouse and want to see it's Perks
-	Tower* _selected;
-	std::shared_ptr<Tower> _sel;
 };
 
 #endif

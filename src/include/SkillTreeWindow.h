@@ -22,7 +22,7 @@ public:
 	virtual void render(sf::RenderWindow& window);
 
 protected:
-	SkillTree* _tree;
+	SkillTree* _tree; // The SkillTree to draw
 };
 
 #endif

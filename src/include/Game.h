@@ -39,7 +39,7 @@ public:
 
 protected:
 	static sf::RenderWindow _window;
-	static PauseWindow _pauseWindow;
+	static PauseWindow _pauseWindow; // Global pause window
 	static Vector2 _size;
 };
 

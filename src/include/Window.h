@@ -10,8 +10,8 @@ class GuiComponent;
 // Window
 // A Window is a state the Game is in that determines what game flow
 // should be followed. The Game holds what Window we're using and controls
-// movement between Windows. 
-class Window : public sf::Drawable, public sf::Transformable {
+// movement between Windows.
+class Window {
 public:
 	Window(const std::string& name, Vector2 size = Vector2(0.0f, 0.0f));
 	virtual ~Window();
@@ -62,9 +62,6 @@ public:
 	virtual void mouseEvent(sf::Event& e);
 	virtual void resizeEvent(sf::Event& e);
 
-	// Drawing
-	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
-
 	// Render to the target window
 	virtual void render(sf::RenderWindow&);
 
@@ -74,8 +71,10 @@ protected:
 	std::string _name; // Internal name of the Window, should be unique
 
 	Vector2 _size; // width and height of the Window
-	WindowState _currState;
-	std::vector<GuiComponent*> _components;
+
+	WindowState _currState; // Current state the window is in
+
+	std::vector<GuiComponent*> _components; // Components in the Window
 };
 
 

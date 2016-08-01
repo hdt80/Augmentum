@@ -98,6 +98,7 @@ public:
 	unsigned int perkCount() const { return _perks.size(); }
 
 	// Attacker changes
+	void setAttackerCount(int c) { _attackerCount = c; }
 	void incAttackerCount() { ++_attackerCount; }
 	void decAttackerCount() { --_attackerCount; }
 
@@ -107,6 +108,7 @@ public:
 	void setSkillTree(SkillTree* tree);
 
 	virtual void setPosition(float x, float y);
+	virtual void moveRelative(float dx, float dy);
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
@@ -114,9 +116,9 @@ protected:
 
 	Map* _map; // Map this object is located on
 
-	LuaScript _lua;
+	LuaScript _lua; // Script associated with this Object
 
-	SkillTree* _tree;
+	SkillTree* _tree; // Skill tree attached to this Object
 	std::vector<Perk*> _perks;
 
 	int _attackerCount; // Number of Objects that have targetted us

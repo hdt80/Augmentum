@@ -120,7 +120,7 @@ void Tower::shoot() {
 	if (!_target->isSimpleTarget()) {
 		e = static_cast<Enemy*>(_target);
 		Projectile* p = new Projectile(_map, e, this, Color(127, 127, 127, 255));
-		_map->shoot(this, p);
+//		_map->shoot(this, p);
 		onShoot(e);
 	} else {
 		CORE_WARNING("Failed to shoot at %i", _target);

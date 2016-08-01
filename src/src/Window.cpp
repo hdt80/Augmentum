@@ -120,8 +120,6 @@ void Window::keyEvent(sf::Event& e) {}
 void Window::mouseEvent(sf::Event& e) {}
 void Window::resizeEvent(sf::Event& e) {}
 
-void Window::draw(sf::RenderTarget& target, sf::RenderStates states) const {}
-
 void Window::render(sf::RenderWindow& target) {
 //	target.clear(sf::Color::Black);
 	for (GuiComponent* comp : _components) {

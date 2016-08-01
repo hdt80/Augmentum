@@ -208,6 +208,11 @@ void Object::setPosition(float nx, float ny) {
 	setTarget(nullptr);
 }
 
+void Object::moveRelative(float dx, float dy) {
+	setPosition(getX() + dx, getY() + dy);
+	_shape.setPosition(getX(), getY());
+}
+
 void Object::setSkillTree(SkillTree* tree) {
 	_tree = tree->clone();
 	_tree->setAttached(this);
