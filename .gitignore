@@ -46,3 +46,6 @@ bin/Tower
 bin/Tower.exe
 
 log.html
+
+
+__pycache__

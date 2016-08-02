@@ -16,7 +16,7 @@ void Game::start() {
 	_size.X = 900; _size.Y = 600;
 
 	_window.create(sf::VideoMode(900, 600, currVidMode.bitsPerPixel),
-		"Tower Defence", sf::Style::Default, currVidSettings);
+		"Augmentum", sf::Style::Default, currVidSettings);
 
 	CurrentGameState = Playing;
 	_pauseWindow.setSize(_size);

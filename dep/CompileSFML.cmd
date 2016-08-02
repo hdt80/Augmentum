@@ -1,6 +1,6 @@
 @echo off
 cd SFML-build
 make -s
-cp lib/*.a ../../lib
-cp lib/*.dll ../../bin
+copy lib/*.a ../../lib
+copy lib/*.dll ../../bin
 cd ../..

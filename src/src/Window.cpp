@@ -121,7 +121,7 @@ void Window::mouseEvent(sf::Event& e) {}
 void Window::resizeEvent(sf::Event& e) {}
 
 void Window::render(sf::RenderWindow& target) {
-//	target.clear(sf::Color::Black);
+	//	target.clear(sf::Color::Black);
 	for (GuiComponent* comp : _components) {
 		if (comp->isVisible()) {
 			// Drawing a component is relative to it's origin

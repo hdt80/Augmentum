@@ -11,19 +11,30 @@ BUILDDIR = build
 EXEDIR = bin
 INCLUDEDIR = src/include
 
+# Programs used
+RM = rm
+ifeq ($(UNAME), Linux)
+	RM = rm
+else
+	RM = del
+endif
 
 # Running Linux? 
 ifeq ($(UNAME), Linux)
 	LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -llua
+	STD_VER = c++14
 # Windows?
 else
 	LINKER_FLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -llua
+	STD_VER = gnu++14
+	STD_VER = c++14
 endif
 
 # Enable all warnings but format and unused variables
-CXX_FLAGS = -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -fbuiltin -fpermissive -std=c++14 -I include -I $(INCLUDEDIR)
+CXX_FLAGS = -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -fbuiltin -fpermissive -std=$(STD_VER) -I include -I $(INCLUDEDIR)
+#CXX_FLAGS = -U__STRICT_ANSI__ -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -std=$(STD_VER) -I include -I $(INCLUDEDIR)
 
-OUTPUT_NAME = Agumentum
+OUTPUT_NAME = Augmentum
 
 # Where the sources are located
 SRCS = $(wildcard $(SRCDIR)/*.cpp)
@@ -58,4 +69,4 @@ val:
 # Cleaning everything up
 .PHONY: clean
 clean:
-	rm $(BUILDDIR)/*.o && rm $(EXEDIR)/$(OUTPUT_NAME)
+	$(RM) $(BUILDDIR)/*.o && $(RM) $(EXEDIR)/$(OUTPUT_NAME)
