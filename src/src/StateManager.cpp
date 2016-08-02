@@ -75,6 +75,8 @@ void StateManager::pop() {
 		CORE_WARNING("%s isn't Running and we're popping",
 			getCurrentState()->getName().c_str());
 	}
+
+	// Get the current state from the stack
 	Window* popped = getCurrentState();
 	_stack.pop_back();
 

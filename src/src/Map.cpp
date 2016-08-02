@@ -43,6 +43,11 @@ Map::~Map() {
 // The diff is provided in milliseconds
 void Map::update(int diff) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
+		objects[i]->move(diff);
+	}
+
+
+	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->update(diff);
 		if (objects[i]->isToRemove() || !inMap(objects[i])) {
 			// Attacked? Don't remove it, and skip over it. Remove it after

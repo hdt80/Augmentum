@@ -6,7 +6,7 @@ Stats::Stats(bool perc) : percent(perc)  {
 	addStat("range", 0.0f);
 	addStat("fireRate", 0.0f);
 	addStat("damage", 0.0f);
-	addStat("speed", 0.0f);
+	addStat("speed", 1.0f);
 	addStat("projSpeed", 0.0f);
 	addStat("accel", 0.0f);
 }

@@ -2,6 +2,8 @@
 
 #include "Perk.h"
 #include <string>
+#include <algorithm>
+#include <cmath>
 #include "Logger.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -10,7 +12,6 @@
 Object::Object(Map* map, float x, float y, int collRadius, Stats s) :
 	Target(x, y), _map(map), _tree(nullptr),  _attackerCount(0), _baseStats(s),
 	_target(nullptr), _toRemove(false), _collisionRadius(collRadius) {
-
 }
 
 Object::Object() :
@@ -79,9 +80,13 @@ void Object::onDeath() {
 ///////////////////////////////////////////////////////////////////////////////
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
+
+//
 void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+
 }
 
+//
 bool Object::collidesWith(Object* o) {
 	return (getCollisionBox().intersects(o->getCollisionBox()));
 }
@@ -94,29 +99,33 @@ bool Object::contains(float px, float py) {
 			py <= getY() + _collisionRadius);
 }
 
+//
 void Object::move(int diff) {
 	// No need to calculate movement if they can't move
 	if (getSpeed() <= 0) {
-		return;
-	}
-	// If we don't have anywhere we've moving to don't move
-	if (_target == nullptr) {
-		_direction = Vector2();
+		CORE_INFO("n spd");
 		return;
 	}
 
-	Vector2 to(_target->getX(), _target->getY());
-	Vector2 cur(x, y);
+	//Vector2 to(_target->getX(), _target->getY());
+	//Vector2 cur(x, y);
 
-	Vector2 goingTo(to - cur);
-	_direction = goingTo.normalize();
+	//Vector2 goingTo(to - cur);
+	//_direction = goingTo.normalize();
 
 	double deltaMove = (double)getSpeed() * 0.000001f * diff;
 
-	x += _direction.X * deltaMove;
-	y += _direction.Y * deltaMove;
+	_velocity.X = approach(_velocityGoal.X, _velocity.X, deltaMove);
+	_velocity.Y = approach(_velocityGoal.Y, _velocity.Y, deltaMove);
+
+	x += _velocity.X;// * deltaMove;
+	y += _velocity.Y;// * deltaMove;
+
+	_shape.setPosition(x, y);
 }
 
+// Update the Object based on how much time has passed
+// diff - How much time has passed, in milliseconds
 void Object::update(int diff) {
 	onUpdate(diff);
 
@@ -129,6 +138,7 @@ void Object::update(int diff) {
 	}
 }
 
+//
 void Object::setStats(Stats s, bool relative) {
 	if (relative) {
 		_baseStats += s;
@@ -137,6 +147,7 @@ void Object::setStats(Stats s, bool relative) {
 	}
 }
 
+//
 void Object::applyStat(Stats s) {
     if (!s.percent) {
         CORE_WARNING("Object::applyStat> Stats isn't percent");
@@ -149,10 +160,12 @@ void Object::applyStat(Stats s) {
     _stats["accel"]     += _baseStats["accel"]     * s["accel"];
 }
 
+//
 void Object::removePerk(Perk* p) {
 	applyStat(-*p->getStats());
 }
 
+//
 void Object::addPerk(Perk* p) {
 	// If we already have the buff
 	if (getPerk(p->getName()) != nullptr) {
@@ -175,6 +188,7 @@ void Object::addPerk(Perk* p) {
 	}
 }
 
+//
 Perk* Object::getPerk(std::string name) {
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		if (_perks[i]->getName() == name) {
@@ -206,6 +220,24 @@ void Object::setPosition(float nx, float ny) {
 	x = nx;
 	y = ny;
 	setTarget(nullptr);
+}
+
+float Object::approach(float max, float cur, float dt) {
+	float diff = max - cur;
+
+	if (diff > dt) {
+		return cur + dt;
+	} 
+	if (diff < -dt) {
+		return cur - dt;
+	}
+
+	return max;
+}
+
+void Object::setVelocity(float x, float y) {
+	_velocityGoal.X = x;
+	_velocityGoal.Y = y;
 }
 
 void Object::moveRelative(float dx, float dy) {

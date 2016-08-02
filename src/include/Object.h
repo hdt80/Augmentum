@@ -39,6 +39,8 @@ public:
 
 	// If that point is within our collision box
 	bool contains(float x, float y);
+
+	// Get the collision box of this Object
 	virtual sf::FloatRect getCollisionBox() { return _shape.getGlobalBounds(); }
 
 	// Moves the object depending on it's target, updating it's position
@@ -53,22 +55,28 @@ public:
 	// isn't just a coord point it isn't a simple target
 	virtual bool isSimpleTarget() { return false; }
 
+	////////////////////////////////////////////////////////////////////////////
 	// Stats
+	////////////////////////////////////////////////////////////////////////////
+	
 	// Apply new stats to the object
 	// If it's relative change stats relative to current stats
 	void applyStat(Stats s);
     void setStats(Stats s, bool relative = true);
+
 	// Stats getters
 	Stats getStatMod() { return _stats; }
 	Stats getStats() { return _stats + _baseStats; }
     Stats getBaseStats() { return _baseStats; };
 
+	// Get specific stats
 	int getSpeed() const { return _stats["speed"] + _baseStats["speed"]; }
 	int getRange() const { return _stats["range"] + _baseStats["range"]; }
 	float getFireRate() const { return _stats["fireRate"] + _baseStats["fireRate"]; }
 	float getDamage() const { return _stats["damage"] + _baseStats["damage"] ; }
 	float getAccel() const { return _stats["accel"] + _baseStats["accel"] ; }
 	float getProjSpeed() const { return _stats["projSpeed"] + _baseStats["projSpeed"]; }
+
 	// Stats setters
 	void setRange(int r) { _stats["range"] = r; }
 	void setFireRate(float r) { _stats["fireRate"] = r; }
@@ -77,14 +85,18 @@ public:
 	void setAccel(float f) { _stats["accel"] = f; }
 	void setProjSpeed(float f) { _stats["projSpeed"] = f; }
 
+	////////////////////////////////////////////////////////////////////////////
 	// Perk methods
+	////////////////////////////////////////////////////////////////////////////
 	virtual void addPerk(Perk* p);
 	virtual void removePerk(Perk* p);
 	bool hasPerk(std::string name) { return getPerk(name) != nullptr; }
-	Perk* getPerk(int index) { return _perks[index];}
+	Perk* getPerk(int index) { return _perks[index]; }
 	Perk* getPerk(std::string name); // nullptr if no Perk with that name
 
+	////////////////////////////////////////////////////////////////////////////
 	// Other getters
+	////////////////////////////////////////////////////////////////////////////
 	Map* getMap() const { return _map; }
 	std::vector<Perk*>& getPerks() { return _perks; }
 	Target* getTarget() const { return _target; }
@@ -94,21 +106,32 @@ public:
 	SkillTree* getTree() const { return _tree; }
 	int getAttackerCount() const { return _attackerCount; }
 
+	////////////////////////////////////////////////////////////////////////////
 	// Utility getters
+	////////////////////////////////////////////////////////////////////////////
 	unsigned int perkCount() const { return _perks.size(); }
 
+	////////////////////////////////////////////////////////////////////////////
 	// Attacker changes
+	////////////////////////////////////////////////////////////////////////////
 	void setAttackerCount(int c) { _attackerCount = c; }
 	void incAttackerCount() { ++_attackerCount; }
 	void decAttackerCount() { --_attackerCount; }
 
+	////////////////////////////////////////////////////////////////////////////
 	// Other setters
+	////////////////////////////////////////////////////////////////////////////
 	void setTarget(Target* t);
 	void setToRemove(bool b) { _toRemove = b; }
 	void setSkillTree(SkillTree* tree);
 
+	////////////////////////////////////////////////////////////////////////////
+	// Movement methods
+	////////////////////////////////////////////////////////////////////////////
 	virtual void setPosition(float x, float y);
 	virtual void moveRelative(float dx, float dy);
+	float approach(float max, float cur, float dt);
+	void setVelocity(float x, float y);
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
@@ -123,9 +146,14 @@ protected:
 
 	int _attackerCount; // Number of Objects that have targetted us
 
+	// Base stats are the stats that all perks base off of
+	// Base stats only change on a level
     Stats _baseStats;
+	// All calculations that affect other Object use this one
 	Stats _stats;
 
+	Vector2 _velocity;
+	Vector2 _velocityGoal;
 	Target* _target; // Target the enemy is running to (can be coord or enemy)
 	Vector2 _direction; // Direction they're moving to
 

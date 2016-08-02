@@ -42,9 +42,20 @@ void GameWindow::init() {
 ///////////////////////////////////////////////////////////////////////////////
 void GameWindow::update(int diff) {
 	Window::update(diff);
+
 	for (unsigned int i = 0; i < emitters.size(); ++i) {
 		emitters[i]->update(diff);
 	}
+
+
+	float xa = sf::Keyboard::isKeyPressed(sf::Keyboard::D) -
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+
+	float ya = sf::Keyboard::isKeyPressed(sf::Keyboard::S) -	
+				sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+
+	_map.getSelected()->setVelocity(xa, ya);
+
 	_map.update(diff);
 }
 
@@ -56,18 +67,18 @@ void GameWindow::handleEvent(sf::Event& e) {
 }
 
 void GameWindow::keyEvent(sf::Event& e) {
-	CORE_INFO("%d", e.key.code);
-	if (e.key.code == sf::Keyboard::Escape) {
-		CORE_INFO("ESC");
-	} else if (e.key.code == sf::Keyboard::A) {
-		_map.getSelected()->moveRelative(-10, 0);
-	} else if (e.key.code == sf::Keyboard::S) {
-		_map.getSelected()->moveRelative(0, 10);
-	} else if (e.key.code == sf::Keyboard::D) {
-		_map.getSelected()->moveRelative(10, 0);
-	} else if (e.key.code == sf::Keyboard::W) {
-		_map.getSelected()->moveRelative(0, -10);
-	}
+	//CORE_INFO("%d", e.key.code);
+	//if (e.key.code == sf::Keyboard::Escape) {
+	//	CORE_INFO("ESC");
+	//} else if (e.key.code == sf::Keyboard::A) {
+	//	_map.getSelected()->moveRelative(-10, 0);
+	//} else if (e.key.code == sf::Keyboard::S) {
+	//	_map.getSelected()->moveRelative(0, 10);
+	//} else if (e.key.code == sf::Keyboard::D) {
+	//	_map.getSelected()->moveRelative(10, 0);
+	//} else if (e.key.code == sf::Keyboard::W) {
+	//	_map.getSelected()->moveRelative(0, -10);
+	//}
 }
 
 void GameWindow::mouseEvent(sf::Event& e) {
