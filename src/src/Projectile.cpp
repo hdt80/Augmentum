@@ -28,7 +28,6 @@ Projectile::Projectile(Map* map, Enemy* e, Tower* t, Color c) :
 
 Projectile::~Projectile() {}
 
-
 void Projectile::loadLua() {
 
 }

@@ -24,7 +24,7 @@ std::string getType(Object* o) {
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
 Map::Map() {
-	_selected = new Ship(this, 0.0f, 0.0f, 10, Stats());
+	_selected = new Ship(this, 0.0f, 0.0f, 25, Stats(), 4, sf::Color::Blue);
 
 	objects.push_back(_selected);
 }
@@ -42,18 +42,21 @@ Map::~Map() {
 
 // The diff is provided in milliseconds
 void Map::update(int diff) {
+	// Move first so the updates follow what the player would see
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->move(diff);
 	}
-
-
+	
+	// Update all the Objects in the map
+	// TODO: Only update the Objects around the player
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->update(diff);
 		if (objects[i]->isToRemove() || !inMap(objects[i])) {
-			// Attacked? Don't remove it, and skip over it. Remove it after
-			// no one is attacking it
+			// If this Object is being attacked, and stored as a pointer to
+			// the Object attacking the Object being removed. In order to
+			// avoid a dangling pointer, we mark the Object for removal instead
+			// of deleting it right away
 			if (objects[i]->getAttackerCount() == 0) {
-				// Push back before removal or seg faults
 				toRemove.push_back(objects[i]);
 				objects.erase(objects.begin() + i);
 			}
@@ -67,29 +70,30 @@ void Map::update(int diff) {
 	}
 	toRemove.clear();
 
+	// Calculate the collisions after all the removal and moves so the player
+	// gets accurate feedback and isn't behind a frame
 	calcCollisions();
 }
 
+// Calculate all the collisions on the Map and call the collision events
 void Map::calcCollisions() {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
-		// If it's not a projectile it doesn't die on collision
-		if (isProjectile(objects[i])) {
-			for (unsigned int j = 0; j < objects.size(); ++j) {
-				// You can only collide with enemies
-				if (isEnemy(objects[j])) {
-					if (objects[i]->collidesWith(objects[j])) {
-						objects[i]->onCollision(objects[j]);
-					}
-				}
+		for (unsigned int j = 0; j < objects.size(); ++j) {
+			// Ensure that we aren't checking with ourself
+			if (objects[i] != objects[j] &&
+					objects[i]->collidesWith(objects[j])) {
+				objects[i]->onCollision(objects[j]);
 			}
 		}
 	}
 }
 
+//
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
 	return getObjectsInRange(t->getX(), t->getY(), r);
 }
 
+//
 std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	std::vector<Object*> objs;
 	for (unsigned int i = 0; i < objects.size(); ++i) {
@@ -100,6 +104,7 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	return objs;
 }
 
+//
 std::vector<Enemy*> Map::getEnemiesInRange(float x, float y, float r) {
 	std::vector<Enemy*> objs;	
 	for (unsigned int i = 0; i < objects.size(); ++i) {
@@ -110,6 +115,20 @@ std::vector<Enemy*> Map::getEnemiesInRange(float x, float y, float r) {
 	return objs;
 }
 
+// Check if there is a collision at the position
+// o - Object that we checking for, use nullptr to use all objects
+// x - x coord to check
+// y - y coord to check
+bool Map::collisionAtPlace(Object* o, float x, float y) {
+	for (unsigned int i = 0; i < objects.size(); ++i) {
+		if (objects[i] != o && objects[i]->contains(x, y)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+//
 bool Map::inMap(Object* o) {
 	return (o->getX() > 0 || o->getX() < _size.X ||
 			o->getY() > 0 || o->getY() < _size.Y);

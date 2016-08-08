@@ -31,6 +31,8 @@ public:
 
 	static void followWindow(Window* w);
 
+	static sf::RenderWindow& getRenderWindow() { return _window; }
+
 	static GameState CurrentGameState;
 	static Window* CurrentWindow;
 	static StateManager WindowManager;

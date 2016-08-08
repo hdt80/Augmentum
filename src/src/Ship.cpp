@@ -3,15 +3,27 @@
 // =============================================================================
 // Ctor and Dtor
 // =============================================================================
-Ship::Ship() {
-	Ship(nullptr, 0.0f, 0.0f, 0, Stats());
+Ship::Ship() :
+		Ship(nullptr, 0.0f, 0.0f, 0, Stats()) {
+
 }
 
+//
 Ship::Ship(Map* map, float x, float y, int collRadius, Stats s)
-	: Unit(map, x, y, collRadius, s) {
+	: Ship(map, x, y, collRadius, s, 30, sf::Color::Red) {
 	
-	_shape.setRadius(15);
-	_shape.setFillColor(sf::Color::Green);
+}
+
+//
+Ship::Ship(Map* map, float x, float y, int collRadius, Stats s,
+		int sides, sf::Color color)
+ 	: Unit(map, x, y, collRadius, s) {
+	
+	_shape.setRadius(collRadius);
+	_shape.setPointCount(sides);
+	_shape.setFillColor(color);
+	_shape.setOutlineColor(sf::Color::Black);
+	_shape.setOutlineThickness(-3.0f);
 }
 
 Ship::~Ship() {

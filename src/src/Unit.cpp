@@ -23,5 +23,6 @@ Unit::~Unit() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
+	target.draw(_bounds);
 	target.draw(_shape);
 }

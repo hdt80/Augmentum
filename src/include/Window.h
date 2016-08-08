@@ -24,15 +24,19 @@ public:
 	// init will be called right before it is made the current state
 	// in StateManager
 	virtual void init();
+
 	// Reinit the Window
 	// Reinitalize the Window and reset it to default values
 	virtual void reset();
+
 	// Pause the window, stop updating
 	// Called when we change our current Window to another one
 	virtual void pause();
+
 	// Resume updating
 	// This Window has been initalized but paused
 	virtual void resume();
+
 	// Close the Window, it is no longer being used
 	// Clean up everything and deallocate all associated objects
 	virtual void close();
@@ -67,6 +71,12 @@ public:
 
 protected:
 	Window();
+
+	//
+	void addComponent(GuiComponent* comp, int depth = 0);
+
+	//
+	GuiComponent* getClickedComponent(float x, float y);
 
 	std::string _name; // Internal name of the Window, should be unique
 

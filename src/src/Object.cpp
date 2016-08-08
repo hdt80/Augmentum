@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cmath>
 #include "Logger.h"
+#include "Map.h"
+#include "Target.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -24,8 +26,10 @@ Object::~Object() {}
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 ////////////////////////////////////////////////////////////////////////////////
+
+//
 void Object::onCollision(Object* o) {
-	CORE_INFO("%x collided with %x", this, o);
+	//CORE_INFO("%x collided with %x", this, o);
 };
 
 // Load all the functions related to the Object
@@ -35,6 +39,7 @@ void Object::loadLua() {
 	}
 }
 
+//
 void Object::onUpdate(int diff) {
 	_lua.callFunction("onUpdate", diff);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -42,6 +47,7 @@ void Object::onUpdate(int diff) {
 	}
 }
 
+//
 void Object::onMove(int diff) {
 	_lua.callFunction("onMove", diff);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -49,6 +55,7 @@ void Object::onMove(int diff) {
 	}
 }
 
+//
 void Object::onShoot(Object* target) {
 	_lua.callFunction("onShoot", target);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -56,6 +63,7 @@ void Object::onShoot(Object* target) {
 	}
 }
 
+//
 void Object::onDamageTaken(int dmg, Object* o) {
 	_lua.callFunction("onDamageTaken", dmg, o);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -63,6 +71,7 @@ void Object::onDamageTaken(int dmg, Object* o) {
 	}
 }
 
+//
 void Object::onDamageDealt(int dmg, Object* hit) {
 	_lua.callFunction("onDamageDealt", dmg, hit);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -70,6 +79,7 @@ void Object::onDamageDealt(int dmg, Object* hit) {
 	}
 }
 
+//
 void Object::onDeath() {
 	_lua.callFunction("onDeath");
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -88,22 +98,32 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 //
 bool Object::collidesWith(Object* o) {
-	return (getCollisionBox().intersects(o->getCollisionBox()));
+	//// Because both sf::Drawable and Target provide a ::getPosition, tell it
+	//Vector2 dist = (o->Target::getPosition() - Target::getPosition());
+	//return (dist.sqrtLength() < (getCollisionRadius() + o->getCollisionRadius())
+	//		* (getCollisionRadius() + o->getCollisionRadius()));
+
+	sf::FloatRect boundBox;
+	bool collides = getCollisionBox().intersects(o->getCollisionBox(), boundBox);
+
+	if (collides) {
+		_bounds.setPosition(boundBox.left, boundBox.top);
+		_bounds.setSize(sf::Vector2f(boundBox.width, boundBox.height));
+		_bounds.setFillColor(sf::Color::Red);
+	}
+
+	return (collides);
 }
 
 // Returns if a point is within the collision box of an Object
 bool Object::contains(float px, float py) {
-	return (px >= getX() - _collisionRadius &&
-			px <= getX() + _collisionRadius &&
-			py >= getY() - _collisionRadius &&
-			py <= getY() + _collisionRadius);
+	return getCollisionBox().contains(px, py);
 }
 
 //
 void Object::move(int diff) {
 	// No need to calculate movement if they can't move
 	if (getSpeed() <= 0) {
-		CORE_INFO("n spd");
 		return;
 	}
 
@@ -120,6 +140,11 @@ void Object::move(int diff) {
 
 	x += _velocity.X;// * deltaMove;
 	y += _velocity.Y;// * deltaMove;
+
+	if (_map->collisionAtPlace(this, x, y)) {
+		x -= _velocity.X;// * deltaMove;
+		y -= _velocity.Y;// * deltaMove;
+	}
 
 	_shape.setPosition(x, y);
 }
@@ -201,6 +226,8 @@ Perk* Object::getPerk(std::string name) {
 ///////////////////////////////////////////////////////////////////////////////
 // Getters and setters
 ///////////////////////////////////////////////////////////////////////////////
+
+//
 void Object::setTarget(Target* t) {
 	// Are we already targetting the target?
 	if (_target == t) {
@@ -216,18 +243,20 @@ void Object::setTarget(Target* t) {
 	_target = t;
 }
 
+//
 void Object::setPosition(float nx, float ny) {
 	x = nx;
 	y = ny;
 	setTarget(nullptr);
 }
 
+//
 float Object::approach(float max, float cur, float dt) {
 	float diff = max - cur;
 
 	if (diff > dt) {
 		return cur + dt;
-	} 
+	}
 	if (diff < -dt) {
 		return cur - dt;
 	}
@@ -235,16 +264,19 @@ float Object::approach(float max, float cur, float dt) {
 	return max;
 }
 
+//
 void Object::setVelocity(float x, float y) {
 	_velocityGoal.X = x;
 	_velocityGoal.Y = y;
 }
 
+//
 void Object::moveRelative(float dx, float dy) {
 	setPosition(getX() + dx, getY() + dy);
 	_shape.setPosition(getX(), getY());
 }
 
+//
 void Object::setSkillTree(SkillTree* tree) {
 	_tree = tree->clone();
 	_tree->setAttached(this);

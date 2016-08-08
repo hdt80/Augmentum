@@ -11,10 +11,10 @@ public:
 	GameWindow(Vector2 size = Vector2(0.0f, 0.0f));
 	~GameWindow();
 
-	// Initalize the window 
+	// Initalize the window
 	virtual void init();
 
-	// Update the Window. 
+	// Update the Window
 	// diff is the amount of microseconds that have passed since the last call
 	virtual void update(int diff);
 
@@ -23,17 +23,14 @@ public:
 	virtual void keyEvent(sf::Event& e);
 	virtual void mouseEvent(sf::Event& e);
 
+	//
 	virtual void render(sf::RenderWindow& window);
 
 	std::vector<ParticleEmitter*> emitters;
 
+	Map* getMap() { return &_map; }
+
 protected:
-	// Rendering submethods
-	void renderMap(sf::RenderWindow&);
-	//void renderSelected(sf::RenderWindow&);
-
-	sf::Font _font;
-
 	Map _map;
 };
 

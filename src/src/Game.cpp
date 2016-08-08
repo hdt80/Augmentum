@@ -19,6 +19,7 @@ void Game::start() {
 		"Augmentum", sf::Style::Default, currVidSettings);
 
 	CurrentGameState = Playing;
+
 	_pauseWindow.setSize(_size);
 
 	loop();

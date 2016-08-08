@@ -9,6 +9,9 @@
 #include "SkillTreeWindow.h"
 #include "GuiComponent.h"
 #include "Ship.h"
+#include "components/WorldComponent.h"
+#include "components/DebugWorldComponent.h"
+#include "FontCache.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Creation Methods
@@ -17,6 +20,14 @@ GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
 	_map.setSize(size.X, size.Y);
+
+	addComponent(new DebugWorldComponent(this, Vector2(_size.X - 180, 0),
+									Vector2(180, _size.Y),
+									size));
+
+	addComponent(new WorldComponent(this, Vector2(0.0, 0.0),
+									Vector2(_size.X, _size.Y),
+									size));
 }
 
 GameWindow::~GameWindow() {
@@ -31,10 +42,12 @@ void GameWindow::init() {
 	SkillTrees::createTrees(_size);
 	ParticleEmit::window = this;
 	
-	if (!_font.loadFromFile("res\\Pixel.ttf")) {
-		CORE_ERROR("Failed to load \'%s\\res\\Pixel.ttf\'",
-			convert::getWorkingDir().c_str());
-	}
+	//if (!_font.loadFromFile("res\\Pixel.ttf")) {
+	//	CORE_ERROR("Failed to load \'%s\\res\\Pixel.ttf\'",
+	//		convert::getWorkingDir().c_str());
+	//}
+
+	FontCache::loadFont("pixel", "res\\Pixel.ttf");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,12 +60,11 @@ void GameWindow::update(int diff) {
 		emitters[i]->update(diff);
 	}
 
+	float xa = (sf::Keyboard::isKeyPressed(sf::Keyboard::D) -
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A));// * 10.0f;
 
-	float xa = sf::Keyboard::isKeyPressed(sf::Keyboard::D) -
-				sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-
-	float ya = sf::Keyboard::isKeyPressed(sf::Keyboard::S) -	
-				sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+	float ya = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) -	
+				sf::Keyboard::isKeyPressed(sf::Keyboard::W));// * 10.0f;
 
 	_map.getSelected()->setVelocity(xa, ya);
 
@@ -82,29 +94,44 @@ void GameWindow::keyEvent(sf::Event& e) {
 }
 
 void GameWindow::mouseEvent(sf::Event& e) {
-	int x = e.mouseButton.x;
-	int y = e.mouseButton.y;
-	if (e.mouseButton.button == sf::Mouse::Left) {
-		CORE_INFO("x: %d, y: %d", x, y);
-	} else if (e.mouseButton.button == sf::Mouse::Middle) {
+	Window::mouseEvent(e);
+	//int x = e.mouseButton.x;
+	//int y = e.mouseButton.y;
 
-	}
+	//GuiComponent* clicked = getClickedComponent(x, y);
+
+	//sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
+
+	//sf::Vector2f worldPos;
+
+	//if (clicked == nullptr) {
+	//	worldPos = Game::getRenderWindow().mapPixelToCoords(pixelPos);
+	//} else {
+	//	worldPos = Game::getRenderWindow()
+	//		.mapPixelToCoords(pixelPos, clicked->getView());
+	//}
+
+	//CORE_INFO("Window (%d, %d) :: Map (%g, %g)",
+	//	pixelPos.x, pixelPos.y, worldPos.x, worldPos.y);
+
+	//if (e.mouseButton.button == sf::Mouse::Left) {
+	//	_map.objects.push_back(new Ship(&_map, worldPos.x, worldPos.y, 20, Stats()));
+	//} else if (e.mouseButton.button == sf::Mouse::Middle) {
+
+	//}
 }
 
 void GameWindow::render(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
-	renderMap(window);
+	window.clear(sf::Color(180, 180, 180));
 
-	for (unsigned int i = 0; i < _map.objects.size(); ++i) {
-		window.draw(*_map.objects[i]);
-	}
 	for (unsigned int i = 0; i < emitters.size(); ++i) {
 		window.draw(*emitters[i]);
 	}
+
 	Window::render(window);
 }
 
-void GameWindow::renderMap(sf::RenderWindow& window) {
+//void GameWindow::renderMap(sf::RenderWindow& window) {
 //	// Drawing the path enemies will take
 //	Path* path = _map.getPath();
 //
@@ -131,7 +158,7 @@ void GameWindow::renderMap(sf::RenderWindow& window) {
 //		window.draw(s);
 //		window.draw(c);
 //	}
-}
+//}
 
 //void GameWindow::renderSelected(sf::RenderWindow& window) {
 //	// Don't draw anything if nothing is selected

@@ -28,12 +28,16 @@ public:
 	// If the Object is within the bounds of this Map
 	bool inMap(Object* o);
 
+	// Get the Ship the player is using
 	Ship* getSelected() { return _selected; }
 
 	// Get all Objects within a radius of a point
 	std::vector<Object*> getObjectsInRange(Target* t, float range);
 	std::vector<Object*> getObjectsInRange(float x, float y, float range);
 	std::vector<Enemy*> getEnemiesInRange(float x, float y, float range);
+
+	// Is there an Object at (x, y)?
+	bool collisionAtPlace(Object* o, float x, float y);
 
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;
@@ -45,7 +49,7 @@ protected:
 	Vector2 _size;
 	Vector2 _origin; // (0, 0)
 
-	Ship* _selected;
+	Ship* _selected; // Ship the player is controlling
 };
 
 #endif

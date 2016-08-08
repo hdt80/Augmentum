@@ -132,10 +132,14 @@ public:
 	virtual void moveRelative(float dx, float dy);
 	float approach(float max, float cur, float dt);
 	void setVelocity(float x, float y);
+	Vector2 getVelocity() const { return _velocity; }
+	Vector2 getVelocityGoal() const { return _velocityGoal; }
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
+
 	sf::CircleShape _shape;
+	sf::RectangleShape _bounds;
 
 	Map* _map; // Map this object is located on
 
@@ -152,10 +156,10 @@ protected:
 	// All calculations that affect other Object use this one
 	Stats _stats;
 
-	Vector2 _velocity;
-	Vector2 _velocityGoal;
+	Vector2 _velocity; // Currently velocity of the Object
+	Vector2 _velocityGoal; // Velocity the Object will accelerate to
 	Target* _target; // Target the enemy is running to (can be coord or enemy)
-	Vector2 _direction; // Direction they're moving to
+	Vector2 _direction;
 
 	bool _toRemove; // Is this object marked for removal?
 	int  _collisionRadius;
