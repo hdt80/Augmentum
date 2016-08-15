@@ -11,9 +11,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
-Projectile::Projectile(Map* map, Enemy* e, Tower* t, Color c) :
-	Object(map, t->getX(), t->getY(), 1, t->getStats()),
-	_color(c), _shooter(t) {
+Projectile::Projectile(Map* map, Enemy* e, Tower* t, Color c)
+	: Object(map, t->getX(), t->getY(), t->getStats()),
+		_color(c), _shooter(t) {
 
 	// Speed of this Projectile is stored in Tower's projSpeed, not speed
 	// so set it to the proper value
@@ -28,6 +28,7 @@ Projectile::Projectile(Map* map, Enemy* e, Tower* t, Color c) :
 
 Projectile::~Projectile() {}
 
+//
 void Projectile::loadLua() {
 
 }
@@ -39,6 +40,7 @@ void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(_shape);
 }
 
+//
 void Projectile::onCollision(Object* o) {
 	// Did we collide with an enemy?
 	Enemy* e = dynamic_cast<Enemy*>(o);

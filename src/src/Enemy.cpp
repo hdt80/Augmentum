@@ -8,10 +8,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constuctor and deconstrctor
 ///////////////////////////////////////////////////////////////////////////////
-Enemy::Enemy(Map* map, float health, Stats s, Path* p, int collRadius) :
-	Object(map, 0, 0, collRadius, s),
-	_health(health), _maxHealth(health), _path(p), _pathPoint(0),
-	_ended(false) {
+Enemy::Enemy(Map* map, float health, Stats s, Path* p)
+	: Object(map, 0, 0, s),
+		_health(health), _maxHealth(health), _path(p), _pathPoint(0),
+		_ended(false) {
 
 	_shape.setRadius(ENEMY_WIDTH);
 	_shape.setFillColor(sf::Color(255, 0, 0));
@@ -25,8 +25,9 @@ Enemy::Enemy(Map* map, float health, Stats s, Path* p, int collRadius) :
 	_lua.loadScript("./lua/enemy.lua");
 }
 
-Enemy::Enemy() {
-	Enemy(nullptr, 20, Stats(), nullptr, 20);
+Enemy::Enemy()
+	: Enemy(nullptr, 10.0f, Stats(), nullptr) {
+
 }
 
 
@@ -34,6 +35,7 @@ Enemy::~Enemy() {
 	if (_ended) {
 
 	}
+
 	ParticleEmit::emit(x, y, 50, Color(255, 0, 0, 255));
 }
 ////////////////////////////////////////////////////////////////////////////////

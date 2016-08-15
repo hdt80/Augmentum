@@ -6,6 +6,7 @@
 #include "Stats.h"
 #include "SkillTree.h"
 #include "LuaScript.h"
+#include "BoundBox.h"
 
 #include <string>
 #include <vector>
@@ -19,11 +20,11 @@ public:
 	// A default constructor must be defined for Sol for some reason.
 	// This constructor should never be used and is only for Sol
 	Object();
-	Object(Map* map, float x, float y, int collRadius, Stats s);
+	Object(Map* map, float x, float y, Stats s);
 	virtual ~Object();
 
 	// If Object* o collides with us
-	bool collidesWith(Object* o);
+	bool collidesWith(Object* o) const;
 
 	// Load the Lua file and define all helper Lua methods
 	virtual void loadLua();
@@ -38,10 +39,11 @@ public:
 	virtual void onDeath();
 
 	// If that point is within our collision box
-	bool contains(float x, float y);
+	bool contains(float x, float y) const;
+	bool intersectsWith(BoundBox* b) const;
 
 	// Get the collision box of this Object
-	virtual sf::FloatRect getCollisionBox() { return _shape.getGlobalBounds(); }
+	virtual sf::FloatRect getCollisionBox() const { return _shape.getGlobalBounds(); }
 
 	// Moves the object depending on it's target, updating it's position
 	// diff - Milliseconds the object is supposed to move for
@@ -53,7 +55,7 @@ public:
 
 	// A simple target is just an (x, y) coord point. Because an Object
 	// isn't just a coord point it isn't a simple target
-	virtual bool isSimpleTarget() { return false; }
+	virtual bool isSimpleTarget() const { return false; }
 
 	////////////////////////////////////////////////////////////////////////////
 	// Stats
@@ -65,9 +67,9 @@ public:
     void setStats(Stats s, bool relative = true);
 
 	// Stats getters
-	Stats getStatMod() { return _stats; }
-	Stats getStats() { return _stats + _baseStats; }
-    Stats getBaseStats() { return _baseStats; };
+	Stats getStatMod() const { return _stats; }
+	Stats getStats() const { return _stats + _baseStats; }
+    Stats getBaseStats() const { return _baseStats; };
 
 	// Get specific stats
 	int getSpeed() const { return _stats["speed"] + _baseStats["speed"]; }
@@ -102,7 +104,6 @@ public:
 	Target* getTarget() const { return _target; }
 	Vector2 getDirection() const { return _direction; }
 	bool isToRemove() const { return _toRemove; }
-	int getCollisionRadius() const { return _collisionRadius; }
 	SkillTree* getTree() const { return _tree; }
 	int getAttackerCount() const { return _attackerCount; }
 
@@ -135,11 +136,18 @@ public:
 	Vector2 getVelocity() const { return _velocity; }
 	Vector2 getVelocityGoal() const { return _velocityGoal; }
 
+	////////////////////////////////////////////////////////////////////////////
+	// Bound box
+	////////////////////////////////////////////////////////////////////////////
+	BoundBox* getBoundBox() const { return _boundBox; }
+	void setBoundBox(BoundBox* box) { _boundBox = box; }
+
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 	sf::CircleShape _shape;
-	sf::RectangleShape _bounds;
+
+	BoundBox* _boundBox; // Bounding box of this Object
 
 	Map* _map; // Map this object is located on
 
@@ -162,7 +170,6 @@ protected:
 	Vector2 _direction;
 
 	bool _toRemove; // Is this object marked for removal?
-	int  _collisionRadius;
 };
 
 #endif

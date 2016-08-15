@@ -4,13 +4,12 @@
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
 Unit::Unit() {
-
+	
 }
 
-Unit::Unit(Map* map, float x, float y, int collRadius, Stats s)
-	: Object(map, x, y, collRadius, s) {
+Unit::Unit(Map* map, float x, float y, Stats s)
+	: Object(map, x, y, s) {
 
-	_shape.setRadius(collRadius);
 	_shape.setFillColor(sf::Color::Blue);
 	_shape.setPosition(x, y);
 }
@@ -23,6 +22,5 @@ Unit::~Unit() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
-	target.draw(_bounds);
 	target.draw(_shape);
 }

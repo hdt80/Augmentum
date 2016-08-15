@@ -5,6 +5,15 @@
 #include <stdio.h>
 
 #include "Colors.h"
+#include "trmclr.hpp"
+
+//namespace {
+//	static void CORE_INFO(const char* fmt, ...);
+//	static void CORE_WARNING(const char* fmt, ...);
+//	static void CORE_WARN(const char* fmt, ...);
+//	static void CORE_ERROR(const char* fmt, ...);
+//}
+
 
 class Logger {
 public:
@@ -17,6 +26,11 @@ public:
 
 	static const std::string CurrentDateTime();
 	static const std::string CurrentTime();
+
+	static trmclr::Style grey;
+	static trmclr::Style yellow;
+	static trmclr::Style orange;
+	static trmclr::Style red;
 
 	void setLogFile(const char* filename, bool isPlainText = false, bool showOnScreen = false);
 
@@ -89,14 +103,14 @@ private:
 
 #define CORE_WARNING(...) \
     do {\
-        Logger::instance().log("WARNING", __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__);\
+        Logger::instance().log(";[033m0};WARNING", __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__);\
         Logger::instance().flush(); \
     } \
     while(0)\
 
 #define CORE_WARN(...) \
     do {\
-        Logger::instance().log("WARNING", __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__);\
+        Logger::instance().log(";[033m0};WARNING", __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__);\
         Logger::instance().flush(); \
     } \
     while(0)\
@@ -141,7 +155,7 @@ private:
 
 #define CORE_WARNING(...) \
     do {\
-        Logger::instance().log("WARNING", NULL, NULL, 0, __VA_ARGS__);\
+        Logger::instance().log("\x1B[33mWARNING", NULL, NULL, 0, __VA_ARGS__);\
     } \
     while(0)\
 

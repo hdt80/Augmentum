@@ -29,7 +29,23 @@ enum StyleTypes
 
 static const uint32_t STYLE_SHIFT =  std::numeric_limits<uint32_t>::digits / N_STYLE_TYPES;
 
-struct Foreground : Style
+struct Attribute
+{
+    static const uint32_t SHIFT = STYLE_SHIFT * ATTRIBUTE;
+
+    enum
+    {
+        DEFAULT     = 0x001 << SHIFT,
+        BOLD        = 0x002 << SHIFT,
+        DIM         = 0x004 << SHIFT,
+        UNDERLINED  = 0x010 << SHIFT,
+        BLINK       = 0x020 << SHIFT,
+        REVERSE     = 0x080 << SHIFT,
+        HIDDEN      = 0x100 << SHIFT
+    };
+};
+
+struct Foreground
 {
     static const uint32_t SHIFT = STYLE_SHIFT * FOREGROUND;
 
@@ -55,7 +71,7 @@ struct Foreground : Style
     };
 };
 
-struct Background : Style
+struct Background
 {
     static const uint32_t SHIFT = STYLE_SHIFT * BACKGROUND;
 
@@ -81,49 +97,28 @@ struct Background : Style
     };
 };
 
-struct Attribute : Style
+inline std::ostream& operator<< (std::ostream& os, const Style& style)
 {
-    static const uint32_t SHIFT = STYLE_SHIFT * ATTRIBUTE;
+    const uint32_t base = 1 << STYLE_SHIFT;
+          uint32_t encoded = style / base;
+          uint32_t decoded = style % base;
+    
+    os << "\x1B[" << (decoded ? decoded : Foreground::DEFAULT >> Foreground::SHIFT);
 
-    enum 
-    {
-        DEFAULT     = 0b1           << SHIFT,
-        BOLD        = 0b10          << SHIFT,
-        DIM         = 0b100         << SHIFT,
-        UNDERLINED  = 0b10000       << SHIFT,
-        BLINK       = 0b100000      << SHIFT,
-        REVERSE     = 0b10000000    << SHIFT,
-        HIDDEN      = 0b100000000   << SHIFT
-    };
+    decoded = encoded % base;
 
-    static void toStream(std::ostream& os, uint32_t attribute)
+    for (uint32_t i = 0; decoded != 0; decoded >>= 1, i++)
     {
-        for (unsigned i = 0; attribute != 0; attribute >>= 1, i++)
+        if (decoded & 1)
         {
-            if (attribute & 1) 
-            { 
-                os << ";" << i;
-            }
+            os << ";" << i;
         }
     }
-};
 
-std::ostream& operator<< (std::ostream& os, const Style& style)
-{
-    const uint32_t quotient = (1 << STYLE_SHIFT);
-    uint32_t dividend = style._value / quotient;
-    uint32_t leftover = style._value % quotient;
-    
-    os << "\e[" << (leftover ? leftover : Foreground::DEFAULT);
+    encoded = encoded / base;
+    decoded = encoded % base;
 
-    leftover = dividend % quotient;
-    dividend /= quotient;
-
-    Attribute::toStream(os, leftover);
-
-    leftover = dividend % quotient;
-
-    os << ";" << (leftover ? leftover : Background::DEFAULT) << "m";
+    os << ";" << (decoded ? decoded : Background::DEFAULT >> Background::SHIFT) << "m";
 
     return os;
 }

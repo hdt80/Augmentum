@@ -11,8 +11,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constuctor and deconstrctor
 ///////////////////////////////////////////////////////////////////////////////
-Tower::Tower(Map* map, float x, float y, Stats s) : Object(map, x, y, 20, s),
-	_lastShot(0.0f) {
+Tower::Tower(Map* map, float x, float y, Stats s)
+	: Object(map, x, y, s),
+		_lastShot(0.0f) {
 
 	_shape.setRadius(TOWER_WIDTH);
 	_shape.setFillColor(sf::Color(0, 255, 0));

@@ -7,21 +7,40 @@
 #include "Logger.h"
 #include "Map.h"
 #include "Target.h"
+#include "bounds/RectangleBoundBox.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
-Object::Object(Map* map, float x, float y, int collRadius, Stats s) :
-	Target(x, y), _map(map), _tree(nullptr),  _attackerCount(0), _baseStats(s),
-	_target(nullptr), _toRemove(false), _collisionRadius(collRadius) {
+Object::Object(Map* map, float x, float y, Stats s)
+	: Target(x, y),
+		_boundBox(nullptr),	_map(map), _tree(nullptr),  _attackerCount(0),
+		_baseStats(s), _target(nullptr), _toRemove(false) {
+
 }
 
-Object::Object() :
-	Target(0, 0), _map(nullptr), _stats(Stats()), _target(nullptr),
-	_toRemove(false), _collisionRadius(0) {
+Object::Object()
+	: Object(nullptr, 0.0f, 0.0f, Stats()) {
 }
 
-Object::~Object() {}
+// Object dtor
+Object::~Object() {
+	delete _boundBox;
+	delete _tree;
+
+	// Make sure we don't delete another Object
+	if (_target && _target->isSimpleTarget()) {
+		delete _target;
+	}
+
+	// Remove all the Perks
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		delete _perks[i];
+	}
+	_perks.clear();
+
+	_map = nullptr;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Events
@@ -96,31 +115,40 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 }
 
-//
-bool Object::collidesWith(Object* o) {
-	//// Because both sf::Drawable and Target provide a ::getPosition, tell it
-	//Vector2 dist = (o->Target::getPosition() - Target::getPosition());
-	//return (dist.sqrtLength() < (getCollisionRadius() + o->getCollisionRadius())
-	//		* (getCollisionRadius() + o->getCollisionRadius()));
-
-	sf::FloatRect boundBox;
-	bool collides = getCollisionBox().intersects(o->getCollisionBox(), boundBox);
-
-	if (collides) {
-		_bounds.setPosition(boundBox.left, boundBox.top);
-		_bounds.setSize(sf::Vector2f(boundBox.width, boundBox.height));
-		_bounds.setFillColor(sf::Color::Red);
+// Check if another Object collides with this one
+// o - Object to check collision with
+bool Object::collidesWith(Object* o) const {
+	// No bound box? No collisions possible
+	if (_boundBox == nullptr || o->getBoundBox() == nullptr) {
+		return false;
 	}
 
-	return (collides);
+	return (o->intersectsWith(getBoundBox()));
 }
 
 // Returns if a point is within the collision box of an Object
-bool Object::contains(float px, float py) {
-	return getCollisionBox().contains(px, py);
+// px - X coord to check
+// py - Y coord to check
+bool Object::contains(float px, float py) const {
+	// No bound box? No collisions possible
+	if (_boundBox == nullptr) {
+		return false;
+	}
+	return getBoundBox()->contains(px, py);
 }
 
-//
+// Check if a BoundBox intersects with our BoundBox
+// box - BoundBox to check with
+bool Object::intersectsWith(BoundBox* box) const {
+	// No bound box? No collisions possible
+	if (_boundBox == nullptr || box == nullptr) {
+		return false;
+	}
+	return getBoundBox()->intersects(box);	
+}
+
+// Move where this Object will be next update
+// diff - Milliseconds that have passed since the last update
 void Object::move(int diff) {
 	// No need to calculate movement if they can't move
 	if (getSpeed() <= 0) {
@@ -138,15 +166,35 @@ void Object::move(int diff) {
 	_velocity.X = approach(_velocityGoal.X, _velocity.X, deltaMove);
 	_velocity.Y = approach(_velocityGoal.Y, _velocity.Y, deltaMove);
 
-	x += _velocity.X;// * deltaMove;
-	y += _velocity.Y;// * deltaMove;
+	x += _velocity.X;
+	y += _velocity.Y;
 
-	if (_map->collisionAtPlace(this, x, y)) {
-		x -= _velocity.X;// * deltaMove;
-		y -= _velocity.Y;// * deltaMove;
+	if (_boundBox) {
+		_boundBox->setOrigin(x, y);
+	}
+
+	// TODO: Will diagonal movement be faster?
+	if (_map->collisionAtPlace(this, _boundBox)) {
+		x -= _velocity.X;
+		y -= _velocity.Y;
+		//x += _velocity.X;// * deltaMove;
+		//y += _velocity.Y;// * deltaMove;
+
 	}
 
 	_shape.setPosition(x, y);
+
+	//if (!_map->collisionAtPlace(
+	//			this, newX + getWidth(), newY + getHeight()) &&
+	//	!_map->collisionAtPlace(this, newX + getWidth(), newY) &&
+	//	!_map->collisionAtPlace(this, newX, newY + getHeight()) &&
+	//	!_map->collisionAtPlace(this, newX, newY))  {
+
+	//	x += _velocity.X;// * deltaMove;
+	//	y += _velocity.Y;// * deltaMove;
+
+	//	_shape.setPosition(x, y);
+	//}
 }
 
 // Update the Object based on how much time has passed
@@ -250,7 +298,10 @@ void Object::setPosition(float nx, float ny) {
 	setTarget(nullptr);
 }
 
-//
+// Linear interpolation
+// max - Max value to approach
+// cur - Current value
+// dt - Delta time (milliseconds) How much to advance the value
 float Object::approach(float max, float cur, float dt) {
 	float diff = max - cur;
 

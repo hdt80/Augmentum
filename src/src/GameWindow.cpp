@@ -79,6 +79,16 @@ void GameWindow::handleEvent(sf::Event& e) {
 }
 
 void GameWindow::keyEvent(sf::Event& e) {
+	if (e.key.code == sf::Keyboard::B) {
+		for (unsigned int i = 0; i < _map.objects.size(); ++i) {
+			BoundBox* bb = _map.objects[i]->getBoundBox();
+			CORE_INFO("%i :: %x", i, _map.objects[i]->getBoundBox());
+			for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
+				CORE_INFO("\t%d -> (%g, %g)", j, bb->getPoint(j).X, bb->getPoint(j).Y);
+			}
+		}
+	}
+
 	//CORE_INFO("%d", e.key.code);
 	//if (e.key.code == sf::Keyboard::Escape) {
 	//	CORE_INFO("ESC");
@@ -126,6 +136,24 @@ void GameWindow::render(sf::RenderWindow& window) {
 
 	for (unsigned int i = 0; i < emitters.size(); ++i) {
 		window.draw(*emitters[i]);
+	}
+
+	for (unsigned int i = 0; i < _map.objects.size(); ++i) {
+		BoundBox* bb = _map.objects[i]->getBoundBox();
+
+		// Add an extra point to the last line completing the boundbox can be
+		// drawn unbroken
+		sf::VertexArray aa(sf::LinesStrip, bb->getPointCount() + 1);
+		for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
+			aa[j].color = sf::Color::Blue;
+			aa[j].position = sf::Vector2f(bb->getPoint(j).X, bb->getPoint(j).Y);
+		}
+		// Adding the last point to the array, to complete the boundbox
+		aa[bb->getPointCount()].color = sf::Color::Blue;
+		aa[bb->getPointCount()].position =
+			sf::Vector2f(bb->getPoint(0).X, bb->getPoint(0).Y);
+
+		window.draw(aa);
 	}
 
 	Window::render(window);

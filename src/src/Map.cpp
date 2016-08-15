@@ -24,7 +24,7 @@ std::string getType(Object* o) {
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
 Map::Map() {
-	_selected = new Ship(this, 0.0f, 0.0f, 25, Stats(), 4, sf::Color::Blue);
+	_selected = new Ship(this, 0.0f, 0.0f, Stats(), 4, sf::Color::Blue);
 
 	objects.push_back(_selected);
 }
@@ -88,12 +88,17 @@ void Map::calcCollisions() {
 	}
 }
 
-//
+// Get all Objects near a Target
+// t - Target to check
+// r - Radius, how close the Object must be to be included
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
 	return getObjectsInRange(t->getX(), t->getY(), r);
 }
 
-//
+// Get all Objects near a Target
+// x - X coord to check
+// y - Y coord to check
+// r - Radius, how close the Object must be to be included
 std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	std::vector<Object*> objs;
 	for (unsigned int i = 0; i < objects.size(); ++i) {
@@ -115,17 +120,43 @@ std::vector<Enemy*> Map::getEnemiesInRange(float x, float y, float r) {
 	return objs;
 }
 
-// Check if there is a collision at the position
-// o - Object that we checking for, use nullptr to use all objects
-// x - x coord to check
-// y - y coord to check
-bool Map::collisionAtPlace(Object* o, float x, float y) {
+// Check if a BoundBox intersects with any other BoundBox
+// o - Object to ignore during checks, use nullptr to check all objects
+// box - Box to check the collision with
+bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
+	// No bound box? can't have a collision
+	if (box == nullptr) {
+		CORE_WARN("[Map: %x] box = nullptr", this);
+		return false;
+	}
+
 	for (unsigned int i = 0; i < objects.size(); ++i) {
-		if (objects[i] != o && objects[i]->contains(x, y)) {
+		if (objects[i] != o && objects[i]->intersectsWith(box)) {
 			return true;
 		}
 	}
 	return false;
+}
+
+// Check if there is a collision at the position
+// o - Object to ignore, or use nullptr to check all objects
+// x - x coord to check
+// y - y coord to check
+bool Map::collisionAtPlace(Object* o, float x, float y) {
+	return (objectAt(o, x, y) != nullptr);
+}
+
+// Return the Object at (x, y), or nullptr if no object is there
+// o - Object to ignore, use nullptr to check for all objects
+// x - X coord of the point
+// y - Y coord of the point
+Object* Map::objectAt(Object* o, float x, float y) {
+	for (unsigned int i = 0; i < objects.size(); ++i) {
+		if (objects[i] != o && objects[i]->contains(x, y)) {
+			return objects[i];
+		}
+	}
+	return nullptr;
 }
 
 //

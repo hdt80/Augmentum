@@ -36,8 +36,19 @@ public:
 	std::vector<Object*> getObjectsInRange(float x, float y, float range);
 	std::vector<Enemy*> getEnemiesInRange(float x, float y, float range);
 
-	// Is there an Object at (x, y)?
+	// Check if a collision at the point (x, y), ignoring Object o
+	// o - Object to ignore during checks
+	// x - X coord to check for a collision
+	// y - Y coord to check for a collision
 	bool collisionAtPlace(Object* o, float x, float y);
+
+	// Check if a collision occurs with a BoundBox
+	// o - Object to ignore during checks
+	// box - BoundBox to check if collisions exist for
+	bool collisionAtPlace(Object* o, BoundBox* box) const;
+
+	// Return the Object at (x, y), ignoring Object o
+	Object* objectAt(Object* o, float x, float y);
 
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;

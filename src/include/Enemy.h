@@ -8,7 +8,7 @@
 class Enemy : public Object {
 public:
 	Enemy();
-	Enemy(Map* map, float health, Stats s, Path* p, int collRadius);
+	Enemy(Map* map, float health, Stats s, Path* p);
 	virtual ~Enemy();
 
 	void loadLua();

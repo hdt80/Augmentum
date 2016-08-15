@@ -6,7 +6,7 @@
 class Unit : public Object {
 public:
 	Unit();
-	Unit(Map* map, float x, float y, int collRadius, Stats s);
+	Unit(Map* map, float x, float y, Stats s);
 	virtual ~Unit();
 
 protected:

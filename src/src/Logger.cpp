@@ -170,3 +170,8 @@ FILE* Logger::loadFileStream(FILE* stream, const char* filename) {
 	return newStream;
 }
 
+
+trmclr::Style Logger::grey(trmclr::Foreground::LIGHT_GRAY);
+trmclr::Style Logger::yellow(trmclr::Foreground::YELLOW);
+trmclr::Style Logger::orange(trmclr::Foreground::LIGHT_RED);
+trmclr::Style Logger::red(trmclr::Foreground::RED);
