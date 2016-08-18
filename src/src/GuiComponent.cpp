@@ -2,8 +2,10 @@
 #include "Logger.h"
 #include "Window.h"
 
-GuiComponent::GuiComponent() :
-		GuiComponent(nullptr, Vector2(), Vector2(), Vector2()){}
+GuiComponent::GuiComponent() 
+	: GuiComponent(nullptr, Vector2(), Vector2(), Vector2()) {
+
+}
 
 GuiComponent::GuiComponent(Window* window,
 		Vector2 pos, Vector2 size, Vector2 windowSize) {
@@ -74,8 +76,6 @@ void GuiComponent::resize(Vector2 newSize) {
 	float origin_y = _pos.Y / newSize.Y;
 	float r_width = _size.X / newSize.X;
 	float r_height = _size.Y / newSize.Y;
-	CORE_INFO("orig x: %g, orig y: %g || r_width: %g, r_height: %g", origin_x
-			, origin_y, r_width, r_height);
 	_view.setViewport(sf::FloatRect(origin_x, origin_y, r_width, r_height));
 }
 

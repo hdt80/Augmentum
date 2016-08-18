@@ -13,7 +13,7 @@ public:
 	virtual void update(int diff);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	virtual void onClick(float window_x, float window_y,
+	virtual void onClick(int button, float window_x, float window_y,
 						 float view_x, float view_y);
 private:
 

@@ -1,0 +1,17 @@
+#include "bounds/PolygonBoundbox.h"
+
+PolygonBoundBox::PolygonBoundBox() {
+
+}
+
+PolygonBoundBox::PolygonBoundBox(Vector2 origin, int pointCount) {
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
+
+bool PolygonBoundBox::contains(float x, float y) {
+	return false;
+}

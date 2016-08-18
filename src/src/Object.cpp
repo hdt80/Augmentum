@@ -166,35 +166,32 @@ void Object::move(int diff) {
 	_velocity.X = approach(_velocityGoal.X, _velocity.X, deltaMove);
 	_velocity.Y = approach(_velocityGoal.Y, _velocity.Y, deltaMove);
 
-	x += _velocity.X;
-	y += _velocity.Y;
+	float newX = x + _velocity.X;
+	float newY = y + _velocity.Y;
 
+	// Check each direction of travel for collision
 	if (_boundBox) {
+		// Check collision on the X plane
+		_boundBox->setOrigin(newX, y);
+		if (!_map->collisionAtPlace(this, _boundBox)) {
+			x = newX;	
+		} else {
+			_velocity.X = 0.0f;
+		}
+
+		// Check collision on the Y place
+		_boundBox->setOrigin(x, newY);
+		if (!_map->collisionAtPlace(this, _boundBox)) {
+			y = newY;	
+		} else {
+			_velocity.Y = 0.0f;
+		}
+
+		// After we check each direction, move to the boundbox to the new place
 		_boundBox->setOrigin(x, y);
 	}
 
-	// TODO: Will diagonal movement be faster?
-	if (_map->collisionAtPlace(this, _boundBox)) {
-		x -= _velocity.X;
-		y -= _velocity.Y;
-		//x += _velocity.X;// * deltaMove;
-		//y += _velocity.Y;// * deltaMove;
-
-	}
-
 	_shape.setPosition(x, y);
-
-	//if (!_map->collisionAtPlace(
-	//			this, newX + getWidth(), newY + getHeight()) &&
-	//	!_map->collisionAtPlace(this, newX + getWidth(), newY) &&
-	//	!_map->collisionAtPlace(this, newX, newY + getHeight()) &&
-	//	!_map->collisionAtPlace(this, newX, newY))  {
-
-	//	x += _velocity.X;// * deltaMove;
-	//	y += _velocity.Y;// * deltaMove;
-
-	//	_shape.setPosition(x, y);
-	//}
 }
 
 // Update the Object based on how much time has passed

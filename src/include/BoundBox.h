@@ -49,15 +49,11 @@ public:
 	// index - Index of the point to get that's stored in _points
 	Vector2 getPoint(int index);
 
-protected:
 	// Add a point to the points that define this BoundBox
 	// v - Vector to add
 	void addPoint(Vector2 v);
 
-	// Get a certain point. Used to find the absolute position of the points
-	// index - Index of the point to get that's stored in _points
-	//Vector2 getPoint(int index);
-
+protected:
 	// The points that define where this BoundBox. These are not absolute 
 	// coords, but relative coords, relaitve to the _origin
 	std::vector<Vector2> _points;

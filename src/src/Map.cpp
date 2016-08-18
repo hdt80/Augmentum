@@ -51,7 +51,7 @@ void Map::update(int diff) {
 	// TODO: Only update the Objects around the player
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->update(diff);
-		if (objects[i]->isToRemove() || !inMap(objects[i])) {
+		if (objects[i]->isToRemove()) {
 			// If this Object is being attacked, and stored as a pointer to
 			// the Object attacking the Object being removed. In order to
 			// avoid a dangling pointer, we mark the Object for removal instead
@@ -126,7 +126,6 @@ std::vector<Enemy*> Map::getEnemiesInRange(float x, float y, float r) {
 bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
 	// No bound box? can't have a collision
 	if (box == nullptr) {
-		CORE_WARN("[Map: %x] box = nullptr", this);
 		return false;
 	}
 
@@ -157,10 +156,4 @@ Object* Map::objectAt(Object* o, float x, float y) {
 		}
 	}
 	return nullptr;
-}
-
-//
-bool Map::inMap(Object* o) {
-	return (o->getX() > 0 || o->getX() < _size.X ||
-			o->getY() > 0 || o->getY() < _size.Y);
 }

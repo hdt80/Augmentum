@@ -41,7 +41,7 @@ public:
 	// window_y - Y position of the click relative to the window
 	// view_x - X position of the click relative to the view
 	// view_y - Y position of the click relative to the view
-	virtual void onClick(float window_x, float window_y,
+	virtual void onClick(int button, float window_x, float window_y,
 					     float view_x, float view_y) {}
 
 	// Position getters and setters

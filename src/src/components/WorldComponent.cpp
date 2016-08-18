@@ -5,6 +5,7 @@
 #include "GameWindow.h"
 #include "Ship.h"
 #include "FontCache.h"
+#include "bounds/PolygonBoundBox.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor
@@ -44,10 +45,28 @@ void WorldComponent::draw(sf::RenderTarget& target,
 // window_y - Y coord relative to the window
 // view_x - X coord relative to the world
 // view_y - Y cooord relative to the world
-void WorldComponent::onClick(float window_x, float window_y,
+void WorldComponent::onClick(int button, float window_x, float window_y,
 		float view_x, float view_y) {
 
-	Ship* ship = new Ship(_map, view_x, view_y, Stats(), 15, sf::Color::Red);
+	Object* obj = nullptr;
 
-	_map->objects.push_back(ship);
+	if (button == sf::Mouse::Left) {
+		obj = new Ship(_map, view_x, view_y, Stats(), 15, sf::Color::Red);
+	} else if (button == sf::Mouse::Right) {
+		obj = new Ship(_map, view_x, view_y, Stats(), 15, sf::Color(232, 232, 232));
+		
+		BoundBox* bb = new PolygonBoundBox(Vector2(view_x, view_y), 8);
+		bb->addPoint(Vector2(0.0f, 0.0f));
+		bb->addPoint(Vector2(0.0f, 20.0f));
+		bb->addPoint(Vector2(20.0f, 40.0f));
+		bb->addPoint(Vector2(40.0f, 40.0f));
+		bb->addPoint(Vector2(20.0f, 40.0f));
+		bb->addPoint(Vector2(20.0f, 20.0f));
+		bb->addPoint(Vector2(20.0f, 0.0f));
+		bb->addPoint(Vector2(20.0f, 0.0f));
+
+		obj->setBoundBox(bb);
+	}
+
+	_map->objects.push_back(obj);
 }

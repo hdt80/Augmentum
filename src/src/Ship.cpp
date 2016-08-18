@@ -4,20 +4,25 @@
 // =============================================================================
 // Ctor and Dtor
 // =============================================================================
-//Ship::Ship()
-//	: Ship(nullptr, 0.0f, 0.0f, Stats()) {
-//
-//}
 
-//
+// Ship ctor
+// map - Map this Ship exists on
+// x - X position to create the ship at
+// y - Y position to create the ship at
+// s - Stats the Ship will have
 Ship::Ship(Map* map, float x, float y, Stats s)
 	: Ship(map, x, y, s, 30, sf::Color::Red) {
 	
 }
 
-//
-Ship::Ship(Map* map, float x, float y, Stats s,
-		int sides, sf::Color color)
+// Ship ctor
+// map - Map this Ship exists on
+// x - X position to create the ship at
+// y - Y position to create the ship at
+// s - Stats the Ship will have
+// sides - How many sides this ship will have
+// color - What color to draw this Ship
+Ship::Ship(Map* map, float x, float y, Stats s,	int sides, sf::Color color)
  	: Unit(map, x, y, s),
 		_sides(sides), _color(color) {
 	

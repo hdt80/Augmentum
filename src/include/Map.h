@@ -25,9 +25,6 @@ public:
 
 	void setSize(int w, int h) { _size.X = w; _size.Y = h;}
 
-	// If the Object is within the bounds of this Map
-	bool inMap(Object* o);
-
 	// Get the Ship the player is using
 	Ship* getSelected() { return _selected; }
 

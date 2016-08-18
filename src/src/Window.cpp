@@ -156,7 +156,8 @@ void Window::mouseEvent(sf::Event& e) {
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
 		sf::Vector2f worldPos = Game::getRenderWindow()
 			.mapPixelToCoords(pixelPos, clicked->getView());
-		clicked->onClick(pixelPos.x, pixelPos.y, worldPos.x, worldPos.y);
+		clicked->onClick(e.mouseButton.button,
+			pixelPos.x, pixelPos.y, worldPos.x, worldPos.y);
 	}
 }
 
