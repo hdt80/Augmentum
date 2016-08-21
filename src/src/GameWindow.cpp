@@ -88,19 +88,6 @@ void GameWindow::keyEvent(sf::Event& e) {
 			}
 		}
 	}
-
-	//CORE_INFO("%d", e.key.code);
-	//if (e.key.code == sf::Keyboard::Escape) {
-	//	CORE_INFO("ESC");
-	//} else if (e.key.code == sf::Keyboard::A) {
-	//	_map.getSelected()->moveRelative(-10, 0);
-	//} else if (e.key.code == sf::Keyboard::S) {
-	//	_map.getSelected()->moveRelative(0, 10);
-	//} else if (e.key.code == sf::Keyboard::D) {
-	//	_map.getSelected()->moveRelative(10, 0);
-	//} else if (e.key.code == sf::Keyboard::W) {
-	//	_map.getSelected()->moveRelative(0, -10);
-	//}
 }
 
 void GameWindow::mouseEvent(sf::Event& e) {
@@ -138,23 +125,23 @@ void GameWindow::render(sf::RenderWindow& window) {
 		window.draw(*emitters[i]);
 	}
 
-	for (unsigned int i = 0; i < _map.objects.size(); ++i) {
-		BoundBox* bb = _map.objects[i]->getBoundBox();
+	//for (unsigned int i = 0; i < _map.objects.size(); ++i) {
+	//	BoundBox* bb = _map.objects[i]->getBoundBox();
 
-		// Add an extra point to the last line completing the boundbox can be
-		// drawn unbroken
-		sf::VertexArray aa(sf::LinesStrip, bb->getPointCount() + 1);
-		for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
-			aa[j].color = sf::Color::Blue;
-			aa[j].position = sf::Vector2f(bb->getPoint(j).X, bb->getPoint(j).Y);
-		}
-		// Adding the last point to the array, to complete the boundbox
-		aa[bb->getPointCount()].color = sf::Color::Blue;
-		aa[bb->getPointCount()].position =
-			sf::Vector2f(bb->getPoint(0).X, bb->getPoint(0).Y);
+	//	// Add an extra point to the last line completing the boundbox can be
+	//	// drawn unbroken
+	//	sf::VertexArray aa(sf::LinesStrip, bb->getPointCount() + 1);
+	//	for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
+	//		aa[j].color = sf::Color::Blue;
+	//		aa[j].position = sf::Vector2f(bb->getPoint(j).X, bb->getPoint(j).Y);
+	//	}
+	//	// Adding the last point to the array, to complete the boundbox
+	//	aa[bb->getPointCount()].color = sf::Color::Blue;
+	//	aa[bb->getPointCount()].position =
+	//		sf::Vector2f(bb->getPoint(0).X, bb->getPoint(0).Y);
 
-		window.draw(aa);
-	}
+	//	window.draw(aa);
+	//}
 
 	Window::render(window);
 }

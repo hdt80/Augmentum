@@ -21,7 +21,7 @@ void BoundBox::addPoint(Vector2 v) {
 // Check if this BoundBox intersects with another BoundBox
 // box - Box to check for intersections with
 bool BoundBox::intersects(BoundBox* box) {
-	for (unsigned int i = 0; i < _points.size(); ++i) {
+	for (unsigned int i = 0; i < getPointCount(); ++i) {
 		if (box->contains(getPoint(i))) {
 			return true;
 		}

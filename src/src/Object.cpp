@@ -172,6 +172,18 @@ void Object::move(int diff) {
 	// Check each direction of travel for collision
 	if (_boundBox) {
 		// Check collision on the X plane
+
+		_boundBox->setOrigin(newX, newY);
+
+		//if (!_map->collisionAtPlace(this, _boundBox)) {
+		//	x = newX;
+		//	y = newY;
+		//} else {
+		//	_velocity.X = 0.0f;
+		//	_velocity.Y = 0.0f;
+		//	CORE_INFO("[Object %x] after pos: (%g, %g)", this, x, y);
+		//}
+
 		_boundBox->setOrigin(newX, y);
 		if (!_map->collisionAtPlace(this, _boundBox)) {
 			x = newX;	

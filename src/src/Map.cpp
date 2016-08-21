@@ -129,11 +129,12 @@ bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
 		return false;
 	}
 
-	for (unsigned int i = 0; i < objects.size(); ++i) {
-		if (objects[i] != o && objects[i]->intersectsWith(box)) {
+	for (Object* obj : objects) {
+		if (obj != o && box->intersects(obj->getBoundBox())) {
 			return true;
 		}
 	}
+
 	return false;
 }
 

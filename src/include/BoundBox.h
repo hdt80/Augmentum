@@ -10,16 +10,19 @@ public:
 	// nullary ctor
 	BoundBox() {}
 	BoundBox(Vector2 origin);
+
 	virtual ~BoundBox() {}
 
 	// Check if a point is contained within this bounding box
 	// point - Point to check
-	virtual bool contains(Vector2 point) { return contains(point.X, point.Y); }
+	virtual bool contains(const Vector2& point) {
+		return contains(point.X, point.Y);
+	}
 
 	// Check if a point is contained within this bounding box
 	// x - X coord to check
 	// y - Y coord to check
-	virtual bool contains(float x, float y) { CORE_INFO("A");return false; }
+	virtual bool contains(float x, float y) { return false; }
 
 	// Check if this BoundBox intersects another BoundBox
 	virtual bool intersects(BoundBox* box);
