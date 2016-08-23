@@ -39,13 +39,15 @@ $RECYCLE.BIN/
 # Project specific
 dep/SFML-build
 dep/Lua-build
+dep/box2d-build
 *.swp
+*.a
+*.dll
 
 bin/*
 bin/Tower
 bin/Tower.exe
 
 log.html
-
 
 __pycache__

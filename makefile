@@ -13,10 +13,10 @@ INCLUDEDIR = src/include
 
 # Running Linux? 
 ifeq ($(UNAME), Linux)
-	LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -llua
+	LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -llua -lbox2d
 # Windows?
 else
-	LINKER_FLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -llua
+	LINKER_FLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -llua -lbox2d
 endif
 
 # Enable all warnings but format and unused variables

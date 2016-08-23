@@ -4,3 +4,6 @@
 [submodule "include/sol"]
 	path = include/sol
 	url = https://github.com/thephd/sol2.git
+[submodule "include/box2d"]
+	path = include/box2d
+	url = https://github.com/erincatto/box2d.git
