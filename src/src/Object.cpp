@@ -1,12 +1,12 @@
 #include "Object.h"
 
-#include "Perk.h"
 #include <string>
 #include <algorithm>
 #include <cmath>
 #include "Logger.h"
 #include "Map.h"
 #include "Target.h"
+#include "Perk.h"
 #include "bounds/RectangleBoundBox.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,8 @@ Object::Object(Map* map, float x, float y, Stats s)
 	: Target(x, y),
 		_boundBox(nullptr),	_map(map), _tree(nullptr),  _attackerCount(0),
 		_baseStats(s), _target(nullptr), _toRemove(false) {
-
+	
+	map->createObjectBody(this, &_polyShape);
 }
 
 Object::Object()
@@ -25,6 +26,11 @@ Object::Object()
 
 // Object dtor
 Object::~Object() {
+	
+	if (_b2Box) {
+		_map->getWorld()->DestroyBody(_b2Box);
+	}
+
 	delete _boundBox;
 	delete _tree;
 
@@ -172,18 +178,6 @@ void Object::move(int diff) {
 	// Check each direction of travel for collision
 	if (_boundBox) {
 		// Check collision on the X plane
-
-		_boundBox->setOrigin(newX, newY);
-
-		//if (!_map->collisionAtPlace(this, _boundBox)) {
-		//	x = newX;
-		//	y = newY;
-		//} else {
-		//	_velocity.X = 0.0f;
-		//	_velocity.Y = 0.0f;
-		//	CORE_INFO("[Object %x] after pos: (%g, %g)", this, x, y);
-		//}
-
 		_boundBox->setOrigin(newX, y);
 		if (!_map->collisionAtPlace(this, _boundBox)) {
 			x = newX;	
@@ -200,10 +194,9 @@ void Object::move(int diff) {
 		}
 
 		// After we check each direction, move to the boundbox to the new place
-		_boundBox->setOrigin(x, y);
 	}
 
-	_shape.setPosition(x, y);
+	setPosition(x, y);
 }
 
 // Update the Object based on how much time has passed
@@ -304,7 +297,10 @@ void Object::setTarget(Target* t) {
 void Object::setPosition(float nx, float ny) {
 	x = nx;
 	y = ny;
-	setTarget(nullptr);
+
+	_b2Box->SetTransform(b2Vec2(nx, ny), _b2Box->GetAngle());
+	_shape.setPosition(nx, ny);
+	_boundBox->setOrigin(nx, ny);
 }
 
 // Linear interpolation

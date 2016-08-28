@@ -3,6 +3,8 @@
 
 #include "Target.h"
 
+#include <box2d/Box2d.h>
+
 #include "Stats.h"
 #include "SkillTree.h"
 #include "LuaScript.h"
@@ -16,6 +18,9 @@ class Map;
 class Perk;
 
 class Object : public Target, public sf::Drawable, public sf::Transformable {
+
+friend class Map;
+
 public:
 	// A default constructor must be defined for Sol for some reason.
 	// This constructor should never be used and is only for Sol
@@ -146,6 +151,9 @@ protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 	sf::CircleShape _shape;
+
+	b2Body* _b2Box;
+	b2PolygonShape _polyShape;
 
 	BoundBox* _boundBox; // Bounding box of this Object
 

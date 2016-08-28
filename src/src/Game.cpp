@@ -73,11 +73,13 @@ void Game::loop() {
 	}
 }
 
+//
 void Game::followWindow(Window* w) {
 	WindowManager.push(w);
 	CurrentWindow = w;
 }
 
+//
 void Game::pause() {
 	if (CurrentWindow != &_pauseWindow) {
 		followWindow(&_pauseWindow);

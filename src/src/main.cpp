@@ -10,7 +10,6 @@
 
 #include "Game.h"
 
-#include "LuaScript.h"
 #include "Convert.h"
 
 // =================================

@@ -1,12 +1,15 @@
 #ifndef _MAP_H
 #define _MAP_H
 
-#include "Tower.h"
+#include "Object.h"
 #include "Enemy.h"
+#include "Tower.h"
 #include "Projectile.h"
 
 #include <vector>
 #include <string>
+
+#include <box2d/Box2D.h>
 
 extern bool isEnemy(Object* o);
 extern bool isTower(Object* o);
@@ -28,10 +31,11 @@ public:
 	// Get the Ship the player is using
 	Ship* getSelected() { return _selected; }
 
+	b2World* getWorld() { return &_world; }
+
 	// Get all Objects within a radius of a point
 	std::vector<Object*> getObjectsInRange(Target* t, float range);
 	std::vector<Object*> getObjectsInRange(float x, float y, float range);
-	std::vector<Enemy*> getEnemiesInRange(float x, float y, float range);
 
 	// Check if a collision at the point (x, y), ignoring Object o
 	// o - Object to ignore during checks
@@ -53,11 +57,23 @@ public:
 	// Object marked for removal
 	std::vector<Object*> toRemove;
 
+	// Create the b2Body of an Object
+	// obj - Object to create the b2Body of
+	// shape - Shape that the Object will use
+	void createObjectBody(Object* obj, b2PolygonShape* shape);
+
+	static b2BodyDef ShipDef;
+	static b2BodyDef AsteroidDef;
+	static b2FixtureDef ShipFixtureDef;
+	static b2FixtureDef AsteroidFixtureDef;
+
 protected:
 	Vector2 _size;
 	Vector2 _origin; // (0, 0)
 
 	Ship* _selected; // Ship the player is controlling
+
+	b2World _world;
 };
 
 #endif

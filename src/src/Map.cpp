@@ -8,6 +8,12 @@ bool isEnemy(Object* o) { return dynamic_cast<Enemy*>(o) != nullptr; }
 bool isTower(Object* o) { return dynamic_cast<Tower*>(o) != nullptr; }
 bool isProjectile(Object* o) { return dynamic_cast<Projectile*>(o) != nullptr; }
 
+b2BodyDef Map::ShipDef;
+b2BodyDef Map::AsteroidDef;
+b2FixtureDef Map::ShipFixtureDef;
+b2FixtureDef Map::AsteroidFixtureDef;
+
+// String representation of an Object
 std::string getType(Object* o) {
 	if (isEnemy(o)) {
 		return "Enemy";
@@ -20,13 +26,30 @@ std::string getType(Object* o) {
 	}
 }
 
+void Map::createObjectBody(Object* obj, b2PolygonShape* shape) {
+	obj->_b2Box = _world.CreateBody(&Map::ShipDef);
+
+	shape->SetAsBox(1, 1);
+
+	Map::ShipFixtureDef.shape = shape;
+	Map::ShipFixtureDef.density = 1;
+
+	obj->_b2Box->CreateFixture(&Map::ShipFixtureDef);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
-Map::Map() {
+Map::Map()
+		: _world(b2Vec2(0.0f, 0.0f)) {
+
 	_selected = new Ship(this, 0.0f, 0.0f, Stats(), 4, sf::Color::Blue);
 
 	objects.push_back(_selected);
+
+	Map::ShipDef.type = b2_dynamicBody;
+	Map::ShipDef.position.Set(0, 0);
+	Map::ShipDef.angle = 0;
 }
 
 Map::~Map() {
@@ -104,17 +127,6 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		if (objects[i]->distanceWith(x, y) <= r) {
 			objs.push_back(objects[i]);
-		}
-	}
-	return objs;
-}
-
-//
-std::vector<Enemy*> Map::getEnemiesInRange(float x, float y, float r) {
-	std::vector<Enemy*> objs;	
-	for (unsigned int i = 0; i < objects.size(); ++i) {
-		if ((objects[i]->distanceWith(x, y) <= r) && isEnemy(objects[i])) {
-			objs.push_back(dynamic_cast<Enemy*>(objects[i]));
 		}
 	}
 	return objs;

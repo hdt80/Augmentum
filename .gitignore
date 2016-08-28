@@ -50,4 +50,6 @@ bin/Tower.exe
 
 log.html
 
+dep/box2d/Documentation
+
 __pycache__

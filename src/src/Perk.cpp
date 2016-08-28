@@ -40,10 +40,6 @@ void Perk::loadLua() {
 		CORE_WARNING("[Perk %x] Loading a loaded script [%x]", this, &_lua);
 	}
 
-	_lua.lua.set_function("getEnemiesInRange", [this](float x, float y, float r) {
-		return _attached->getMap()->getEnemiesInRange(x, y, r);
-	});
-
 	_lua.lua.set_function("getObjectsInRange", [this](float x, float y, float r) {
 		return _attached->getMap()->getObjectsInRange(x, y, r);	
 	});
