@@ -52,10 +52,20 @@ SkillNode::SkillNode() {
 }
 
 SkillNode::~SkillNode() {
-
+	if (left) {
+		delete left;
+	}
+	if (right) {
+		delete right;
+	}
+	if (perk) {
+		delete perk;
+	}
 }
 
 // Add a newly created Node as one of our children
+// node - Node to add as our child
+// Returns true if the node was added, or false if an error occured
 bool SkillNode::add(SkillNode* node) {
 	node->nodePrereq = this;
 	node->depth = depth + 1;
@@ -88,50 +98,51 @@ bool SkillNode::contains(float px, float py) {
 // Clone a Node into a new Node. This is a deep copy, meaning all pointers
 // are also cloned as new objects
 SkillNode* SkillNode::clone(std::vector<SkillNode*>* vec) {
-	if (this == nullptr) {
-		return nullptr;
-	}
-
     // Create the new node with the same values for each variable
 	SkillNode* node = new SkillNode();
 	node->isLeft = isLeft;
 	node->depth = depth;
-	node->perk = perk->clone();
+	if (perk) {
+		node->perk = perk->clone();
+	} else {
+		node->perk = nullptr;
+	}
 	node->points = 0;
 	node->maxPoints = maxPoints;
 	node->pos = pos;
     node->box = box;
 
     // Set the child Nodes after we clone the child so child's child's are ok
-	node->left = left->clone(vec);
-	if (node->left != nullptr) {
+	node->left = nullptr;
+	if (left) {
+		node->left = left->clone(vec);
 		node->left->nodePrereq = node;
 	}
 	
 	node->right = right->clone(vec);
-	if (node->right != nullptr) {
+	node->right = nullptr;
+	if (right) {
+		node->right = right->clone(vec);
 		node->right->nodePrereq = node;
 	}
 	vec->push_back(node);
 	return node;
 }
 
+// Print out this Node
 void SkillNode::print() {
-	if (this == nullptr) {
-		return;
-	}
 	char rel = 'L';
 	if (nodePrereq != nullptr) {
 		if (nodePrereq->right == this) {
 			rel = 'R';
 		}
-		printf("%s> (\'%s\':%x, %i%c) [%c:\'%s\':%x]\n",
+		CORE_INFO("%s> (\'%s\':%x, %i%c) [%c:\'%s\':%x]",
 			(unlocked() == true) ? "UNLOCK" : " LOCK ",
 			name().c_str(), this, depth,
 			(isLeft) ? 'L' : 'R', rel,
 			nodePrereq->name().c_str(), nodePrereq);
 	} else {
-		printf("%s> (\'%s\':%x, %i) [%s]\n",
+		CORE_INFO("%s> (\'%s\':%x, %i) [%s]",
 			(unlocked() == true) ? "UNLOCK" : " LOCK ",
 			name().c_str(), this, depth, "Root");
 	}
@@ -167,12 +178,16 @@ void SkillNode::setPoints(int p) {
 
     // Update the color of the box
     if (!unlocked()) {
+		// Not unlocked, can't put any points into it
         box.setFillColor(sf::Color::Red);
     } else if (unlocked() && points == 0) {
+		// Unlocked but no points
         box.setFillColor(sf::Color::White);
     } else if (unlocked() && points > 0 && points < maxPoints) {
+		// Unlocked with points, but not the max
         box.setFillColor(sf::Color(128, 128, 128)); // Gray
     } else if (points >= maxPoints) {
+		// All points put into this Node
         box.setFillColor(sf::Color::Green);
         // Child Nodes are now unlocked, reflect that
         if (left) {
@@ -202,7 +217,13 @@ SkillTree::SkillTree(Vector2 size) {
 }
 
 SkillTree::~SkillTree() {
-
+	if (_head) {
+		delete _head;
+	}
+	for (unsigned int i = 0; i < _data.size(); ++i) {
+		delete _data[i];
+	}
+	_data.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,26 +231,27 @@ SkillTree::~SkillTree() {
 ///////////////////////////////////////////////////////////////////////////////
 void SkillTree::print(SkillNode* node, bool pos) {
 	if (node != nullptr) {
-		print(node->left, pos);
+		if (node->left) {
+			print(node->left, pos);
+		}
 		char rel = 'L';
 		if (node->nodePrereq != nullptr) {
 			if (node->nodePrereq->right == node) {
 				rel = 'R';
 			}
-			if (pos) {
-				printf("(%g, %g) ", node->getX(), node->getY());
-			}
-			printf("%s> (\'%s\':%x, %i%c) [%c:\'%s\':%x]\n",
+			CORE_INFO("%s> (\'%s\':%x, %i%c) [%c:\'%s\':%x]",
 				(node->unlocked() == true) ? "UNLOCK" : " LOCK ",
 				node->name().c_str(), node, node->depth,
 				(node->isLeft) ? 'L' : 'R', rel,
 				node->nodePrereq->name().c_str(), node->nodePrereq);
 		} else {
-			printf("%s> (\'%s\':%x, %i) [%s]\n",
+			CORE_INFO("%s> (\'%s\':%x, %i) [%s]",
 				(node->unlocked() == true) ? "UNLOCK" : " LOCK ",
 				node->name().c_str(), node, node->depth, "Root");
 		}
-		print(node->right, pos);
+		if (node->right) {
+			print(node->right, pos);
+		}
 	}
 }
 

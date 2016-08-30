@@ -27,9 +27,6 @@ Perk::~Perk() {
 }
 
 Perk* Perk::clone() {
-	if (this == nullptr) {
-		return nullptr;
-	}
 	Perk* clone = new Perk(_name, _stats, _maxDuration, _maxStacks);
 	clone->setStackable(_stackable);
 	return clone;

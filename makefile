@@ -28,16 +28,22 @@ OUTPUT_NAME = Augmentum
 SRCS = $(wildcard $(SRCDIR)/*.cpp)
 SRCS += $(wildcard $(SRCDIR)/*/*.cpp)
 
+CSRCS = $(wildcard $(SRCDIR)/*.c)
+
 # Where the compiled objects are located
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SRCS))
+COBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(CSRCS))
 
 # Linking all the .o files and with the libs
-build: $(OBJS)
+build: $(OBJS) $(COBJS)
 	$(CXX) $^ $(LINKER_FLAGS) -o ./bin/$(OUTPUT_NAME)
 
 # Compiling all the .cpp files into .o files
 $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CXX) $(CXX_FLAGS) -o "$@" "$<"
+
+$(COBJS): $(BUILDDIRT)/%.o : $(SRCDIR)/%.c
+	$(CC) $(CC_FLAGS) -o "$@" "$<"
 
 # Running the created exe
 .PHONY: run

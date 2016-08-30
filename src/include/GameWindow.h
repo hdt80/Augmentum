@@ -32,6 +32,8 @@ public:
 
 protected:
 	Map _map;
+
+	b2DebugDrawer _debugDraw;
 };
 
 #endif
