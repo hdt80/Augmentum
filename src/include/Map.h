@@ -57,16 +57,6 @@ public:
 	// Object marked for removal
 	std::vector<Object*> toRemove;
 
-	// Create the b2Body of an Object
-	// obj - Object to create the b2Body of
-	// shape - Shape that the Object will use
-	void createObjectBody(Object* obj, b2PolygonShape* shape);
-
-	static b2BodyDef ShipDef;
-	static b2BodyDef AsteroidDef;
-	static b2FixtureDef ShipFixtureDef;
-	static b2FixtureDef AsteroidFixtureDef;
-
 protected:
 	Vector2 _size;
 	Vector2 _origin; // (0, 0)

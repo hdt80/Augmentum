@@ -88,6 +88,18 @@ void GameWindow::keyEvent(sf::Event& e) {
 			}
 		}
 	}
+	if (e.key.code == sf::Keyboard::N) {
+		CORE_INFO("[GameWindow %x] Turning on box2d shapeBit", this);
+		// TODO: Dear god no
+		WorldComponent* wc = dynamic_cast<WorldComponent*>(_components[1]);
+		if (wc == nullptr) {
+			CORE_WARN("wc isn't 1");
+			return;
+		}
+		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
+		CORE_INFO("b2DebugDraw flags: %d", Game::b2DebugDrawer.GetFlags());
+		wc->setDrawBounds(!wc->getDrawBounds());
+	}
 }
 
 void GameWindow::mouseEvent(sf::Event& e) {
@@ -124,25 +136,7 @@ void GameWindow::render(sf::RenderWindow& window) {
 	for (unsigned int i = 0; i < emitters.size(); ++i) {
 		window.draw(*emitters[i]);
 	}
-
-	//for (unsigned int i = 0; i < _map.objects.size(); ++i) {
-	//	BoundBox* bb = _map.objects[i]->getBoundBox();
-
-	//	// Add an extra point to the last line completing the boundbox can be
-	//	// drawn unbroken
-	//	sf::VertexArray aa(sf::LinesStrip, bb->getPointCount() + 1);
-	//	for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
-	//		aa[j].color = sf::Color::Blue;
-	//		aa[j].position = sf::Vector2f(bb->getPoint(j).X, bb->getPoint(j).Y);
-	//	}
-	//	// Adding the last point to the array, to complete the boundbox
-	//	aa[bb->getPointCount()].color = sf::Color::Blue;
-	//	aa[bb->getPointCount()].position =
-	//		sf::Vector2f(bb->getPoint(0).X, bb->getPoint(0).Y);
-
-	//	window.draw(aa);
-	//}
-
+	
 	Window::render(window);
 }
 

@@ -18,6 +18,8 @@ void Game::start() {
 	_window.create(sf::VideoMode(900, 600, currVidMode.bitsPerPixel),
 		"Augmentum", sf::Style::Default, currVidSettings);
 
+	b2DebugDrawer.setRenderWindow(&_window);
+
 	CurrentGameState = Playing;
 
 	_pauseWindow.setSize(_size);
@@ -26,14 +28,17 @@ void Game::start() {
 }
 
 void Game::loop() {
+	// Set up timing vars
 	std::chrono::time_point<std::chrono::high_resolution_clock> tStart, tEnd;
 	tStart = std::chrono::high_resolution_clock::now();
 	long long tDiff;
 
+	// Create the first window
 	GameWindow w(_size);
 
 	followWindow(&w);
 
+	// Main loop
 	sf::Event e;
 	while (!toClose()) {
 		tEnd = tStart;
@@ -67,7 +72,6 @@ void Game::loop() {
 
 		CurrentWindow->update(tDiff);
 		CurrentWindow->render(_window);
-        _window.setTitle(CurrentWindow->getName());
 		Fps.update();
 		_window.display();
 	}
@@ -77,6 +81,7 @@ void Game::loop() {
 void Game::followWindow(Window* w) {
 	WindowManager.push(w);
 	CurrentWindow = w;
+	_window.setTitle(CurrentWindow->getName());
 }
 
 //
@@ -92,11 +97,14 @@ void Game::pause() {
 // Static vars
 ///////////////////////////////////////////////////////////////////////////////
 Game::GameState Game::CurrentGameState = Uninitalized;
-Window* Game::CurrentWindow            = nullptr;
+Window*			Game::CurrentWindow    = nullptr;
 
+DebugDrawer  Game::b2DebugDrawer;
 StateManager Game::WindowManager;
+
 FPS Game::Fps;
 
+// Procted vars
 sf::RenderWindow Game::_window;
-PauseWindow Game::_pauseWindow;
-Vector2 Game::_size;
+PauseWindow		 Game::_pauseWindow;
+Vector2			 Game::_size;

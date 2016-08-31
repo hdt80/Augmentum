@@ -8,11 +8,6 @@ bool isEnemy(Object* o) { return dynamic_cast<Enemy*>(o) != nullptr; }
 bool isTower(Object* o) { return dynamic_cast<Tower*>(o) != nullptr; }
 bool isProjectile(Object* o) { return dynamic_cast<Projectile*>(o) != nullptr; }
 
-b2BodyDef Map::ShipDef;
-b2BodyDef Map::AsteroidDef;
-b2FixtureDef Map::ShipFixtureDef;
-b2FixtureDef Map::AsteroidFixtureDef;
-
 // String representation of an Object
 std::string getType(Object* o) {
 	if (isEnemy(o)) {
@@ -26,17 +21,6 @@ std::string getType(Object* o) {
 	}
 }
 
-void Map::createObjectBody(Object* obj, b2PolygonShape* shape) {
-	obj->_b2Box = _world.CreateBody(&Map::ShipDef);
-
-	shape->SetAsBox(1, 1);
-
-	Map::ShipFixtureDef.shape = shape;
-	Map::ShipFixtureDef.density = 1;
-
-	obj->_b2Box->CreateFixture(&Map::ShipFixtureDef);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,9 +31,6 @@ Map::Map()
 
 	objects.push_back(_selected);
 
-	Map::ShipDef.type = b2_dynamicBody;
-	Map::ShipDef.position.Set(0, 0);
-	Map::ShipDef.angle = 0;
 }
 
 Map::~Map() {

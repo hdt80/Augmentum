@@ -15,8 +15,11 @@ public:
 
 	virtual void onClick(int button, float window_x, float window_y,
 						 float view_x, float view_y);
-private:
 
+	// 
+	void setDrawBounds(bool b) { _drawBounds = b; }
+	bool getDrawBounds() const { return _drawBounds; }
+private:
 	bool _drawBounds; // Draw the bounding boxes of the Objects
 
 	Map* _map;

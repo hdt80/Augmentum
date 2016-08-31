@@ -2,10 +2,17 @@
 #define _DEBUG_DRAW_H
 
 #include <box2d/Box2d.h>
+#include <SFML/Graphics.hpp>
 
-class b2DebugDrawer : public b2Draw {
+class DebugDrawer : public b2Draw {
 public:
-	b2DebugDrawer();
+	DebugDrawer();
+
+	// Set the RenderWindow
+	void setRenderWindow(sf::RenderWindow* window) { _window = window; }
+	sf::RenderWindow* getRenderWindow() { return _window; }
+
+	void setRenderTarget(sf::RenderTarget* target) { _target = target; }
 
 	// Methods that b2DebugDraw uses to draw all the b2Bodies
 	
@@ -33,7 +40,10 @@ public:
 	void DrawPoint(const b2Vec2& p, float size, const b2Color& color);
 
 protected:
+	sf::RenderWindow* _window;
+	sf::RenderTarget* _target;
 
+	inline sf::Color getSfColor(const b2Color& color);
 };
 
 #endif

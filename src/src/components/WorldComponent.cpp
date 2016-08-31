@@ -6,6 +6,7 @@
 #include "Ship.h"
 #include "FontCache.h"
 #include "bounds/PolygonBoundBox.h"
+#include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor
@@ -18,7 +19,11 @@ WorldComponent::WorldComponent(Window* window, Vector2 pos,
 	if ((gameWindow = dynamic_cast<GameWindow*>(window)) != nullptr) {
 		_window = gameWindow;
 		_map = gameWindow->getMap();
+
+		_map->getWorld()->SetDebugDraw(&Game::b2DebugDrawer);
 	}
+
+	_drawBounds = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,22 +44,10 @@ void WorldComponent::draw(sf::RenderTarget& target,
 		target.draw(*(_map->objects[i]), states);
 	}
 
-	for (unsigned int i = 0; i < _map->objects.size(); ++i) {
-		BoundBox* bb = _map->objects[i]->getBoundBox();
-
-		// Add an extra point to the last line completing the boundbox can be
-		// drawn unbroken
-		sf::VertexArray aa(sf::LinesStrip, bb->getPointCount() + 1);
-		for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
-			aa[j].color = sf::Color::Blue;
-			aa[j].position = sf::Vector2f(bb->getPoint(j).X, bb->getPoint(j).Y);
-		}
-		// Adding the last point to the array, to complete the boundbox
-		aa[bb->getPointCount()].color = sf::Color::Blue;
-		aa[bb->getPointCount()].position =
-			sf::Vector2f(bb->getPoint(0).X, bb->getPoint(0).Y);
-
-		target.draw(aa);
+	// Draw the bounds of boxes
+	if (_drawBounds) {
+		Game::b2DebugDrawer.setRenderTarget(&target);
+		_map->getWorld()->DrawDebugData();	
 	}
 }
 

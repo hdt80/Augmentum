@@ -9,6 +9,7 @@
 #include "StateManager.h"
 #include "Vector2.h"
 #include "FPS.h"
+#include "DebugDraw.h"
 
 #define REFRESH_RATE 16666 // 60 FPS - 16.666ms between each frame
 
@@ -20,17 +21,23 @@ public:
 	// Ending - Game is being closed, start deallocating everything
 	enum GameState {Uninitalized, Paused, Playing, Ending};
 	
+	// Start running the game
 	static void start();
+	// Main game loop
 	static void loop();
 
 	// If the Game is already paused unpause, else pause it
 	static void pause();
 
+	// Get if the game is currently shutting down
 	static bool toClose() { return CurrentGameState == Ending; }
+	// Set the current GameSate
 	static void setState(GameState state) { CurrentGameState = state; }
 
+	// Add a new Window to the StateManager and begin updating that one
 	static void followWindow(Window* w);
 
+	// Get the sf::RenderWindow that we draw everything to
 	static sf::RenderWindow& getRenderWindow() { return _window; }
 
 	static GameState CurrentGameState;
@@ -38,6 +45,8 @@ public:
 	static StateManager WindowManager;
 
 	static FPS Fps;
+
+	static DebugDrawer b2DebugDrawer;
 
 protected:
 	static sf::RenderWindow _window;

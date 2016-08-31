@@ -17,7 +17,6 @@ Object::Object(Map* map, float x, float y, Stats s)
 		_boundBox(nullptr),	_map(map), _tree(nullptr),  _attackerCount(0),
 		_baseStats(s), _target(nullptr), _toRemove(false) {
 	
-	map->createObjectBody(this, &_polyShape);
 }
 
 Object::Object()
@@ -26,7 +25,6 @@ Object::Object()
 
 // Object dtor
 Object::~Object() {
-	
 	if (_b2Box) {
 		_map->getWorld()->DestroyBody(_b2Box);
 	}
