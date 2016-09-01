@@ -12,8 +12,6 @@ public:
 	void setRenderWindow(sf::RenderWindow* window) { _window = window; }
 	sf::RenderWindow* getRenderWindow() { return _window; }
 
-	void setRenderTarget(sf::RenderTarget* target) { _target = target; }
-
 	// Methods that b2DebugDraw uses to draw all the b2Bodies
 	
 	// Draw a closed polygon with points provided in a CCW order
@@ -41,7 +39,6 @@ public:
 
 protected:
 	sf::RenderWindow* _window;
-	sf::RenderTarget* _target;
 
 	inline sf::Color getSfColor(const b2Color& color);
 };
