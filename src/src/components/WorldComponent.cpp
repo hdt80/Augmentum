@@ -46,7 +46,6 @@ void WorldComponent::draw(sf::RenderTarget& target,
 
 	// Draw the bounds of boxes
 	if (_drawBounds) {
-		Game::b2DebugDrawer.setRenderTarget(&target);
 		_map->getWorld()->DrawDebugData();	
 	}
 }
