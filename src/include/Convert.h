@@ -18,6 +18,9 @@
 #endif
 
 namespace convert {
+
+	const float B2BOX_SCALE = 30.f;
+
 	template<typename T> 
 	std::string toString(const T& n) {
 		std::ostringstream stream;
@@ -40,6 +43,15 @@ namespace convert {
 		snprintf(buf.get(), size, format.c_str(), args ...);
 		return std::string(buf.get(), buf.get() + size - 1);
 	}
+
+	// Convert radians to degrees
+	inline float toDeg(float rad) { return rad * 57.295779; }
+	// Convert degrees to radians
+	inline float toRad(float deg) { return deg * 0.0174532; }
+
+	// Box2d uses a smaller scale than our game, by a factor of 10
+	inline float toB2(float f) { return f / B2BOX_SCALE; }
+	inline float fromB2(float f) { return f * B2BOX_SCALE; }
 }
 
 #endif

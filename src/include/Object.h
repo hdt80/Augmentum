@@ -17,10 +17,8 @@
 class Map;
 class Perk;
 
-class Object : public Target, public sf::Drawable, public sf::Transformable {
-
-friend class Map;
-
+class Object : public Target, public b2ContactListener, 
+		public sf::Drawable, public sf::Transformable {
 public:
 	// A default constructor must be defined for Sol for some reason.
 	// This constructor should never be used and is only for Sol
@@ -30,6 +28,11 @@ public:
 
 	// If Object* o collides with us
 	bool collidesWith(Object* o) const;
+	// Methods inherited from b2ContactListener
+	void BeginContact(b2Contact* contact);
+	void EndContact(b2Contact* contact);
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+	void PostSolve(b2Contact* contact, const b2Manifold* newManifold);
 
 	// Load the Lua file and define all helper Lua methods
 	virtual void loadLua();

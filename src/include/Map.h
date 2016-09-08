@@ -64,6 +64,9 @@ protected:
 	Ship* _selected; // Ship the player is controlling
 
 	b2World _world;
+	// How many times to iterate the world
+	int velocityIterations = 1;
+	int positionIterations = 1;
 };
 
 #endif

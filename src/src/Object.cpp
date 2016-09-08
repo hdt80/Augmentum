@@ -55,6 +55,22 @@ void Object::onCollision(Object* o) {
 	//CORE_INFO("%x collided with %x", this, o);
 };
 
+void Object::BeginContact(b2Contact* contact) {
+	CORE_INFO("[Object %x] BeginContact", this);
+}
+
+void Object::EndContact(b2Contact* contact) {
+	CORE_INFO("[Object %x] EndContact", this);
+}
+
+void Object::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
+	CORE_INFO("[Object %x] PreSolve", this);
+}
+
+void Object::PostSolve(b2Contact* contact, const b2Manifold* newManifold) {
+	CORE_INFO("[Object %x] PostSolve", this);
+}
+
 // Load all the functions related to the Object
 void Object::loadLua() {
 	if (_lua.isLoaded()) {
@@ -122,6 +138,8 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 // Check if another Object collides with this one
 // o - Object to check collision with
 bool Object::collidesWith(Object* o) const {
+	// TODO: Temp code to test Box2d
+	return false;
 	// No bound box? No collisions possible
 	if (_boundBox == nullptr || o->getBoundBox() == nullptr) {
 		return false;
@@ -134,6 +152,8 @@ bool Object::collidesWith(Object* o) const {
 // px - X coord to check
 // py - Y coord to check
 bool Object::contains(float px, float py) const {
+	// TODO: Temp code to test Box2d
+	return false;
 	// No bound box? No collisions possible
 	if (_boundBox == nullptr) {
 		return false;
@@ -144,6 +164,8 @@ bool Object::contains(float px, float py) const {
 // Check if a BoundBox intersects with our BoundBox
 // box - BoundBox to check with
 bool Object::intersectsWith(BoundBox* box) const {
+	// TODO: Temp code to test Box2d
+	return false;
 	// No bound box? No collisions possible
 	if (_boundBox == nullptr || box == nullptr) {
 		return false;
@@ -296,9 +318,9 @@ void Object::setPosition(float nx, float ny) {
 	x = nx;
 	y = ny;
 
-	_b2Box->SetTransform(b2Vec2(nx, ny), _b2Box->GetAngle());
-	_shape.setPosition(nx, ny);
-	_boundBox->setOrigin(nx, ny);
+	_b2Box->SetTransform(b2Vec2(x, y), _b2Box->GetAngle());
+	_shape.setPosition(x, y);
+	_boundBox->setOrigin(x, y);
 }
 
 // Linear interpolation

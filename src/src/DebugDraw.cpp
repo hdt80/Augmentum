@@ -17,11 +17,15 @@ sf::Color DebugDrawer::getSfColor(const b2Color& color) {
 void DebugDrawer::DrawPolygon(const b2Vec2* verts,
 		int vertCount, const b2Color& color) {
 
-	sf::VertexArray aa(sf::LinesStrip, vertCount);
+	// Add one extra point to close the polygon
+	sf::VertexArray aa(sf::LinesStrip, vertCount + 1);
 	for (int i = 0; i < vertCount; ++i) {
 		aa[i].position = sf::Vector2f(verts[i].x, verts[i].y);
 		aa[i].color = getSfColor(color);
 	}
+	// Add the first point again to close the polygon
+	aa[vertCount].position = sf::Vector2f(verts[0].x, verts[0].y);
+	aa[vertCount].color = getSfColor(color);
 
 	_window->draw(aa);
 	
@@ -34,13 +38,15 @@ void DebugDrawer::DrawPolygon(const b2Vec2* verts,
 void DebugDrawer::DrawSolidPolygon(const b2Vec2* verts,
 		int vertCount, const b2Color& color) {
 
-	sf::ConvexShape shape(vertCount);
+	// One more to draw the line from the end to beginning
+	sf::ConvexShape shape(vertCount + 1);
 	shape.setFillColor(getSfColor(color));
 	shape.setPosition(sf::Vector2f(verts[0].x, verts[0].y));
 
 	for (int i = 0; i < vertCount; ++i) {
 		shape.setPoint(i, sf::Vector2f(verts[i].x, verts[i].y));
 	}
+	shape.setPoint(vertCount, sf::Vector2f(verts[0].x, verts[0].y));
 
 	_window->draw(shape);
 }
@@ -72,10 +78,11 @@ void DebugDrawer::DrawSolidCircle(const b2Vec2& center,
 	shape.setFillColor(col);
 
 	// The Axis is which direction the circle faces
+	b2Vec2 p = center + (radius * axis);
 	sf::VertexArray aa(sf::Lines, 2);
 	aa[0].position = sf::Vector2f(center.x, center.x);
 	aa[0].color = col;
-	aa[1].position = sf::Vector2f(axis.x, axis.y);
+	aa[1].position = sf::Vector2f(p.x, p.y);
 	aa[1].color = col;
 
 	_window->draw(shape);

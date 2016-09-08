@@ -96,9 +96,16 @@ void GameWindow::keyEvent(sf::Event& e) {
 			CORE_WARN("wc isn't 1");
 			return;
 		}
-		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
+		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit);// | b2Draw::e_aabbBit);
 		CORE_INFO("b2DebugDraw flags: %d", Game::b2DebugDrawer.GetFlags());
 		wc->setDrawBounds(!wc->getDrawBounds());
+	}
+	if (e.key.code == sf::Keyboard::M) {
+		b2Body* bodies = _map.getWorld()->GetBodyList();
+		for (int i = 0; i < _map.getWorld()->GetBodyCount(); ++i) {
+			CORE_INFO("%d/%d :: (%g, %g)", i, _map.getWorld()->GetBodyCount(),
+					bodies[i].GetPosition().x, bodies[i].GetPosition().y);
+		}
 	}
 }
 

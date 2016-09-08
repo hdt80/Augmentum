@@ -38,11 +38,12 @@ Ship::Ship(Map* map, float x, float y, Stats s,	int sides, sf::Color color)
 	b2BodyDef bdf;
 	bdf.type = b2_dynamicBody;
 	bdf.position.Set(x, y);
+	bdf.angle = 0; // Radians
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);
-	cs.m_radius = 40;
+	cs.m_radius = 20;
 
 	b2FixtureDef fd;
 	fd.shape = &cs;

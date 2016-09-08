@@ -74,6 +74,8 @@ void Map::update(int diff) {
 	}
 	toRemove.clear();
 
+	_world.Step(1.0f / 60.0f, velocityIterations, positionIterations);
+
 	// Calculate the collisions after all the removal and moves so the player
 	// gets accurate feedback and isn't behind a frame
 	calcCollisions();
@@ -118,6 +120,8 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 // box - Box to check the collision with
 bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
 	// No bound box? can't have a collision
+	// TODO: Temp code to test Box2d
+	return false;
 	if (box == nullptr) {
 		return false;
 	}
@@ -136,6 +140,8 @@ bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
 // x - x coord to check
 // y - y coord to check
 bool Map::collisionAtPlace(Object* o, float x, float y) {
+	// TODO: Temp code to test Box2d
+	return false;
 	return (objectAt(o, x, y) != nullptr);
 }
 
