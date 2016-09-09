@@ -74,7 +74,8 @@ void Map::update(int diff) {
 	}
 	toRemove.clear();
 
-	_world.Step(1.0f / 60.0f, velocityIterations, positionIterations);
+	//CORE_INFO("Stepping world for %g milliseconds", 1.0f / diff);
+	_world.Step(1.0f / diff, velocityIterations, positionIterations);
 
 	// Calculate the collisions after all the removal and moves so the player
 	// gets accurate feedback and isn't behind a frame

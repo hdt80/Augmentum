@@ -89,7 +89,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 		}
 	}
 	if (e.key.code == sf::Keyboard::N) {
-		CORE_INFO("[GameWindow %x] Turning on box2d shapeBit", this);
+		CORE_INFO("[GameWindow %x] Toggling on box2d shapeBit", this);
 		// TODO: Dear god no
 		WorldComponent* wc = dynamic_cast<WorldComponent*>(_components[1]);
 		if (wc == nullptr) {

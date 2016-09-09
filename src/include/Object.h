@@ -138,11 +138,14 @@ public:
 	// Movement methods
 	////////////////////////////////////////////////////////////////////////////
 	virtual void setPosition(float x, float y);
-	virtual void moveRelative(float dx, float dy);
 	float approach(float max, float cur, float dt);
 	void setVelocity(float x, float y);
 	Vector2 getVelocity() const { return _velocity; }
 	Vector2 getVelocityGoal() const { return _velocityGoal; }
+	// Position methods
+	virtual float getX() const { return _b2Box->GetPosition().x; }
+	virtual float getY() const { return _b2Box->GetPosition().y; }
+	virtual Vector2 getPosition() const { return Vector2(getX(), getY()); }
 
 	////////////////////////////////////////////////////////////////////////////
 	// Bound box

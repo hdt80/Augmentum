@@ -176,52 +176,53 @@ bool Object::intersectsWith(BoundBox* box) const {
 // Move where this Object will be next update
 // diff - Milliseconds that have passed since the last update
 void Object::move(int diff) {
-	// No need to calculate movement if they can't move
-	if (getSpeed() <= 0) {
-		return;
-	}
+	//// No need to calculate movement if they can't move
+	//if (getSpeed() <= 0) {
+	//	return;
+	//}
 
-	//Vector2 to(_target->getX(), _target->getY());
-	//Vector2 cur(x, y);
+	////Vector2 to(_target->getX(), _target->getY());
+	////Vector2 cur(x, y);
 
-	//Vector2 goingTo(to - cur);
-	//_direction = goingTo.normalize();
+	////Vector2 goingTo(to - cur);
+	////_direction = goingTo.normalize();
 
-	double deltaMove = (double)getSpeed() * 0.000001f * diff;
+	//double deltaMove = (double)getSpeed() * 0.000001f * diff;
 
-	_velocity.X = approach(_velocityGoal.X, _velocity.X, deltaMove);
-	_velocity.Y = approach(_velocityGoal.Y, _velocity.Y, deltaMove);
+	//_velocity.X = approach(_velocityGoal.X, _velocity.X, deltaMove);
+	//_velocity.Y = approach(_velocityGoal.Y, _velocity.Y, deltaMove);
 
-	float newX = x + _velocity.X;
-	float newY = y + _velocity.Y;
+	//float newX = x + _velocity.X;
+	//float newY = y + _velocity.Y;
 
-	// Check each direction of travel for collision
-	if (_boundBox) {
-		// Check collision on the X plane
-		_boundBox->setOrigin(newX, y);
-		if (!_map->collisionAtPlace(this, _boundBox)) {
-			x = newX;	
-		} else {
-			_velocity.X = 0.0f;
-		}
+	//// Check each direction of travel for collision
+	//if (_boundBox) {
+	//	// Check collision on the X plane
+	//	_boundBox->setOrigin(newX, y);
+	//	if (!_map->collisionAtPlace(this, _boundBox)) {
+	//		x = newX;	
+	//	} else {
+	//		_velocity.X = 0.0f;
+	//	}
 
-		// Check collision on the Y place
-		_boundBox->setOrigin(x, newY);
-		if (!_map->collisionAtPlace(this, _boundBox)) {
-			y = newY;	
-		} else {
-			_velocity.Y = 0.0f;
-		}
+	//	// Check collision on the Y place
+	//	_boundBox->setOrigin(x, newY);
+	//	if (!_map->collisionAtPlace(this, _boundBox)) {
+	//		y = newY;	
+	//	} else {
+	//		_velocity.Y = 0.0f;
+	//	}
 
-		// After we check each direction, move to the boundbox to the new place
-	}
+	//	// After we check each direction, move to the boundbox to the new place
+	//}
 
-	setPosition(x, y);
+	//setPosition(x, y);
 }
 
 // Update the Object based on how much time has passed
 // diff - How much time has passed, in milliseconds
 void Object::update(int diff) {
+//	CORE_INFO("pos (%g, %g)", getX(), getY());
 	onUpdate(diff);
 
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -323,33 +324,17 @@ void Object::setPosition(float nx, float ny) {
 	_boundBox->setOrigin(x, y);
 }
 
-// Linear interpolation
-// max - Max value to approach
-// cur - Current value
-// dt - Delta time (milliseconds) How much to advance the value
-float Object::approach(float max, float cur, float dt) {
-	float diff = max - cur;
-
-	if (diff > dt) {
-		return cur + dt;
-	}
-	if (diff < -dt) {
-		return cur - dt;
-	}
-
-	return max;
-}
-
 //
 void Object::setVelocity(float x, float y) {
+	b2Vec2 vel = _b2Box->GetLinearVelocity();
+	b2Vec2 velDiff = b2Vec2(x, y) - vel;
+
+	CORE_INFO("vel (%g, %g) velDiff (%g, %g)", vel.x, vel.y, velDiff.x, velDiff.y);
+
+	_b2Box->ApplyLinearImpulse(velDiff, _b2Box->GetWorldCenter(), true);
+
 	_velocityGoal.X = x;
 	_velocityGoal.Y = y;
-}
-
-//
-void Object::moveRelative(float dx, float dy) {
-	setPosition(getX() + dx, getY() + dy);
-	_shape.setPosition(getX(), getY());
 }
 
 //

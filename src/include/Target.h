@@ -15,9 +15,9 @@ public:
 	float distanceWithSqr(float dx, float dy);
 	float distanceWithSqr(Target* t);
 
-	Vector2 getPosition() { return Vector2(x, y); }
-	float getX() const { return x; }
-	float getY() const { return y; }
+	virtual Vector2 getPosition() { return Vector2(x, y); }
+	virtual float getX() const { return x; }
+	virtual float getY() const { return y; }
 
 	virtual void setPosition(float x, float y) {
 		this->x = x;
