@@ -18,7 +18,7 @@ Enemy::Enemy(Map* map, float health, Stats s, Path* p)
 
 	_hpBar.setFillColor(sf::Color::Green);
 
-	setPosition(p->getPoint(0)->X, p->getPoint(0)->Y);
+	this->Target::setPosition(p->getPoint(0)->X, p->getPoint(0)->Y);
 	_target = new Target(p->getPoint(1));
 
 	loadLua();

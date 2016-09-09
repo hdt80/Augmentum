@@ -176,47 +176,21 @@ bool Object::intersectsWith(BoundBox* box) const {
 // Move where this Object will be next update
 // diff - Milliseconds that have passed since the last update
 void Object::move(int diff) {
-	//// No need to calculate movement if they can't move
-	//if (getSpeed() <= 0) {
-	//	return;
-	//}
 
-	////Vector2 to(_target->getX(), _target->getY());
-	////Vector2 cur(x, y);
+}
 
-	////Vector2 goingTo(to - cur);
-	////_direction = goingTo.normalize();
+// Set the linear velocity of this Object
+// x - X acceleration to apply
+// y - Y acceleration to apply
+void Object::setVelocity(float x, float y) {
+	b2Vec2 vel = _b2Box->GetLinearVelocity();
+	CORE_INFO("vel(%g, %g)", vel.x, vel.y);
+	b2Vec2 end(x, y);
+	CORE_INFO("end(%g, %g)", end.x, end.y);
 
-	//double deltaMove = (double)getSpeed() * 0.000001f * diff;
-
-	//_velocity.X = approach(_velocityGoal.X, _velocity.X, deltaMove);
-	//_velocity.Y = approach(_velocityGoal.Y, _velocity.Y, deltaMove);
-
-	//float newX = x + _velocity.X;
-	//float newY = y + _velocity.Y;
-
-	//// Check each direction of travel for collision
-	//if (_boundBox) {
-	//	// Check collision on the X plane
-	//	_boundBox->setOrigin(newX, y);
-	//	if (!_map->collisionAtPlace(this, _boundBox)) {
-	//		x = newX;	
-	//	} else {
-	//		_velocity.X = 0.0f;
-	//	}
-
-	//	// Check collision on the Y place
-	//	_boundBox->setOrigin(x, newY);
-	//	if (!_map->collisionAtPlace(this, _boundBox)) {
-	//		y = newY;	
-	//	} else {
-	//		_velocity.Y = 0.0f;
-	//	}
-
-	//	// After we check each direction, move to the boundbox to the new place
-	//}
-
-	//setPosition(x, y);
+	b2Vec2 diff = vel - end;
+	CORE_INFO("diff (%g, %g)", diff.x, diff.y);
+	_b2Box->ApplyLinearImpulseToCenter(diff, true);
 }
 
 // Update the Object based on how much time has passed
@@ -312,29 +286,6 @@ void Object::setTarget(Target* t) {
 		delete _target;
 	}
 	_target = t;
-}
-
-//
-void Object::setPosition(float nx, float ny) {
-	x = nx;
-	y = ny;
-
-	_b2Box->SetTransform(b2Vec2(x, y), _b2Box->GetAngle());
-	_shape.setPosition(x, y);
-	_boundBox->setOrigin(x, y);
-}
-
-//
-void Object::setVelocity(float x, float y) {
-	b2Vec2 vel = _b2Box->GetLinearVelocity();
-	b2Vec2 velDiff = b2Vec2(x, y) - vel;
-
-	CORE_INFO("vel (%g, %g) velDiff (%g, %g)", vel.x, vel.y, velDiff.x, velDiff.y);
-
-	_b2Box->ApplyLinearImpulse(velDiff, _b2Box->GetWorldCenter(), true);
-
-	_velocityGoal.X = x;
-	_velocityGoal.Y = y;
 }
 
 //

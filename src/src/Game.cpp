@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Logger.h"
-
 #include "GameWindow.h"
 
 void Game::start() {

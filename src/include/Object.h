@@ -137,15 +137,10 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	// Movement methods
 	////////////////////////////////////////////////////////////////////////////
-	virtual void setPosition(float x, float y);
-	float approach(float max, float cur, float dt);
 	void setVelocity(float x, float y);
-	Vector2 getVelocity() const { return _velocity; }
-	Vector2 getVelocityGoal() const { return _velocityGoal; }
-	// Position methods
-	virtual float getX() const { return _b2Box->GetPosition().x; }
-	virtual float getY() const { return _b2Box->GetPosition().y; }
-	virtual Vector2 getPosition() const { return Vector2(getX(), getY()); }
+	Vector2 getVelocity() { return Vector2(_b2Box->GetLinearVelocity().x, _b2Box->GetLinearVelocity().y); }
+	virtual float getX() { return _b2Box->GetPosition().x; }
+	virtual float getY() { return _b2Box->GetPosition().y; }
 
 	////////////////////////////////////////////////////////////////////////////
 	// Bound box
@@ -159,7 +154,6 @@ protected:
 	sf::CircleShape _shape;
 
 	b2Body* _b2Box;
-	b2PolygonShape _polyShape;
 
 	BoundBox* _boundBox; // Bounding box of this Object
 
@@ -178,8 +172,6 @@ protected:
 	// All calculations that affect other Object use this one
 	Stats _stats;
 
-	Vector2 _velocity; // Currently velocity of the Object
-	Vector2 _velocityGoal; // Velocity the Object will accelerate to
 	Target* _target; // Target the enemy is running to (can be coord or enemy)
 	Vector2 _direction;
 

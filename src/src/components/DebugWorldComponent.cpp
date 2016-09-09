@@ -54,8 +54,8 @@ void DebugWorldComponent::draw(sf::RenderTarget& target,
 	text.setPosition(0.0f, 32.0f);
 	target.draw(text);
 
-	text.setString(convert::format("Goal Speed: %g, %g", 
-				ship->getVelocityGoal().X, ship->getVelocityGoal().Y));
-	text.setPosition(0.0f, 48.0f);
-	target.draw(text);
+	//text.setString(convert::format("Goal Speed: %g, %g", 
+	//			ship->getVelocityGoal().X, ship->getVelocityGoal().Y));
+	//text.setPosition(0.0f, 48.0f);
+	//target.draw(text);
 }

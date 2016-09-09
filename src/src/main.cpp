@@ -22,9 +22,7 @@ void setColorOutput();
 // Because I'm too lazy to update my WinSDK, we manually define what 
 // ENABLE_VIRTUAL_TERMINAL_PROCESSING is so we can use colored output
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
-
-#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
-
+	#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif // ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 
 #endif // _WIN32
@@ -53,7 +51,6 @@ int main(int argc, char* argv[]) {
 // If you're not using the Windows 10 update that added support for this then
 // you'll have ugly output
 void setColorOutput() {
-	CORE_INFO("Output before ENABLE_VIRTUAL_TERMINAL_PROCESSING is enabled");
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hOut == INVALID_HANDLE_VALUE) {
 		CORE_ERROR("INVALID_HANDLE_VALUE: %d", GetLastError());
@@ -71,6 +68,5 @@ void setColorOutput() {
 		CORE_ERROR("SetConsoleMode failed: %d", GetLastError());
 		return;
 	}
-	CORE_INFO("Output after ENABLE_VIRTUAL_TERMINAL_PROCESSING is enabled");
 }
 #endif // _WIN32
