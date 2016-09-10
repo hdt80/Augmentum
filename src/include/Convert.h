@@ -36,6 +36,8 @@ namespace convert {
 
 	std::string getWorkingDir();
 
+	float approach(float max, float cur, float dt);
+
 	template<typename ... Args>
 	std::string format(const std::string& format, Args ... args) {
 		size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1;

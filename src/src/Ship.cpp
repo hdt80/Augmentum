@@ -47,7 +47,8 @@ Ship::Ship(Map* map, float x, float y, Stats s,	int sides, sf::Color color)
 
 	b2FixtureDef fd;
 	fd.shape = &cs;
-	fd.density = 1;
+	fd.density = 1.0f;
+	fd.friction = 0.4f;
 	_b2Box->CreateFixture(&fd);
 
 	_b2Box->SetTransform(b2Vec2(x, y), _b2Box->GetAngle());

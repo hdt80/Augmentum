@@ -184,12 +184,9 @@ void Object::move(int diff) {
 // y - Y acceleration to apply
 void Object::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();
-	CORE_INFO("vel(%g, %g)", vel.x, vel.y);
 	b2Vec2 end(x, y);
-	CORE_INFO("end(%g, %g)", end.x, end.y);
 
-	b2Vec2 diff = vel - end;
-	CORE_INFO("diff (%g, %g)", diff.x, diff.y);
+	b2Vec2 diff = end - vel;
 	_b2Box->ApplyLinearImpulseToCenter(diff, true);
 }
 

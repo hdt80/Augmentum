@@ -31,4 +31,20 @@ namespace convert {
 		path[sizeof(path) - 1] = '\0';
 		return path;
 	}
+
+	// Linear interpolation
+	// max - Max value to approach
+	// cur - Current value
+	// dt - Delta time (seconds), how much to advance the value
+	float approach(float max, float cur, float dt) {
+		float diff = max - cur;
+
+		if (diff > dt) {
+			return cur + dt;
+		}
+		if (diff < -dt) {
+			return cur - dt;
+		}
+		return max;
+	}
 }
