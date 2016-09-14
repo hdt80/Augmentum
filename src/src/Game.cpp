@@ -37,6 +37,8 @@ void Game::loop() {
 
 	followWindow(&w);
 
+	_window.setVerticalSyncEnabled(true);
+
 	// Main loop
 	sf::Event e;
 	while (!toClose()) {

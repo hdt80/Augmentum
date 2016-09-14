@@ -55,21 +55,6 @@ void Object::onCollision(Object* o) {
 	//CORE_INFO("%x collided with %x", this, o);
 };
 
-void Object::BeginContact(b2Contact* contact) {
-	CORE_INFO("[Object %x] BeginContact", this);
-}
-
-void Object::EndContact(b2Contact* contact) {
-	CORE_INFO("[Object %x] EndContact", this);
-}
-
-void Object::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
-	CORE_INFO("[Object %x] PreSolve", this);
-}
-
-void Object::PostSolve(b2Contact* contact, const b2Manifold* newManifold) {
-	CORE_INFO("[Object %x] PostSolve", this);
-}
 
 // Load all the functions related to the Object
 void Object::loadLua() {
@@ -176,7 +161,7 @@ bool Object::intersectsWith(BoundBox* box) const {
 // Move where this Object will be next update
 // diff - Milliseconds that have passed since the last update
 void Object::move(int diff) {
-
+	updatePosition(getX(), getY());
 }
 
 // Set the linear velocity of this Object
@@ -185,6 +170,7 @@ void Object::move(int diff) {
 void Object::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();
 	b2Vec2 end(x, y);
+	end *= getSpeed();
 
 	b2Vec2 diff = end - vel;
 	_b2Box->ApplyLinearImpulseToCenter(diff, true);
@@ -203,6 +189,14 @@ void Object::update(int diff) {
 			_perks.erase(_perks.begin() + i);
 		}
 	}
+}
+
+// Update the shape's position
+// x - X pos 
+// y - Y pos
+// This is used to ensure that _b2Box and _shape are synced
+void Object::updatePosition(float x, float y) {
+	_shape.setPosition(x, y);
 }
 
 //

@@ -17,8 +17,7 @@
 class Map;
 class Perk;
 
-class Object : public Target, public b2ContactListener, 
-		public sf::Drawable, public sf::Transformable {
+class Object : public Target, public sf::Drawable, public sf::Transformable {
 public:
 	// A default constructor must be defined for Sol for some reason.
 	// This constructor should never be used and is only for Sol
@@ -28,11 +27,6 @@ public:
 
 	// If Object* o collides with us
 	bool collidesWith(Object* o) const;
-	// Methods inherited from b2ContactListener
-	void BeginContact(b2Contact* contact);
-	void EndContact(b2Contact* contact);
-	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
-	void PostSolve(b2Contact* contact, const b2Manifold* newManifold);
 
 	// Load the Lua file and define all helper Lua methods
 	virtual void loadLua();
@@ -138,7 +132,9 @@ public:
 	// Movement methods
 	////////////////////////////////////////////////////////////////////////////
 	void setVelocity(float x, float y);
-	Vector2 getVelocity() { return Vector2(_b2Box->GetLinearVelocity().x, _b2Box->GetLinearVelocity().y); }
+	void updatePosition(float x, float y);
+	Vector2 getVelocity() { return Vector2(_b2Box->GetLinearVelocity().x,
+			_b2Box->GetLinearVelocity().y); }
 	virtual float getX() { return _b2Box->GetPosition().x; }
 	virtual float getY() { return _b2Box->GetPosition().y; }
 

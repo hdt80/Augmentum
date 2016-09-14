@@ -28,6 +28,8 @@ GameWindow::GameWindow(Vector2 size) {
 	addComponent(new WorldComponent(this, Vector2(0.0, 0.0),
 									Vector2(_size.X, _size.Y),
 									size));
+
+	
 }
 
 GameWindow::~GameWindow() {
@@ -96,7 +98,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 			CORE_WARN("wc isn't 1");
 			return;
 		}
-		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit);// | b2Draw::e_aabbBit);
+		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
 		CORE_INFO("b2DebugDraw flags: %d", Game::b2DebugDrawer.GetFlags());
 		wc->setDrawBounds(!wc->getDrawBounds());
 	}

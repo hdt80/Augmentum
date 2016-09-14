@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "Tower.h"
 #include "Projectile.h"
+#include "ContactListener.h"
 
 #include <vector>
 #include <string>
@@ -64,6 +65,7 @@ protected:
 	Ship* _selected; // Ship the player is controlling
 
 	b2World _world;
+	ContactListener* _contactListener;
 	// How many times to iterate the world
 	int velocityIterations = 1;
 	int positionIterations = 1;

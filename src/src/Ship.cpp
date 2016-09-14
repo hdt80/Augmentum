@@ -45,8 +45,12 @@ Ship::Ship(Map* map, float x, float y, Stats s,	int sides, sf::Color color)
 	cs.m_p.Set(0, 0);
 	cs.m_radius = 20;
 
+	b2PolygonShape dBox;
+	dBox.SetAsBox(10.0f, 10.0f);
+
 	b2FixtureDef fd;
-	fd.shape = &cs;
+	//fd.shape = &cs;
+	fd.shape = &dBox;
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
 	_b2Box->CreateFixture(&fd);
