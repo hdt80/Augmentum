@@ -1,4 +1,4 @@
-#include "bounds/PolygonBoundbox.h"
+#include "bounds/PolygonBoundBox.h"
 
 PolygonBoundBox::PolygonBoundBox() {
 
