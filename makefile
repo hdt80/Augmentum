@@ -14,7 +14,7 @@ VERBOSE = 0
 
 # Running Linux? 
 ifeq ($(UNAME), Linux)
-	LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -llua -lbox2d
+	LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -llua -Llib -lBox2D
 # Windows?
 else
 	LINKER_FLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -llua -lbox2d
@@ -22,11 +22,12 @@ endif
 
 # Debug flags
 ifeq ($(VERBOSE), 1)
-	CXX_FLAGS += -M
+	CXX_FLAGS += -M -MF /dev/stdout
 endif
 
 # Enable all warnings but format and unused variables
-CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -fbuiltin -fpermissive -std=c++14 -I include -I $(INCLUDEDIR)
+CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -fpermissive -std=c++14
+#CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -iquote include -iquote $(INCLUDEDIR) -fbuiltin -fpermissive -std=c++14
 
 OUTPUT_NAME = Augmentum
 

@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 
-#include <box2d/Box2D.h>
+#include "Box2D/Box2D.h"
 
 extern bool isEnemy(Object* o);
 extern bool isTower(Object* o);

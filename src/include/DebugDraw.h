@@ -1,7 +1,7 @@
 #ifndef _DEBUG_DRAW_H
 #define _DEBUG_DRAW_H
 
-#include <box2d/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <SFML/Graphics.hpp>
 
 class DebugDrawer : public b2Draw {

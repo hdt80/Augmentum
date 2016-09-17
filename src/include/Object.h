@@ -3,7 +3,7 @@
 
 #include "Target.h"
 
-#include "box2d/Box2D.h"
+#include "Box2D/Box2D.h"
 
 #include "Stats.h"
 #include "SkillTree.h"
