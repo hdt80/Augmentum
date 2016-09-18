@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -146,6 +146,14 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     virtual void setMouseCursorVisible(bool visible);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Grab or release the mouse cursor
+    ///
+    /// \param grabbed True to enable, false to disable
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual void setMouseCursorGrabbed(bool grabbed);
 
     ////////////////////////////////////////////////////////////
     /// \brief Enable or disable automatic key-repeat
@@ -301,7 +309,7 @@ private:
     /// \return True if the event was processed, false if it was discarded
     ///
     ////////////////////////////////////////////////////////////
-    bool processEvent(XEvent windowEvent);
+    bool processEvent(XEvent& windowEvent);
 
     ////////////////////////////////////////////////////////////
     // Member data
@@ -318,7 +326,9 @@ private:
     bool                              m_keyRepeat;       ///< Is the KeyRepeat feature enabled?
     Vector2i                          m_previousSize;    ///< Previous size of the window, to find if a ConfigureNotify event is a resize event (could be a move event only)
     bool                              m_useSizeHints;    ///< Is the size of the window fixed with size hints?
-    bool                              m_fullscreen;      ///< Is window in fullscreen?
+    bool                              m_fullscreen;      ///< Is the window in fullscreen?
+    bool                              m_cursorGrabbed;   ///< Is the mouse cursor trapped?
+    bool                              m_windowMapped;    ///< Has the window been mapped by the window manager?
 };
 
 } // namespace priv

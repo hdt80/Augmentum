@@ -82,7 +82,11 @@ void Game::loop() {
 void Game::followWindow(Window* w) {
 	WindowManager.push(w);
 	CurrentWindow = w;
-	_window.setTitle(CurrentWindow->getName());
+	CORE_DEBUG("[Game] CurrentWindow Name: %s",  CurrentWindow->getName().c_str());
+	std::string s = CurrentWindow->getName();
+	const char* str = s.c_str();
+	sf::String sr(str);
+	_window.setTitle(sr);
 }
 
 //

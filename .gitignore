@@ -42,8 +42,6 @@ dep/Lua-build
 dep/box2d-build
 dep/Box2D-build
 *.swp
-*.a
-*.dll
 
 bin/*
 bin/Tower

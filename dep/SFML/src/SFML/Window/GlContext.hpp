@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -217,11 +217,12 @@ protected:
     /// \param stencilBits  Stencil bits of the configuration to evaluate
     /// \param antialiasing Antialiasing level of the configuration to evaluate
     /// \param accelerated  Whether the pixel format is hardware accelerated
+    /// \param sRgb         Whether the pixel format is sRGB capable
     ///
     /// \return Score of the configuration
     ///
     ////////////////////////////////////////////////////////////
-    static int evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing, bool accelerated);
+    static int evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing, bool accelerated, bool sRgb);
 
     ////////////////////////////////////////////////////////////
     // Member data
@@ -232,9 +233,10 @@ private:
 
     ////////////////////////////////////////////////////////////
     /// \brief Perform various initializations after the context construction
+    /// \param requestedSettings Requested settings during context creation
     ///
     ////////////////////////////////////////////////////////////
-    void initialize();
+    void initialize(const ContextSettings& requestedSettings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Check whether the context is compatible with the requested settings

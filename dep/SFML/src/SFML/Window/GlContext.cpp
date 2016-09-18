@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -100,6 +100,10 @@
     #define GL_CONTEXT_FLAGS 0x821E
 #endif
 
+#if !defined(GL_FRAMEBUFFER_SRGB)
+    #define GL_FRAMEBUFFER_SRGB 0x8DB9
+#endif
+
 #if !defined(GL_CONTEXT_FLAG_DEBUG_BIT)
     #define GL_CONTEXT_FLAG_DEBUG_BIT 0x00000002
 #endif
@@ -131,8 +135,8 @@ namespace
     ContextType* sharedContext = NULL;
 
     // Internal contexts
-    sf::ThreadLocalPtr<sf::priv::GlContext> internalContext(NULL);
-    std::set<sf::priv::GlContext*> internalContexts;
+    sf::ThreadLocalPtr<sf::Context> internalContext(NULL);
+    std::set<sf::Context*> internalContexts;
     sf::Mutex internalContextsMutex;
 
     // Check if the internal context of the current thread is valid
@@ -148,11 +152,11 @@ namespace
     }
 
     // Retrieve the internal context for the current thread
-    sf::priv::GlContext* getInternalContext()
+    sf::Context* getInternalContext()
     {
         if (!hasInternalContext())
         {
-            internalContext = sf::priv::GlContext::create();
+            internalContext = new sf::Context;
             sf::Lock lock(internalContextsMutex);
             internalContexts.insert(internalContext);
         }
@@ -171,9 +175,12 @@ void GlContext::globalInit()
 {
     Lock lock(mutex);
 
+    if (sharedContext)
+        return;
+
     // Create the shared context
     sharedContext = new ContextType(NULL);
-    sharedContext->initialize();
+    sharedContext->initialize(ContextSettings());
 
     // This call makes sure that:
     // - the shared context is inactive (it must never be)
@@ -187,13 +194,16 @@ void GlContext::globalCleanup()
 {
     Lock lock(mutex);
 
+    if (!sharedContext)
+        return;
+
     // Destroy the shared context
     delete sharedContext;
     sharedContext = NULL;
 
     // Destroy the internal contexts
     Lock internalContextsLock(internalContextsMutex);
-    for (std::set<GlContext*>::iterator it = internalContexts.begin(); it != internalContexts.end(); ++it)
+    for (std::set<Context*>::iterator it = internalContexts.begin(); it != internalContexts.end(); ++it)
         delete *it;
     internalContexts.clear();
 }
@@ -215,7 +225,7 @@ GlContext* GlContext::create()
 
     // Create the context
     GlContext* context = new ContextType(sharedContext);
-    context->initialize();
+    context->initialize(ContextSettings());
 
     return context;
 }
@@ -231,7 +241,7 @@ GlContext* GlContext::create(const ContextSettings& settings, const WindowImpl* 
 
     // Create the context
     GlContext* context = new ContextType(sharedContext, settings, owner, bitsPerPixel);
-    context->initialize();
+    context->initialize(settings);
     context->checkSettings(settings);
 
     return context;
@@ -248,7 +258,7 @@ GlContext* GlContext::create(const ContextSettings& settings, unsigned int width
 
     // Create the context
     GlContext* context = new ContextType(sharedContext, settings, width, height);
-    context->initialize();
+    context->initialize(settings);
     context->checkSettings(settings);
 
     return context;
@@ -340,7 +350,7 @@ GlContext::GlContext()
 
 
 ////////////////////////////////////////////////////////////
-int GlContext::evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing, bool accelerated)
+int GlContext::evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing, bool accelerated, bool sRgb)
 {
     int colorDiff        = static_cast<int>(bitsPerPixel)               - colorBits;
     int depthDiff        = static_cast<int>(settings.depthBits)         - depthBits;
@@ -356,6 +366,10 @@ int GlContext::evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& 
     // Aggregate the scores
     int score = std::abs(colorDiff) + std::abs(depthDiff) + std::abs(stencilDiff) + std::abs(antialiasingDiff);
 
+    // If the user wants an sRGB capable format, try really hard to get one
+    if (settings.sRgbCapable && !sRgb)
+        score += 10000000;
+
     // Make sure we prefer hardware acceleration over features
     if (!accelerated)
         score += 100000000;
@@ -365,7 +379,7 @@ int GlContext::evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& 
 
 
 ////////////////////////////////////////////////////////////
-void GlContext::initialize()
+void GlContext::initialize(const ContextSettings& requestedSettings)
 {
     // Activate the context
     setActive(true);
@@ -462,9 +476,32 @@ void GlContext::initialize()
         }
     }
 
-    // Enable antialiasing if needed
-    if (m_settings.antialiasingLevel > 0)
+    // Enable anti-aliasing if requested by the user and supported
+    if ((requestedSettings.antialiasingLevel > 0) && (m_settings.antialiasingLevel > 0))
+    {
         glEnable(GL_MULTISAMPLE);
+    }
+    else
+    {
+        m_settings.antialiasingLevel = 0;
+    }
+
+    // Enable sRGB if requested by the user and supported
+    if (requestedSettings.sRgbCapable && m_settings.sRgbCapable)
+    {
+        glEnable(GL_FRAMEBUFFER_SRGB);
+
+        // Check to see if the enable was successful
+        if (glIsEnabled(GL_FRAMEBUFFER_SRGB) == GL_FALSE)
+        {
+            err() << "Warning: Failed to enable GL_FRAMEBUFFER_SRGB" << std::endl;
+            m_settings.sRgbCapable = false;
+        }
+    }
+    else
+    {
+        m_settings.sRgbCapable = false;
+    }
 }
 
 
@@ -490,10 +527,11 @@ void GlContext::checkSettings(const ContextSettings& requestedSettings)
     int requestedVersion = requestedSettings.majorVersion * 10 + requestedSettings.minorVersion;
 
     if ((m_settings.attributeFlags    != requestedSettings.attributeFlags)    ||
-        (version                      <  requestedVersion)           ||
+        (version                      <  requestedVersion)                    ||
         (m_settings.stencilBits       <  requestedSettings.stencilBits)       ||
         (m_settings.antialiasingLevel <  requestedSettings.antialiasingLevel) ||
-        (m_settings.depthBits         <  requestedSettings.depthBits))
+        (m_settings.depthBits         <  requestedSettings.depthBits)         ||
+        (!m_settings.sRgbCapable      && requestedSettings.sRgbCapable))
     {
         err() << "Warning: The created OpenGL context does not fully meet the settings that were requested" << std::endl;
         err() << "Requested: version = " << requestedSettings.majorVersion << "." << requestedSettings.minorVersion
@@ -503,6 +541,7 @@ void GlContext::checkSettings(const ContextSettings& requestedSettings)
               << std::boolalpha
               << " ; core = " << ((requestedSettings.attributeFlags & ContextSettings::Core) != 0)
               << " ; debug = " << ((requestedSettings.attributeFlags & ContextSettings::Debug) != 0)
+              << " ; sRGB = " << requestedSettings.sRgbCapable
               << std::noboolalpha << std::endl;
         err() << "Created: version = " << m_settings.majorVersion << "." << m_settings.minorVersion
               << " ; depth bits = " << m_settings.depthBits
@@ -511,6 +550,7 @@ void GlContext::checkSettings(const ContextSettings& requestedSettings)
               << std::boolalpha
               << " ; core = " << ((m_settings.attributeFlags & ContextSettings::Core) != 0)
               << " ; debug = " << ((m_settings.attributeFlags & ContextSettings::Debug) != 0)
+              << " ; sRGB = " << m_settings.sRgbCapable
               << std::noboolalpha << std::endl;
     }
 }
