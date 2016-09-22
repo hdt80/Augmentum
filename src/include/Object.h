@@ -8,7 +8,6 @@
 #include "Stats.h"
 #include "SkillTree.h"
 #include "LuaScript.h"
-#include "BoundBox.h"
 
 #include <string>
 #include <vector>
@@ -42,7 +41,7 @@ public:
 
 	// If that point is within our collision box
 	bool contains(float x, float y) const;
-	bool intersectsWith(BoundBox* b) const;
+//	bool intersectsWith(BoundBox* b) const;
 
 	// Get the collision box of this Object
 	virtual sf::FloatRect getCollisionBox() const { return _shape.getGlobalBounds(); }
@@ -141,8 +140,6 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	// Bound box
 	////////////////////////////////////////////////////////////////////////////
-	BoundBox* getBoundBox() const { return _boundBox; }
-	void setBoundBox(BoundBox* box) { _boundBox = box; }
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
@@ -150,8 +147,6 @@ protected:
 	sf::CircleShape _shape;
 
 	b2Body* _b2Box;
-
-	BoundBox* _boundBox; // Bounding box of this Object
 
 	Map* _map; // Map this object is located on
 

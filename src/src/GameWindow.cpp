@@ -28,8 +28,6 @@ GameWindow::GameWindow(Vector2 size) {
 	addComponent(new WorldComponent(this, Vector2(0.0, 0.0),
 									Vector2(_size.X, _size.Y),
 									size));
-
-	
 }
 
 GameWindow::~GameWindow() {
@@ -81,15 +79,6 @@ void GameWindow::handleEvent(sf::Event& e) {
 }
 
 void GameWindow::keyEvent(sf::Event& e) {
-	if (e.key.code == sf::Keyboard::B) {
-		for (unsigned int i = 0; i < _map.objects.size(); ++i) {
-			BoundBox* bb = _map.objects[i]->getBoundBox();
-			CORE_INFO("%i :: %x", i, _map.objects[i]->getBoundBox());
-			for (unsigned int j = 0; j < bb->getPointCount(); ++j) {
-				CORE_INFO("\t%d -> (%g, %g)", j, bb->getPoint(j).X, bb->getPoint(j).Y);
-			}
-		}
-	}
 	if (e.key.code == sf::Keyboard::N) {
 		CORE_INFO("[GameWindow %x] Toggling on box2d shapeBit", this);
 		// TODO: Dear god no
@@ -101,8 +90,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
 		CORE_INFO("b2DebugDraw flags: %d", Game::b2DebugDrawer.GetFlags());
 		wc->setDrawBounds(!wc->getDrawBounds());
-	}
-	if (e.key.code == sf::Keyboard::M) {
+	} else if (e.key.code == sf::Keyboard::M) {
 		b2Body* bodies = _map.getWorld()->GetBodyList();
 		for (int i = 0; i < _map.getWorld()->GetBodyCount(); ++i) {
 			CORE_INFO("%d/%d :: (%g, %g)", i, _map.getWorld()->GetBodyCount(),

@@ -1,5 +1,4 @@
 #include "Ship.h"
-#include "bounds/RectangleBoundBox.h"
 #include "Map.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,11 +53,4 @@ Ship::Ship(Map* map, float x, float y, Stats s,	int sides, sf::Color color)
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
 	_b2Box->CreateFixture(&fd);
-
-	_b2Box->SetTransform(b2Vec2(x, y), _b2Box->GetAngle());
-
-	RectangleBoundBox* box =
-		new RectangleBoundBox(Vector2(x, y), Vector2(20.0f, 20.0f));
-
-	_boundBox = box;
 }

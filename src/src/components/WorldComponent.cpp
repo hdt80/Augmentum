@@ -5,7 +5,6 @@
 #include "GameWindow.h"
 #include "Ship.h"
 #include "FontCache.h"
-#include "bounds/PolygonBoundBox.h"
 #include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,20 +66,6 @@ void WorldComponent::onClick(int button, float window_x, float window_y,
 		obj = new Ship(_map, view_x, view_y, s, 15, sf::Color::Red);
 	} else if (button == sf::Mouse::Right) {
 		obj = new Ship(_map, view_x, view_y, s, 9, sf::Color(232, 232, 232));
-		
-		BoundBox* bb = new PolygonBoundBox(Vector2(view_x, view_y), 9);
-		bb->addPoint(Vector2(0.0f, 0.0f));
-		bb->addPoint(Vector2(20.0f, 0.0f));
-		bb->addPoint(Vector2(40.0f, 20.0f));
-		bb->addPoint(Vector2(40.0f, 40.0f));
-		bb->addPoint(Vector2(20.0f, 60.0f));
-		bb->addPoint(Vector2(0.0f, 60.0f));
-		bb->addPoint(Vector2(-20.0f, 40.0f));
-		bb->addPoint(Vector2(-20.0f, 20.0f));
-		// Last point is added again for the algorithm to work
-		bb->addPoint(Vector2(0.0f, 0.0f));
-
-		obj->setBoundBox(bb);
 	}
 
 	_map->objects.push_back(obj);

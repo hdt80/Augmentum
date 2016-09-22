@@ -44,11 +44,6 @@ public:
 	// y - Y coord to check for a collision
 	bool collisionAtPlace(Object* o, float x, float y);
 
-	// Check if a collision occurs with a BoundBox
-	// o - Object to ignore during checks
-	// box - BoundBox to check if collisions exist for
-	bool collisionAtPlace(Object* o, BoundBox* box) const;
-
 	// Return the Object at (x, y), ignoring Object o
 	Object* objectAt(Object* o, float x, float y);
 

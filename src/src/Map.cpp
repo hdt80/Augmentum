@@ -118,26 +118,6 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	return objs;
 }
 
-// Check if a BoundBox intersects with any other BoundBox
-// o - Object to ignore during checks, use nullptr to check all objects
-// box - Box to check the collision with
-bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
-	// No bound box? can't have a collision
-	// TODO: Temp code to test Box2d
-	return false;
-	if (box == nullptr) {
-		return false;
-	}
-
-	for (Object* obj : objects) {
-		if (obj != o && box->intersects(obj->getBoundBox())) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
 // Check if there is a collision at the position
 // o - Object to ignore, or use nullptr to check all objects
 // x - x coord to check
@@ -145,7 +125,6 @@ bool Map::collisionAtPlace(Object* o, BoundBox* box) const {
 bool Map::collisionAtPlace(Object* o, float x, float y) {
 	// TODO: Temp code to test Box2d
 	return false;
-	return (objectAt(o, x, y) != nullptr);
 }
 
 // Return the Object at (x, y), or nullptr if no object is there

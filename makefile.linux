@@ -1,0 +1,4 @@
+# Cleaning everything up
+.PHONY: clean
+clean:
+	rm $(BUILDDIR)/*.o && rm $(EXEDIR)/$(OUTPUT_NAME)

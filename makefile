@@ -3,7 +3,7 @@ CXX = g++
 #CXX = clang++
 CC = gcc
 
-UNAME := $(shell uname)
+ARCH := $(shell uname)
 
 # Directories used for input and output
 SRCDIR = src/src
@@ -12,12 +12,27 @@ EXEDIR = bin
 INCLUDEDIR = src/include
 VERBOSE = 0
 
+export SRCDIR
+export BUILDDIR
+export EXEDIR
+export INCLUDEDIR
+export VERBOSE
+export OUTPUT_NAME
+export CXX_FLAGS
+export ARCH
+export SRCS
+export OBJS
+export COBJS
+
 # Running Linux? 
-ifeq ($(UNAME), Linux)
+ifeq ($(ARCH), Linux)
 	LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -llua -Llib -lBox2D
+	# Turn to lowercase to ensure the file is found
+	ARCH = linux
 # Windows?
 else
 	LINKER_FLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -llua -lbox2d
+	ARCH = mingw
 endif
 
 # Debug flags
@@ -27,7 +42,6 @@ endif
 
 # Enable all warnings but format and unused variables
 CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -fpermissive -std=c++14
-#CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -iquote include -iquote $(INCLUDEDIR) -fbuiltin -fpermissive -std=c++14
 
 OUTPUT_NAME = Augmentum
 
@@ -70,4 +84,4 @@ val:
 # Cleaning everything up
 .PHONY: clean
 clean:
-	rm $(BUILDDIR)/*.o && rm $(EXEDIR)/$(OUTPUT_NAME)
+	$(MAKE) -f makefile.$(ARCH) clean

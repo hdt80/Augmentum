@@ -7,14 +7,13 @@
 #include "Map.h"
 #include "Target.h"
 #include "Perk.h"
-#include "bounds/RectangleBoundBox.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
 Object::Object(Map* map, float x, float y, Stats s)
 	: Target(x, y),
-		_boundBox(nullptr),	_map(map), _tree(nullptr),  _attackerCount(0),
+		_map(map), _tree(nullptr),  _attackerCount(0),
 		_baseStats(s), _target(nullptr), _toRemove(false) {
 	
 }
@@ -29,7 +28,6 @@ Object::~Object() {
 		_map->getWorld()->DestroyBody(_b2Box);
 	}
 
-	delete _boundBox;
 	delete _tree;
 
 	// Make sure we don't delete another Object
@@ -97,7 +95,6 @@ void Object::onDamageTaken(int dmg, Object* o) {
 
 //
 void Object::onDamageDealt(int dmg, Object* hit) {
-	_lua.callFunction("onDamageDealt", dmg, hit);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->onDamageDealt(dmg, hit);
 	}
@@ -125,12 +122,6 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 bool Object::collidesWith(Object* o) const {
 	// TODO: Temp code to test Box2d
 	return false;
-	// No bound box? No collisions possible
-	if (_boundBox == nullptr || o->getBoundBox() == nullptr) {
-		return false;
-	}
-
-	return (o->intersectsWith(getBoundBox()));
 }
 
 // Returns if a point is within the collision box of an Object
@@ -139,23 +130,6 @@ bool Object::collidesWith(Object* o) const {
 bool Object::contains(float px, float py) const {
 	// TODO: Temp code to test Box2d
 	return false;
-	// No bound box? No collisions possible
-	if (_boundBox == nullptr) {
-		return false;
-	}
-	return getBoundBox()->contains(px, py);
-}
-
-// Check if a BoundBox intersects with our BoundBox
-// box - BoundBox to check with
-bool Object::intersectsWith(BoundBox* box) const {
-	// TODO: Temp code to test Box2d
-	return false;
-	// No bound box? No collisions possible
-	if (_boundBox == nullptr || box == nullptr) {
-		return false;
-	}
-	return getBoundBox()->intersects(box);	
 }
 
 // Move where this Object will be next update
@@ -173,6 +147,7 @@ void Object::setVelocity(float x, float y) {
 	end *= getSpeed();
 
 	b2Vec2 diff = end - vel;
+	diff *= getSpeed();
 	_b2Box->ApplyLinearImpulseToCenter(diff, true);
 }
 
