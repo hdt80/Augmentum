@@ -34,8 +34,8 @@ public:
 	// x - X coord to emit from
 	// y - Y coord to emit from
 	// amt - Amount of particles to add
-	// dir - Direction the particles should travel
-	void emit(ParticleDef* pDef, float x, float y, int amt, Vector2 dir);
+	// angle - Angle to shoot the particles at
+	void emit(ParticleDef* pDef, float x, float y, int amt, int angle);
 
 	// Update all particles
 	// diff - Microseconds since last update
@@ -47,7 +47,6 @@ protected:
 	struct Particle {
 		ParticleDef* pDef;
 		sf::Vector2f velocity;
-		sf::Vector2f pos;
 		float lifeLeft; // How many more seconds this particle will be around
 		bool done;
 	};

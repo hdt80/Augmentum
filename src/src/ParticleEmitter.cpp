@@ -4,6 +4,7 @@
 
 #include "Logger.h"
 #include "Random.h"
+#include "Convert.h"
 
 ParticleEmitter::ParticleEmitter() {
 	_vertices.setPrimitiveType(sf::Points);
@@ -19,30 +20,28 @@ ParticleEmitter::~ParticleEmitter() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void ParticleEmitter::emit(ParticleDef* pDef,
-		float x, float y, int amt, Vector2 dir) {
+		float x, float y, int amt, int angle) {
 
 	// Resize both vectors
 	_particles.resize(_particles.size() + amt);
 	_vertices.resize(_vertices.getVertexCount() + amt);
 
-	float angle = std::atan2(dir.X, dir.Y);
-
 	// Only start where we added more particles
 	for (unsigned int i = _particles.size() - amt; i < _particles.size(); ++i) {
 
 		// Random angle between the angle of the direction and the dispersion
-		float dirAng =
-			Random::randInt(-pDef->coneOfDispersion, pDef->coneOfDispersion)
-			+ angle;
+		float dirAng = Random::randInt(-pDef->coneOfDispersion / 2.0f,
+				pDef->coneOfDispersion / 2.0f) + angle;
+
+		dirAng = convert::toRad(dirAng);
 
 		_particles[i].pDef = pDef;
-		_particles[i].pos = sf::Vector2f(x, y);
 		_particles[i].lifeLeft = _particles[i].pDef->lifetime;
 		_particles[i].done = false;
-		_particles[i].velocity = sf::Vector2f(std::cos(angle) * pDef->speed,
-				std::sin(angle) * pDef->speed);
+		_particles[i].velocity = sf::Vector2f(std::cos(dirAng) * pDef->speed,
+				std::sin(dirAng) * pDef->speed);
 
-		_vertices[i].position = _particles[i].pos;
+		_vertices[i].position = sf::Vector2f(x, y);
 		_vertices[i].color = pDef->initColor;
 	}
 }

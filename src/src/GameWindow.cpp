@@ -65,6 +65,12 @@ void GameWindow::update(int diff) {
 	_map.getSelected()->setVelocity(xa, ya);
 
 	_map.update(diff);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+		sf::Vector2i pos = sf::Mouse::getPosition(Game::getRenderWindow());
+		GameWindow::Emitter.emit(&def, pos.x, pos.y, 5, 0);
+	}
+
 	GameWindow::Emitter.update(diff);
 }
 
@@ -96,9 +102,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 
 //
 void GameWindow::mouseMoveEvent(sf::Event& e) {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-		GameWindow::Emitter.emit(&def, e.mouseMove.x, e.mouseMove.y, 5, Vector2(0, 0));
-	}
+
 }
 
 //
