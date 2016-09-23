@@ -47,7 +47,7 @@ void Projectile::onCollision(Object* o) {
 	if (e == nullptr) {
 		return;
 	}
-	ParticleEmit::emit(x, y, 10, _color);
+//	ParticleEmit::emit(x, y, 10, _color);
 	e->applyDamage(getDamage(), _shooter);
 
 	_shooter->onDamageDealt(getDamage(), e);

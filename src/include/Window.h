@@ -64,6 +64,7 @@ public:
 	virtual void handleEvent(sf::Event& e);
 	virtual void keyEvent(sf::Event& e);
 	virtual void mouseEvent(sf::Event& e);
+	virtual void mouseMoveEvent(sf::Event& e);
 	virtual void resizeEvent(sf::Event& e);
 
 	// Render to the target window

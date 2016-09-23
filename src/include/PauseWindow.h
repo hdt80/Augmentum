@@ -3,7 +3,6 @@
 
 #include "Window.h"
 #include "Map.h"
-#include "Particle.h"
 #include "Vector2.h"
 
 class PauseWindow : public Window {

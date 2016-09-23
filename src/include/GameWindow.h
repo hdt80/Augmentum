@@ -3,7 +3,7 @@
 
 #include "Window.h"
 #include "Map.h"
-#include "Particle.h"
+#include "ParticleEmitter.h"
 #include "Vector2.h"
 
 class GameWindow : public Window {
@@ -19,19 +19,21 @@ public:
 	virtual void update(int diff);
 
 	// Event methods
-	virtual void handleEvent(sf::Event& e);
 	virtual void keyEvent(sf::Event& e);
 	virtual void mouseEvent(sf::Event& e);
+	virtual void mouseMoveEvent(sf::Event& e);
 
 	//
 	virtual void render(sf::RenderWindow& window);
 
-	std::vector<ParticleEmitter*> emitters;
+	static ParticleEmitter Emitter;
 
 	Map* getMap() { return &_map; }
 
 protected:
-	Map _map;
+	Map _map; // Map the game is played on
+
+	ParticleDef def;
 };
 
 #endif

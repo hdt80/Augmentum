@@ -18,11 +18,6 @@ export EXEDIR
 export INCLUDEDIR
 export VERBOSE
 export OUTPUT_NAME
-export CXX_FLAGS
-export ARCH
-export SRCS
-export OBJS
-export COBJS
 
 # Running Linux? 
 ifeq ($(ARCH), Linux)
@@ -34,6 +29,8 @@ else
 	LINKER_FLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -llua -lbox2d
 	ARCH = mingw
 endif
+
+export ARCH
 
 # Debug flags
 ifeq ($(VERBOSE), 1)

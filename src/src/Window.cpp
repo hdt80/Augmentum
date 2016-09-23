@@ -139,6 +139,8 @@ void Window::handleEvent(sf::Event& e) {
 		keyEvent(e);
 	} else if (e.type == sf::Event::MouseButtonReleased) {
 		mouseEvent(e);
+	} else if (e.type == sf::Event::MouseMoved) {
+		mouseMoveEvent(e);
 	} else if (e.type == sf::Event::Resized) {
 		resizeEvent(e);
 	}
@@ -160,6 +162,8 @@ void Window::mouseEvent(sf::Event& e) {
 			pixelPos.x, pixelPos.y, worldPos.x, worldPos.y);
 	}
 }
+
+void Window::mouseMoveEvent(sf::Event& e) {}
 
 void Window::resizeEvent(sf::Event& e) {}
 

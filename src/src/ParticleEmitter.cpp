@@ -1,15 +1,83 @@
 #include "ParticleEmitter.h"
 
-#include "Window.h"
-#include "Particle.h"
-#include "Color.h"
+#include <random>
 
-GameWindow* ParticleEmit::window; // Create a reference to the window
+#include "Logger.h"
+#include "Random.h"
 
-namespace ParticleEmit {
-	void emit(float x, float y, int amount, Color c) {
-		ParticleEmitter* pe = new ParticleEmitter(sf::Vector2f(x, y),
-			amount, c.toSF());
-		window->emitters.push_back(pe);
+ParticleEmitter::ParticleEmitter() {
+	_vertices.setPrimitiveType(sf::Points);
+}
+
+ParticleEmitter::~ParticleEmitter() {
+	_particles.clear();
+	_vertices.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Methods
+///////////////////////////////////////////////////////////////////////////////
+
+void ParticleEmitter::emit(ParticleDef* pDef,
+		float x, float y, int amt, Vector2 dir) {
+
+	// Resize both vectors
+	_particles.resize(_particles.size() + amt);
+	_vertices.resize(_vertices.getVertexCount() + amt);
+
+	float angle = std::atan2(dir.X, dir.Y);
+
+	// Only start where we added more particles
+	for (unsigned int i = _particles.size() - amt; i < _particles.size(); ++i) {
+
+		// Random angle between the angle of the direction and the dispersion
+		float dirAng =
+			Random::randInt(-pDef->coneOfDispersion, pDef->coneOfDispersion)
+			+ angle;
+
+		_particles[i].pDef = pDef;
+		_particles[i].pos = sf::Vector2f(x, y);
+		_particles[i].lifeLeft = _particles[i].pDef->lifetime;
+		_particles[i].done = false;
+		_particles[i].velocity = sf::Vector2f(std::cos(angle) * pDef->speed,
+				std::sin(angle) * pDef->speed);
+
+		_vertices[i].position = _particles[i].pos;
+		_vertices[i].color = pDef->initColor;
 	}
+}
+
+// Update all the particles in this Emitter
+// diff - Milliseconds since last call
+void ParticleEmitter::update(int diff) {
+	for (unsigned int i = 0; i < _particles.size(); ++i) {
+		if (_particles[i].done == false) {
+			Particle& p = _particles[i];
+			p.lifeLeft -= diff * 0.000001f;
+
+			if (p.lifeLeft <= 0.0f) {
+				p.done = true;
+				// TODO: Proper removal
+				_vertices[i] = sf::Vertex();
+			}
+
+			float ratioDone = p.lifeLeft / p.pDef->lifetime;
+
+			_vertices[i].position += p.velocity * (float)diff * 0.000001f;
+			if (p.pDef->slowDown) {
+				p.velocity /= ratioDone;
+			}
+			if (p.pDef->fade) {
+				_vertices[i].color.a = ratioDone * 255;
+			}
+		}
+	}
+}
+
+void ParticleEmitter::draw(sf::RenderTarget& target,
+	sf::RenderStates states) const {
+
+	states.transform *= getTransform(); // Apply transformation
+	states.texture = nullptr; // No texture
+	target.draw(_vertices, states);
 }

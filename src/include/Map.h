@@ -27,8 +27,6 @@ public:
 	void update(int diff);
 	void calcCollisions();
 
-	void setSize(int w, int h) { _size.X = w; _size.Y = h;}
-
 	// Get the Ship the player is using
 	Ship* getSelected() { return _selected; }
 
@@ -54,7 +52,6 @@ public:
 	std::vector<Object*> toRemove;
 
 protected:
-	Vector2 _size;
 	Vector2 _origin; // (0, 0)
 
 	Ship* _selected; // Ship the player is controlling
@@ -62,8 +59,10 @@ protected:
 	b2World _world;
 	ContactListener* _contactListener;
 	// How many times to iterate the world
-	int velocityIterations = 1;
-	int positionIterations = 1;
+	int velocityIterations = 6;
+	int positionIterations = 2;
+
+	float b2UpdateCounter; // Ensure that the b2 world is only updated 60/sec
 };
 
 #endif

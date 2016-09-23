@@ -1,10 +1,8 @@
 #include "GameWindow.h"
 #include "Logger.h"
 #include "Game.h"
-#include "sfLine.h"
 #include "Common.h"
 #include "SkillTree.h"
-#include "ParticleEmitter.h"
 #include "Convert.h"
 #include "SkillTreeWindow.h"
 #include "GuiComponent.h"
@@ -13,13 +11,14 @@
 #include "components/DebugWorldComponent.h"
 #include "FontCache.h"
 
+ParticleEmitter GameWindow::Emitter;
+
 ///////////////////////////////////////////////////////////////////////////////
 // Creation Methods
 ///////////////////////////////////////////////////////////////////////////////
 GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
-	_map.setSize(size.X, size.Y);
 
 	addComponent(new DebugWorldComponent(this, Vector2(_size.X - 180, 0),
 									Vector2(180, _size.Y),
@@ -28,6 +27,13 @@ GameWindow::GameWindow(Vector2 size) {
 	addComponent(new WorldComponent(this, Vector2(0.0, 0.0),
 									Vector2(_size.X, _size.Y),
 									size));
+	def.lifetime = 3.0f;
+	def.coneOfDispersion = 15.0f;
+	def.initColor = sf::Color(255, 0, 0);
+	def.endColor = def.initColor;
+	def.fade = true;
+	def.speed = 30.0f;
+	def.slowDown = false;
 }
 
 GameWindow::~GameWindow() {
@@ -40,12 +46,6 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
-	ParticleEmit::window = this;
-	
-	//if (!_font.loadFromFile("res\\Pixel.ttf")) {
-	//	CORE_ERROR("Failed to load \'%s\\res\\Pixel.ttf\'",
-	//		convert::getWorkingDir().c_str());
-	//}
 
 	FontCache::loadFont("pixel", "res\\Pixel.ttf");
 }
@@ -55,29 +55,24 @@ void GameWindow::init() {
 ///////////////////////////////////////////////////////////////////////////////
 void GameWindow::update(int diff) {
 	Window::update(diff);
-
-	for (unsigned int i = 0; i < emitters.size(); ++i) {
-		emitters[i]->update(diff);
-	}
-
+	
 	float xa = (sf::Keyboard::isKeyPressed(sf::Keyboard::D) -
-				sf::Keyboard::isKeyPressed(sf::Keyboard::A));// * 10.0f;
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A));
 
 	float ya = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) -	
-				sf::Keyboard::isKeyPressed(sf::Keyboard::W));// * 10.0f;
+				sf::Keyboard::isKeyPressed(sf::Keyboard::W));
 
 	_map.getSelected()->setVelocity(xa, ya);
 
 	_map.update(diff);
+	GameWindow::Emitter.update(diff);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // SFML Method Wrapper
 ///////////////////////////////////////////////////////////////////////////////
-void GameWindow::handleEvent(sf::Event& e) {
-	Window::handleEvent(e);
-}
 
+//
 void GameWindow::keyEvent(sf::Event& e) {
 	if (e.key.code == sf::Keyboard::N) {
 		CORE_INFO("[GameWindow %x] Toggling on box2d shapeBit", this);
@@ -99,6 +94,14 @@ void GameWindow::keyEvent(sf::Event& e) {
 	}
 }
 
+//
+void GameWindow::mouseMoveEvent(sf::Event& e) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+		GameWindow::Emitter.emit(&def, e.mouseMove.x, e.mouseMove.y, 5, Vector2(0, 0));
+	}
+}
+
+//
 void GameWindow::mouseEvent(sf::Event& e) {
 	Window::mouseEvent(e);
 	//int x = e.mouseButton.x;
@@ -129,11 +132,8 @@ void GameWindow::mouseEvent(sf::Event& e) {
 
 void GameWindow::render(sf::RenderWindow& window) {
 	window.clear(sf::Color(180, 180, 180));
+	window.draw(GameWindow::Emitter);
 
-	for (unsigned int i = 0; i < emitters.size(); ++i) {
-		window.draw(*emitters[i]);
-	}
-	
 	Window::render(window);
 }
 

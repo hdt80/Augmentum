@@ -27,7 +27,9 @@ std::string getType(Object* o) {
 Map::Map()
 		: _world(b2Vec2(0.0f, 0.0f)) {
 
-	_selected = new Ship(this, 0.0f, 0.0f, Stats(), 4, sf::Color::Blue);
+	Stats s;
+	s["speed"] = 20.0f;
+	_selected = new Ship(this, 0.0f, 0.0f, s, 4, sf::Color::Blue);
 
 	objects.push_back(_selected);
 
@@ -76,8 +78,11 @@ void Map::update(int diff) {
 	}
 	toRemove.clear();
 
-	//CORE_INFO("Stepping world for %g milliseconds %d (%g)", diff / 1000000.0f, diff, 1 / 60.0f);
-	_world.Step(diff / 1000000.0f, velocityIterations, positionIterations);
+	b2UpdateCounter += diff;
+	if (b2UpdateCounter >= 16667) {
+		_world.Step(b2UpdateCounter / 1000000.0f, velocityIterations, positionIterations);
+		b2UpdateCounter = 0;
+	}
 
 	// Calculate the collisions after all the removal and moves so the player
 	// gets accurate feedback and isn't behind a frame

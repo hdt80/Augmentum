@@ -39,7 +39,9 @@ void DebugWorldComponent::draw(sf::RenderTarget& target,
 	Ship* ship = _map->getSelected();
 
 	sf::Text text("", FontCache::getFont("pixel"), 16);
-	text.setColor(sf::Color::White);
+	text.setFillColor(sf::Color::White);
+	text.setOutlineColor(sf::Color::Black);
+	text.setOutlineThickness(1.0f);
 
 	text.setString(convert::format("FPS: %u", Game::Fps.getFPS()));
 	text.setPosition(0.0f, 0.0f);
