@@ -34,7 +34,7 @@ namespace convert {
 	// Convert a string to an int
 	int toInt(std::string str);
 
-	std::string getWorkingDir();
+	const std::string& getWorkingDir();
 
 	float approach(float max, float cur, float dt);
 

@@ -8,26 +8,35 @@
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 Cursor::Cursor() {
-	int points = 20;
-	int radius = 2; // pixels
+	_x = 0; _y = 0;
 
-	_vertArray.setPrimitiveType(sf::LineStrip);
+	float points = 20;
+	float radius = 2; // pixels
+
+	_vertArray.setPrimitiveType(sf::TriangleFan);
 	_vertArray.resize(points);
 
-	int angle = 0;
+	float angle = 0;
 	for (int i = 0; i < points; ++i) {
-		angle = convert::toRad(360 / (points * i + 1));	
+		if (i == 0) {
+			angle = 0;
+		} else {
+			angle = convert::toRad((360 / points) * i);	
+		}
 		
-		// std uses rad
-		_vertArray[i].position.x = _x + radius + std::cos(angle);
-		_vertArray[i].position.y = _y + radius + std::sin(angle);
-		_vertArray[i].color = sf::Color(128, 128, 128);
+		// std uses radians
+		_vertArray[i].position.x = _x + radius * std::cos(angle);
+		_vertArray[i].position.y = _y + radius * std::sin(angle);
+		_vertArray[i].color = sf::Color(255, 0, 0);
 	}
+
+	_origVert = _vertArray;
 }
 
 Cursor::~Cursor() {
 
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +46,8 @@ void Cursor::setPosition(float x, float y) {
 	_y = y;
 
 	for (unsigned int i = 0; i < _vertArray.getVertexCount(); ++i) {
-		_vertArray[i].position.x = _x;
-		_vertArray[i].position.y = _y;
+		_vertArray[i].position.x = _origVert[i].position.x + _x;
+		_vertArray[i].position.y = _origVert[i].position.y + _y;
 	}
 }
 
@@ -46,8 +55,6 @@ void Cursor::update(int diff) {
 	sf::Vector2i pos = sf::Mouse::getPosition(Game::getRenderWindow());
 
 	setPosition(pos.x, pos.y);
-
-	CORE_INFO("Mouse pos %g %g", getX(), getY());
 }
 
 void Cursor::draw(sf::RenderTarget& target, sf::RenderStates states) const {

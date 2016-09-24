@@ -30,6 +30,7 @@ public:
 
 private:
 	sf::VertexArray _vertArray;
+	sf::VertexArray _origVert; // Used to determine the new spot of the Cursor
 
 	// Position of the Cursor
 	float _x;

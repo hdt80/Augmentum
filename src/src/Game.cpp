@@ -17,6 +17,8 @@ void Game::start() {
 	_window.create(sf::VideoMode(900, 600, currVidMode.bitsPerPixel),
 		"Augmentum", sf::Style::Default, currVidSettings);
 
+	_window.setMouseCursorVisible(false);
+
 	b2DebugDrawer.setRenderWindow(&_window);
 
 	CurrentGameState = Playing;
