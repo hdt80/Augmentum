@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "ParticleEmitter.h"
 #include "Vector2.h"
+#include "Cursor.h"
 
 class GameWindow : public Window {
 public:
@@ -34,6 +35,8 @@ protected:
 	Map _map; // Map the game is played on
 
 	ParticleDef def;
+
+	Cursor _cursor;
 };
 
 #endif

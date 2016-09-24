@@ -29,9 +29,15 @@ void ParticleEmitter::emit(ParticleDef* pDef,
 	// Only start where we added more particles
 	for (unsigned int i = _particles.size() - amt; i < _particles.size(); ++i) {
 
-		// Random angle between the angle of the direction and the dispersion
-		float dirAng = Random::randInt(-pDef->coneOfDispersion / 2.0f,
-				pDef->coneOfDispersion / 2.0f) + angle;
+		float dirAng;
+		
+		if (angle >= 0) {
+			// Random angle between the angle and the dispersion
+			dirAng = Random::randInt(-pDef->coneOfDispersion / 2.0f,
+					pDef->coneOfDispersion / 2.0f) + angle;
+		} else {
+			dirAng = Random::randInt(0, 360);
+		}
 
 		dirAng = convert::toRad(dirAng);
 

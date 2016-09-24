@@ -35,6 +35,7 @@ public:
 	// y - Y coord to emit from
 	// amt - Amount of particles to add
 	// angle - Angle to shoot the particles at
+	//			If angle is < 0, then a random angle between 0-360 is picked
 	void emit(ParticleDef* pDef, float x, float y, int amt, int angle);
 
 	// Update all particles

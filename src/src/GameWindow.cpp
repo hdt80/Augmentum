@@ -68,10 +68,11 @@ void GameWindow::update(int diff) {
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
 		sf::Vector2i pos = sf::Mouse::getPosition(Game::getRenderWindow());
-		GameWindow::Emitter.emit(&def, pos.x, pos.y, 5, 0);
+		GameWindow::Emitter.emit(&def, pos.x, pos.y, 5, -10);
 	}
 
 	GameWindow::Emitter.update(diff);
+	_cursor.update(diff);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,6 +138,7 @@ void GameWindow::mouseEvent(sf::Event& e) {
 void GameWindow::render(sf::RenderWindow& window) {
 	window.clear(sf::Color(180, 180, 180));
 	window.draw(GameWindow::Emitter);
+	window.draw(_cursor);
 
 	Window::render(window);
 }
