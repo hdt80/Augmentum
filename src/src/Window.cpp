@@ -11,6 +11,7 @@ Window::Window(const std::string& name, Vector2 size) {
 	_size = size;
 	_name = name;
 	_currState = Uninitalized;
+	_drawCompBounds = false;
 }
 
 Window::Window() {
@@ -106,7 +107,7 @@ void Window::addComponent(GuiComponent* comp, int depth) {
 // Get the GuiComponent at that location
 // x - X position to look at
 // y - Y position to look at
-// The first GuiComponent that contains that point will be returned, 
+// The first GuiComponent that contains that point will be returned,
 // so if there are two GuiComponents overlapping the point, the first one
 // added to the Window will be returned
 GuiComponent* Window::getClickedComponent(float x, float y) {
@@ -146,7 +147,11 @@ void Window::handleEvent(sf::Event& e) {
 	}
 }
 
-void Window::keyEvent(sf::Event& e) {}
+void Window::keyEvent(sf::Event& e) {
+	if (e.key.code == sf::Keyboard::H) {
+		_drawCompBounds = !_drawCompBounds;	
+	}
+}
 
 //
 void Window::mouseEvent(sf::Event& e) {
@@ -163,18 +168,48 @@ void Window::mouseEvent(sf::Event& e) {
 	}
 }
 
-void Window::mouseMoveEvent(sf::Event& e) {}
+void Window::mouseMoveEvent(sf::Event& e) {
+	if (_drawCompBounds) {
+		_hoveredComp = getClickedComponent(e.mouseButton.x, e.mouseButton.y);
+	}
+}
 
 void Window::resizeEvent(sf::Event& e) {}
 
 void Window::render(sf::RenderWindow& target) {
 	for (GuiComponent* comp : _components) {
 		if (comp->isVisible()) {
-			// Drawing a component is relative to it's origin
+			// Drawing a component relative to its origin and not the screen's
 			target.setView(comp->getView());
 			target.draw(*comp);
 		}
 	}
+
+	// Draw the Bounds after so it's over the GuiComps
+	if (_drawCompBounds) {
+		// Draw to the main view
+		target.setView(target.getDefaultView());
+		sf::RectangleShape shape;
+		shape.setFillColor(sf::Color::Transparent);
+		shape.setOutlineColor(sf::Color::Green);
+		shape.setOutlineThickness(-2.0f);
+
+		for (GuiComponent* comp : _components) {
+			// Set the shape's pos to the same as the GuiComp's pos
+			shape.setPosition(comp->getX(), comp->getY());	
+			shape.setSize(sf::Vector2f(comp->getWidth(), comp->getHeight()));
+			target.draw(shape);
+		}
+		// Draw the selected GuiComp on top
+		if (_hoveredComp) {
+			shape.setPosition(_hoveredComp->getX(), _hoveredComp->getY());	
+			shape.setSize(sf::Vector2f(_hoveredComp->getWidth(),
+						_hoveredComp->getHeight()));
+			shape.setOutlineColor(sf::Color::Cyan);
+			target.draw(shape);
+		}
+	}
+
 	// After drawing all components reset where we're drawing to
 	target.setView(target.getDefaultView());
 }

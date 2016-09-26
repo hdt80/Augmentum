@@ -79,6 +79,10 @@ protected:
 	//
 	GuiComponent* getClickedComponent(float x, float y);
 
+
+	bool _drawCompBounds;
+	GuiComponent* _hoveredComp;
+
 	std::string _name; // Internal name of the Window, should be unique
 
 	Vector2 _size; // width and height of the Window

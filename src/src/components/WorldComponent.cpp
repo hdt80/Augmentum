@@ -66,6 +66,8 @@ void WorldComponent::onClick(int button, float window_x, float window_y,
 		obj = new Ship(_map, view_x, view_y, s, 15, sf::Color::Red);
 	} else if (button == sf::Mouse::Right) {
 		obj = new Ship(_map, view_x, view_y, s, 9, sf::Color(232, 232, 232));
+	} else {
+		CORE_WARN("Uncaught sf::Mouse button");
 	}
 
 	_map->objects.push_back(obj);

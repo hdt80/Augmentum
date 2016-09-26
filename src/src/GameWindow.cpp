@@ -47,7 +47,7 @@ void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
 
-	FontCache::loadFont("pixel", "res\\Pixel.ttf");
+	FontCache::loadFont("pixel", "res/Pixel.ttf");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,6 +81,7 @@ void GameWindow::update(int diff) {
 
 //
 void GameWindow::keyEvent(sf::Event& e) {
+	Window::keyEvent(e);
 	if (e.key.code == sf::Keyboard::N) {
 		CORE_INFO("[GameWindow %x] Toggling on box2d shapeBit", this);
 		// TODO: Dear god no
@@ -103,7 +104,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 
 //
 void GameWindow::mouseMoveEvent(sf::Event& e) {
-
+	Window::mouseMoveEvent(e);
 }
 
 //
