@@ -11,21 +11,22 @@ public:
 	// Load a font and store it into the cache
 	// name - Name to store the font as
 	// path - Path to the font to load
-	static void loadFont(std::string name, std::string path);
+	static void loadFont(const std::string& name, const std::string& path);
 
 	// Get a loaded font
 	// name - Name the the font was stored under
-	static const sf::Font& getFont(std::string name);
+	static sf::Font& getFont(const std::string& name);
 
 	// Check if a font under a name is cached
 	// name - Name of the font to check
-	static bool isLoaded(std::string name);
+	static bool isLoaded(const std::string& name);
 
-	static void setDefaultFont(std::string name, std::string path);
-	static sf::Font getDefaultFont();
+	static void setDefaultFont(const std::string& path);
+	static sf::Font& getDefaultFont() { return _defaultFont; }
 
 private:
 	static std::map<std::string, sf::Font> _fontCache;
+	static sf::Font _defaultFont;
 };
 
 #endif

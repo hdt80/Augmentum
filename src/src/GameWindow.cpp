@@ -10,6 +10,7 @@
 #include "components/WorldComponent.h"
 #include "components/DebugWorldComponent.h"
 #include "FontCache.h"
+#include "GuiStyleCache.h"
 
 ParticleEmitter GameWindow::Emitter;
 
@@ -20,13 +21,38 @@ GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
 
-	addComponent(new DebugWorldComponent(this, Vector2(_size.X - 180, 0),
-									Vector2(180, _size.Y),
-									size));
+	GuiStyle* debugStyle = new GuiStyle();
+	debugStyle->font = &FontCache::getDefaultFont();
+	debugStyle->bodyColor = sf::Color(128, 128, 128);
+	debugStyle->borderColor = sf::Color(180, 180, 180);
+	debugStyle->highlightedColor = sf::Color(24, 24, 24);
+	debugStyle->highlightedBorderColor = sf::Color(220, 220, 220);
+	debugStyle->highlightedTextColor = sf::Color(80, 80, 160);
+	debugStyle->dimensions = Vector2(180, 20);
+	debugStyle->borderSize = 1.0f;
+	debugStyle->padding = 2;
+	debugStyle->textSize = -1;
+	GuiStyleCache::saveStyle("debug_style", debugStyle);
 
-	addComponent(new WorldComponent(this, Vector2(0.0, 0.0),
-									Vector2(_size.X, _size.Y),
-									size));
+	GuiStyle* worldStyle = new GuiStyle();
+	worldStyle->font = &FontCache::getDefaultFont();
+	worldStyle->bodyColor = sf::Color(128, 128, 128);
+	worldStyle->borderColor = sf::Color(180, 180, 180);
+	worldStyle->highlightedColor = sf::Color(24, 24, 24);
+	worldStyle->highlightedBorderColor = sf::Color(220, 220, 220);
+	worldStyle->highlightedTextColor = sf::Color(80, 80, 160);
+	worldStyle->dimensions = Vector2(180, 20);
+	worldStyle->borderSize = 1.0f;
+	worldStyle->padding = 2;
+	worldStyle->textSize = -1;
+	GuiStyleCache::saveStyle("world_style", worldStyle);
+
+	addComponent(new DebugWorldComponent(this, debugStyle, 
+				Vector2(_size.X - 180, 0), Vector2(180, _size.Y), size));
+
+	addComponent(new WorldComponent(this, worldStyle, 
+				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y), size));
+
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
 	def.initColor = sf::Color(255, 0, 0);
@@ -46,6 +72,8 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
+
+	FontCache::setDefaultFont("res/Pixel.ttf");
 
 	FontCache::loadFont("pixel", "res/Pixel.ttf");
 }

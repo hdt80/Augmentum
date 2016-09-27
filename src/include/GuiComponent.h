@@ -3,20 +3,43 @@
 
 #include <SFML/Graphics.hpp>
 #include "Vector2.h"
+#include "GuiEntry.h"
 
 class Window;
+
+// Parameters to use when creating a GuiEntry
+struct GuiStyle {
+	sf::Font* font; // Font to use
+
+	sf::Color bodyColor; // Background color
+	sf::Color borderColor; // Color around the border
+	sf::Color textColor; // Color of the text
+
+	sf::Color highlightedColor; // Color of highlighted entry
+	sf::Color highlightedBorderColor; // Color of the border's highlighted entry
+	sf::Color highlightedTextColor; // Color of highlighted entry's text
+
+	Vector2 dimensions; // How big each GuiEntry should be
+
+	float borderSize; // How big the border is in pixels
+	int padding; // Pixels between each GuiEntry
+	int textSize; // Size of the message if negative, automatically find it
+};
 
 class GuiComponent : public sf::Drawable, public sf::Transformable {
 public:
 	// GuiComponent ctor
 	// pos - Where on the screen this component should start (pixels)
+	// style - GuiStyle to use when creating our entries
 	// size - How much of the screen this component takes up (pixels)
-	// windowSize - Size of the window this component is a part of
-	GuiComponent(Window* window, Vector2 pos, Vector2 size, Vector2 windowSize);
+	// windowSize - Size of the window this component is a part of (pixels)
+	GuiComponent(Window* window, GuiStyle* style,
+			Vector2 pos, Vector2 size, Vector2 windowSize);
 	~GuiComponent();
 
-	// Update this component based on how many milliseconds have passed
+	// Update this component based on how many microseconds have passed
 	void virtual update(int diff);
+	// Inherited from sf::Drawable
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 	// Resize this component to a newSize of a window. This should be called
@@ -28,7 +51,7 @@ public:
 	// y - Y position of the window
 	bool contains(float x, float y);
 
-	// Return if the point given is within the bounds of this GuiComponent, 
+	// Return if the point given is within the bounds of this GuiComponent,
 	//		but only if it's clickable
 	// x - X position of the point clicked
 	// y - Y position of the point clicked
@@ -37,6 +60,7 @@ public:
 	// Events
 	
 	// Called when this GuiComponent is clicked
+	// button - Button that was pressed, use sf::Mouse::Button::* to compare
 	// window_x - X position of the click relative to the window
 	// window_y - Y position of the click relative to the window
 	// view_x - X position of the click relative to the view
@@ -60,9 +84,9 @@ public:
 	void setWidth(float w) { _size.X = w; }
 	void setHeight(float h) { _size.Y = h; }
 
-	// Window
-	void setWindow(Window* window);
-	Window* getWindow() const;
+	// Window getter and setter
+	void setWindow(Window* window) { _window = window; }
+	const Window* getWindow() { return _window; }
 
 	// Get the view representing this GuiComponent
 	sf::View getView() { return _view; }
@@ -78,18 +102,20 @@ public:
 	void setClickable(bool b) { this->_clickable = b; }
 
 protected:
-	GuiComponent();
 
 	Vector2 _pos; // Position of this component
 	Vector2 _size; // Dimension of the component. x = width, y = height
+
+	GuiStyle _guiStyle; // GuiStyle to use in this GuiComponent
+	std::vector<GuiEntry*> _entries; // Entries to draw
 
 	bool _visible; // If this component is visible
 	bool _updating; // If we should update this component
 	bool _clickable; // If this GuiComponent can be clicked
 
-	sf::View _view;
+	sf::View _view; // View to draw to
 
-	Window* _window;
+	Window* _window; // Window this is a part of
 };
 
 

@@ -6,7 +6,7 @@
 
 class DebugWorldComponent : public GuiComponent {
 public:
-	DebugWorldComponent(Window* window, Vector2 pos,
+	DebugWorldComponent(Window* window, GuiStyle* style, Vector2 pos,
 			Vector2 size, Vector2 windowSize);
 
 	virtual void update(int diff);

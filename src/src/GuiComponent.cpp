@@ -2,12 +2,11 @@
 #include "Logger.h"
 #include "Window.h"
 
-GuiComponent::GuiComponent() 
-	: GuiComponent(nullptr, Vector2(), Vector2(), Vector2()) {
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
 
-}
-
-GuiComponent::GuiComponent(Window* window,
+GuiComponent::GuiComponent(Window* window, GuiStyle* style,
 		Vector2 pos, Vector2 size, Vector2 windowSize) {
 
 	// Components start at (0, 0) and not the position because a view represents
@@ -28,8 +27,11 @@ GuiComponent::GuiComponent(Window* window,
 
 GuiComponent::~GuiComponent() {
 	_window = nullptr;
+	for (GuiEntry* entry : _entries) {
+		delete entry;
+	}
+	_entries.clear();
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Update methods
@@ -77,14 +79,4 @@ void GuiComponent::resize(Vector2 newSize) {
 	float r_width = _size.X / newSize.X;
 	float r_height = _size.Y / newSize.Y;
 	_view.setViewport(sf::FloatRect(origin_x, origin_y, r_width, r_height));
-}
-
-//
-void GuiComponent::setWindow(Window* window) {
-	_window = window;
-}
-
-//
-Window* GuiComponent::getWindow() const {
-	return _window;
 }
