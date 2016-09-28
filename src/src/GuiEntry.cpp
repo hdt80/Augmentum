@@ -7,6 +7,7 @@
 GuiEntry::GuiEntry() {}
 
 GuiEntry::GuiEntry(GuiStyle* style, const std::string& msg) {
+	_style = style;
 	_shape.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_shape.setFillColor(style->bodyColor);
 	_shape.setOutlineColor(style->borderColor);
@@ -17,7 +18,7 @@ GuiEntry::GuiEntry(GuiStyle* style, const std::string& msg) {
 	_text.setString(msg);
 	_text.setFillColor(style->textColor);
 	_text.setOutlineColor(sf::Color::Black);
-	_text.setOutlineThickness(-1.0f);
+	_text.setOutlineThickness(1.0f);
 	setMessage(msg);
 	
 	// Find the font size programmically?
@@ -29,6 +30,8 @@ GuiEntry::GuiEntry(GuiStyle* style, const std::string& msg) {
 		// TODO: Factor in padding
 		_text.setCharacterSize(style->textSize);
 	}
+
+	_highlighted = false;
 }
 
 GuiEntry::~GuiEntry() {}
@@ -45,4 +48,17 @@ void GuiEntry::setMessage(const std::string& msg) {
 void GuiEntry::setPosition(float x, float y) {
 	_shape.setPosition(x, y);
 	_text.setPosition(x, y);
+}
+
+void GuiEntry::setHighlighted(bool b) {
+	_highlighted = b;
+	if (_highlighted) {
+		_shape.setFillColor(_style->highlightedColor);
+		_shape.setOutlineColor(_style->highlightedBorderColor);
+		_text.setFillColor(_style->highlightedTextColor);
+	} else {
+		_shape.setFillColor(_style->bodyColor);
+		_shape.setOutlineColor(_style->borderColor);
+		_text.setFillColor(_style->textColor);
+	}
 }

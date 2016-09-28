@@ -22,6 +22,8 @@ GuiComponent::GuiComponent(Window* window, GuiStyle* style,
 	_updating = true;
 	_clickable = true;
 
+	_highlightedEntry = nullptr;
+
 	_window = window;
 }
 
@@ -37,28 +39,39 @@ GuiComponent::~GuiComponent() {
 // Update methods
 ///////////////////////////////////////////////////////////////////////////////
 
-//
 void GuiComponent::update(int diff) {
-
+	sf::Vector2i mousePos = sf::Mouse::getPosition();	
+	GuiEntry* hovered = getEntry(mousePos.x, mousePos.y);
+	
+	if (_highlightedEntry != hovered) {
+		if (_highlightedEntry) {
+			_highlightedEntry->setHighlighted(false);
+		}
+		if (hovered) {
+			hovered->setHighlighted(true);
+		}
+		_highlightedEntry = hovered;
+	}
 }
 
-//
 void GuiComponent::draw(sf::RenderTarget& target,
 		sf::RenderStates states) const {
 
+	for (GuiEntry* entry : _entries) {
+		target.draw(entry->getShape());
+		target.draw(entry->getText());
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Bounds methods
 ////////////////////////////////////////////////////////////////////////////////
 
-//
 bool GuiComponent::contains(float x, float y) {
 	return (x >= _pos.X && x <= _size.X + _pos.X &&
 			y >= _pos.Y && y <= _size.Y + _pos.Y);
 }
 
-//
 bool GuiComponent::hasClicked(float x, float y) {
 	if (!_clickable) {
 		return false;
@@ -66,11 +79,27 @@ bool GuiComponent::hasClicked(float x, float y) {
 	return contains(x, y);
 }	
 
+void GuiComponent::addEntry(GuiEntry* entry, float x, float y) {
+	entry->setPosition(x, y);
+	_entries.push_back(entry);
+}
+
+GuiEntry* GuiComponent::getEntry(float x, float y) {
+	for (unsigned int i = 0; i < _entries.size(); ++i) {
+		GuiEntry* entry = _entries[i];
+		if (entry->getX() > x && entry->getX() + _guiStyle.dimensions.X < x &&
+			entry->getY() > y && entry->getY() + _guiStyle.dimensions.Y < y) {
+			
+			return entry;
+		}
+	}
+	return nullptr;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Event methods
 ///////////////////////////////////////////////////////////////////////////////
 
-//
 void GuiComponent::resize(Vector2 newSize) {
 	// Views use a ratio of 0.0 to 1.0 to determine how much of the screen
 	// to use. Since we provide the position and size in pixels, we convert them

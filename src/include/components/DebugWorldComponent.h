@@ -10,10 +10,13 @@ public:
 			Vector2 size, Vector2 windowSize);
 
 	virtual void update(int diff);
-	void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 private:
 	Map* _map;
+
+	GuiEntry* _fps;
+	GuiEntry* _pos;
+	GuiEntry* _speed;
 };
 
 #endif

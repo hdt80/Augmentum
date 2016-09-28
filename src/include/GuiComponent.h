@@ -57,6 +57,19 @@ public:
 	// y - Y position of the point clicked
 	bool hasClicked(float x, float y);
 
+	// GuiEntry methods
+
+	// Add a new GuiEntry at a position
+	// entry - GuiEntry to add
+	// x - X position to put it. Relative to this view
+	// y - Y position to put it. Relative to this view
+	void addEntry(GuiEntry* entry, float x, float y);
+
+	// Get a GuiEntry at a position
+	// x - X position to find the GuiEntry at
+	// y - Y position to find the GuiEntry at
+	GuiEntry* getEntry(float x, float y);
+
 	// Events
 	
 	// Called when this GuiComponent is clicked
@@ -108,6 +121,7 @@ protected:
 
 	GuiStyle _guiStyle; // GuiStyle to use in this GuiComponent
 	std::vector<GuiEntry*> _entries; // Entries to draw
+	GuiEntry* _highlightedEntry; // Entry being hovered over
 
 	bool _visible; // If this component is visible
 	bool _updating; // If we should update this component

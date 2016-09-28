@@ -21,23 +21,13 @@ GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
 
-	GuiStyle* debugStyle = new GuiStyle();
-	debugStyle->font = &FontCache::getDefaultFont();
-	debugStyle->bodyColor = sf::Color(128, 128, 128);
-	debugStyle->borderColor = sf::Color(180, 180, 180);
-	debugStyle->highlightedColor = sf::Color(24, 24, 24);
-	debugStyle->highlightedBorderColor = sf::Color(220, 220, 220);
-	debugStyle->highlightedTextColor = sf::Color(80, 80, 160);
-	debugStyle->dimensions = Vector2(180, 20);
-	debugStyle->borderSize = 1.0f;
-	debugStyle->padding = 2;
-	debugStyle->textSize = -1;
-	GuiStyleCache::saveStyle("debug_style", debugStyle);
+	FontCache::setDefaultFont("res/Pixel.ttf");
 
 	GuiStyle* worldStyle = new GuiStyle();
 	worldStyle->font = &FontCache::getDefaultFont();
 	worldStyle->bodyColor = sf::Color(128, 128, 128);
 	worldStyle->borderColor = sf::Color(180, 180, 180);
+	worldStyle->textColor = sf::Color::Black;
 	worldStyle->highlightedColor = sf::Color(24, 24, 24);
 	worldStyle->highlightedBorderColor = sf::Color(220, 220, 220);
 	worldStyle->highlightedTextColor = sf::Color(80, 80, 160);
@@ -46,6 +36,20 @@ GameWindow::GameWindow(Vector2 size) {
 	worldStyle->padding = 2;
 	worldStyle->textSize = -1;
 	GuiStyleCache::saveStyle("world_style", worldStyle);
+
+	GuiStyle* debugStyle = new GuiStyle();
+	debugStyle->font = &FontCache::getDefaultFont();
+	debugStyle->bodyColor = sf::Color::Transparent;
+	debugStyle->borderColor = sf::Color::Transparent;
+	debugStyle->textColor = sf::Color::White;
+	debugStyle->highlightedColor = sf::Color::Transparent;
+	debugStyle->highlightedBorderColor = sf::Color::Transparent;
+	debugStyle->highlightedTextColor = sf::Color::Transparent;
+	debugStyle->dimensions = Vector2(180, 20);
+	debugStyle->borderSize = 1.0f;
+	debugStyle->padding = 2;
+	debugStyle->textSize = -1;
+	GuiStyleCache::saveStyle("debug_style", debugStyle);
 
 	addComponent(new DebugWorldComponent(this, debugStyle, 
 				Vector2(_size.X - 180, 0), Vector2(180, _size.Y), size));
@@ -72,8 +76,6 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
-
-	FontCache::setDefaultFont("res/Pixel.ttf");
 
 	FontCache::loadFont("pixel", "res/Pixel.ttf");
 }
