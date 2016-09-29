@@ -11,6 +11,9 @@
 #include "components/DebugWorldComponent.h"
 #include "FontCache.h"
 #include "GuiStyleCache.h"
+#include "GuiToolbarComponent.h"
+#include "GuiButton.h"
+#include "GuiMenuButton.h"
 
 ParticleEmitter GameWindow::Emitter;
 
@@ -23,11 +26,11 @@ GameWindow::GameWindow(Vector2 size) {
 
 	FontCache::setDefaultFont("res/Pixel.ttf");
 
-	GuiStyle* worldStyle = new GuiStyle();
+	GuiEntryStyle* worldStyle = new GuiEntryStyle();
 	worldStyle->font = &FontCache::getDefaultFont();
 	worldStyle->bodyColor = sf::Color(128, 128, 128);
 	worldStyle->borderColor = sf::Color(180, 180, 180);
-	worldStyle->textColor = sf::Color::Black;
+	worldStyle->textColor = sf::Color::White;
 	worldStyle->highlightedColor = sf::Color(24, 24, 24);
 	worldStyle->highlightedBorderColor = sf::Color(220, 220, 220);
 	worldStyle->highlightedTextColor = sf::Color(80, 80, 160);
@@ -37,7 +40,7 @@ GameWindow::GameWindow(Vector2 size) {
 	worldStyle->textSize = -1;
 	GuiStyleCache::saveStyle("world_style", worldStyle);
 
-	GuiStyle* debugStyle = new GuiStyle();
+	GuiEntryStyle* debugStyle = new GuiEntryStyle();
 	debugStyle->font = &FontCache::getDefaultFont();
 	debugStyle->bodyColor = sf::Color::Transparent;
 	debugStyle->borderColor = sf::Color::Transparent;
@@ -51,11 +54,25 @@ GameWindow::GameWindow(Vector2 size) {
 	debugStyle->textSize = -1;
 	GuiStyleCache::saveStyle("debug_style", debugStyle);
 
-	addComponent(new DebugWorldComponent(this, debugStyle, 
-				Vector2(_size.X - 180, 0), Vector2(180, _size.Y), size));
+	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
+	toolbarStyle->dimensions = Vector2(64, 24);
 
-	addComponent(new WorldComponent(this, worldStyle, 
-				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y), size));
+	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
+				Vector2(16, 16), Vector2(_size.X - 48, 96), size, false);
+
+	WorldComponent* worldComp = new WorldComponent(this, worldStyle,
+				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y), size);
+	
+	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
+				Vector2(_size.X - 180, 0), Vector2(180, _size.Y), size);
+
+	toolbar->addEntry(new GuiEntry(toolbar->getEntryStyle(), "File"));
+	toolbar->addEntry(new GuiEntry(toolbar->getEntryStyle(), "Edit"));
+	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(), "View", dComp));
+
+	addComponent(toolbar);
+	addComponent(worldComp);
+	addComponent(dComp);
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;

@@ -1,12 +1,13 @@
 #include "GuiEntry.h"
 #include "GuiComponent.h"
+#include "GuiStyleCache.h"
+#include "Logger.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
-GuiEntry::GuiEntry() {}
 
-GuiEntry::GuiEntry(GuiStyle* style, const std::string& msg) {
+GuiEntry::GuiEntry(GuiEntryStyle* style, const std::string& msg) {
 	_style = style;
 	_shape.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_shape.setFillColor(style->bodyColor);

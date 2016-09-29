@@ -99,20 +99,15 @@ const std::string Window::getStateString(WindowState state) {
 	}
 }
 
-//
 void Window::addComponent(GuiComponent* comp, int depth) {
 	_components.push_back(comp);
 }
 
-// Get the GuiComponent at that location
-// x - X position to look at
-// y - Y position to look at
-// The first GuiComponent that contains that point will be returned,
-// so if there are two GuiComponents overlapping the point, the first one
-// added to the Window will be returned
 GuiComponent* Window::getClickedComponent(float x, float y) {
 	for (unsigned int i = 0; i < _components.size(); ++i) {
+		CORE_INFO("%d: %x", i, _components[i]);
 		if (_components[i]->hasClicked(x, y)) {
+			CORE_INFO("%d: %x - Clicked", i, _components[i]);
 			return _components[i];
 		}
 	}
@@ -205,7 +200,7 @@ void Window::render(sf::RenderWindow& target) {
 			shape.setPosition(_hoveredComp->getX(), _hoveredComp->getY());	
 			shape.setSize(sf::Vector2f(_hoveredComp->getWidth(),
 						_hoveredComp->getHeight()));
-			shape.setOutlineColor(sf::Color::Cyan);
+			shape.setOutlineColor(sf::Color::Magenta);
 			target.draw(shape);
 		}
 	}

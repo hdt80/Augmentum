@@ -4,16 +4,15 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-struct GuiStyle;
+struct GuiEntryStyle;
 
 class GuiEntry {
 public:
-	GuiEntry();
 	// GuiEntry ctor - After this object is created is will not change
 	// style - Style to model the _shape and _text after
 	// msg - Message to display on the screen
-	GuiEntry(GuiStyle* style, const std::string& msg);
-	~GuiEntry();
+	GuiEntry(GuiEntryStyle* style, const std::string& msg);
+	virtual ~GuiEntry();
 
 	// Get the shape that will be drawn in a GuiComponent
 	const sf::RectangleShape& getShape() { return _shape; }
@@ -40,7 +39,7 @@ public:
 	float getY() { return _shape.getPosition().y; }
 
 protected:
-	GuiStyle* _style;
+	GuiEntryStyle* _style;
 	sf::RectangleShape _shape; // Drawn to the screen
 	sf::Text _text; // Drawn to the screen
 	std::string _msg; // What message will be drawn

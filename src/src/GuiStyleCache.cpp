@@ -1,14 +1,14 @@
 #include "GuiStyleCache.h"
 #include "Logger.h"
 
-void GuiStyleCache::saveStyle(const std::string& name, GuiStyle* style) {
+void GuiStyleCache::saveStyle(const std::string& name, GuiEntryStyle* style) {
 	if (contains(name)) {
 		CORE_WARN("Overwriting a saved GuiStyle: \'%s\'", name.c_str());
 	}
 	_styleCache[name] = style;
 }
 
-const GuiStyle* GuiStyleCache::getStyle(const std::string& name) {
+const GuiEntryStyle* GuiStyleCache::getStyle(const std::string& name) {
 	if (!contains(name)) {
 		CORE_WARN("Could not load \'%s\'. Not loaded!", name.c_str());
 		return nullptr;
@@ -17,7 +17,7 @@ const GuiStyle* GuiStyleCache::getStyle(const std::string& name) {
 }
 
 bool GuiStyleCache::contains(const std::string& name) {
-	std::map<std::string, GuiStyle*>::iterator it = _styleCache.find(name);
+	std::map<std::string, GuiEntryStyle*>::iterator it = _styleCache.find(name);
 
 	return it != _styleCache.end();
 }
@@ -25,4 +25,4 @@ bool GuiStyleCache::contains(const std::string& name) {
 ////////////////////////////////////////////////////////////////////////////////
 // Static vars
 ////////////////////////////////////////////////////////////////////////////////
-std::map<std::string, GuiStyle*> GuiStyleCache::_styleCache;
+std::map<std::string, GuiEntryStyle*> GuiStyleCache::_styleCache;

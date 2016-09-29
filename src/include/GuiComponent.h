@@ -8,7 +8,7 @@
 class Window;
 
 // Parameters to use when creating a GuiEntry
-struct GuiStyle {
+struct GuiEntryStyle {
 	sf::Font* font; // Font to use
 
 	sf::Color bodyColor; // Background color
@@ -26,6 +26,14 @@ struct GuiStyle {
 	int textSize; // Size of the message if negative, automatically find it
 };
 
+// Parameters to use when creating a GuiComponent
+struct GuiComponentStyle {
+	sf::Color bodyColor;
+	sf::Color borderColor;
+	
+	float borderSize;
+};
+
 class GuiComponent : public sf::Drawable, public sf::Transformable {
 public:
 	// GuiComponent ctor
@@ -33,9 +41,9 @@ public:
 	// style - GuiStyle to use when creating our entries
 	// size - How much of the screen this component takes up (pixels)
 	// windowSize - Size of the window this component is a part of (pixels)
-	GuiComponent(Window* window, GuiStyle* style,
+	GuiComponent(Window* window, GuiEntryStyle* style,
 			Vector2 pos, Vector2 size, Vector2 windowSize);
-	~GuiComponent();
+	virtual ~GuiComponent();
 
 	// Update this component based on how many microseconds have passed
 	void virtual update(int diff);
@@ -49,13 +57,13 @@ public:
 	// Return if a point is within the bounds of this GuiComponent
 	// x - X position of the window
 	// y - Y position of the window
-	bool contains(float x, float y);
+	virtual bool contains(float x, float y);
 
 	// Return if the point given is within the bounds of this GuiComponent,
 	//		but only if it's clickable
 	// x - X position of the point clicked
 	// y - Y position of the point clicked
-	bool hasClicked(float x, float y);
+	virtual bool hasClicked(float x, float y);
 
 	// GuiEntry methods
 
@@ -63,12 +71,18 @@ public:
 	// entry - GuiEntry to add
 	// x - X position to put it. Relative to this view
 	// y - Y position to put it. Relative to this view
-	void addEntry(GuiEntry* entry, float x, float y);
+	virtual void addEntry(GuiEntry* entry, float x = 0, float y = 0);
 
 	// Get a GuiEntry at a position
 	// x - X position to find the GuiEntry at
 	// y - Y position to find the GuiEntry at
-	GuiEntry* getEntry(float x, float y);
+	virtual GuiEntry* getEntry(float x, float y);
+
+	// Get the GuiStyle that this GuiComponent uses
+	GuiEntryStyle* getEntryStyle() { return _guiEntryStyle; }
+
+	// Get the GuiComponentStyle this GuiComponent uses
+	GuiComponentStyle* getComponentStyle() { return _guiCompStyle; }
 
 	// Events
 	
@@ -79,7 +93,7 @@ public:
 	// view_x - X position of the click relative to the view
 	// view_y - Y position of the click relative to the view
 	virtual void onClick(int button, float window_x, float window_y,
-					     float view_x, float view_y) {}
+					     float view_x, float view_y);
 
 	// Position getters and setters
 	float getX() { return _pos.X; }
@@ -115,11 +129,11 @@ public:
 	void setClickable(bool b) { this->_clickable = b; }
 
 protected:
-
 	Vector2 _pos; // Position of this component
 	Vector2 _size; // Dimension of the component. x = width, y = height
 
-	GuiStyle _guiStyle; // GuiStyle to use in this GuiComponent
+	GuiEntryStyle* _guiEntryStyle; // GuiStyle to use in this GuiComponent
+	GuiComponentStyle* _guiCompStyle; // GuiStyle to use
 	std::vector<GuiEntry*> _entries; // Entries to draw
 	GuiEntry* _highlightedEntry; // Entry being hovered over
 

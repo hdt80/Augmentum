@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor
 ////////////////////////////////////////////////////////////////////////////////
-WorldComponent::WorldComponent(Window* window, GuiStyle* style, Vector2 pos,
+WorldComponent::WorldComponent(Window* window, GuiEntryStyle* style, Vector2 pos,
 		Vector2 size, Vector2 windowSize)
 	: GuiComponent(window, style, pos, size, windowSize) {
 
@@ -32,6 +32,7 @@ WorldComponent::WorldComponent(Window* window, GuiStyle* style, Vector2 pos,
 // Update this Component
 // diff - Milliseconds since the last update
 void WorldComponent::update(int diff) {
+	GuiComponent::update(diff);
 	_view.setCenter(_map->getSelected()->getX(), _map->getSelected()->getY());
 }
 
@@ -47,6 +48,8 @@ void WorldComponent::draw(sf::RenderTarget& target,
 	if (_drawBounds) {
 		_map->getWorld()->DrawDebugData();	
 	}
+
+	GuiComponent::draw(target, states);
 }
 
 // Called when this Compontent is clicked on
@@ -56,6 +59,8 @@ void WorldComponent::draw(sf::RenderTarget& target,
 // view_y - Y cooord relative to the world
 void WorldComponent::onClick(int button, float window_x, float window_y,
 		float view_x, float view_y) {
+
+	GuiComponent::onClick(button, window_x, window_y, view_x, view_y);
 
 	Object* obj = nullptr;
 

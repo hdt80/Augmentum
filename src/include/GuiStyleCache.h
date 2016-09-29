@@ -9,18 +9,18 @@ public:
 	// Store a GuiStyle under a name into the cache
 	// name - Name to store the GuiStyle as
 	// style - Style to save 
-	static void saveStyle(const std::string& name, GuiStyle* style);
+	static void saveStyle(const std::string& name, GuiEntryStyle* style);
 
 	// Get a saved GuiStyle
 	// name - Name the the GuiStyle was stored under
-	static const GuiStyle* getStyle(const std::string& name);
+	static const GuiEntryStyle* getStyle(const std::string& name);
 
 	// Check if a GuiStyle is saved in this cache
 	// name - Name of the font to check
 	static bool contains(const std::string& name);
 
 private:
-	static std::map<std::string, GuiStyle*> _styleCache;
+	static std::map<std::string, GuiEntryStyle*> _styleCache;
 };
 
 #endif

@@ -1,12 +1,13 @@
 #include "GuiComponent.h"
 #include "Logger.h"
 #include "Window.h"
+#include "GuiButton.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiComponent::GuiComponent(Window* window, GuiStyle* style,
+GuiComponent::GuiComponent(Window* window, GuiEntryStyle* style,
 		Vector2 pos, Vector2 size, Vector2 windowSize) {
 
 	// Components start at (0, 0) and not the position because a view represents
@@ -23,6 +24,7 @@ GuiComponent::GuiComponent(Window* window, GuiStyle* style,
 	_clickable = true;
 
 	_highlightedEntry = nullptr;
+	_guiEntryStyle = style;
 
 	_window = window;
 }
@@ -42,6 +44,12 @@ GuiComponent::~GuiComponent() {
 void GuiComponent::update(int diff) {
 	sf::Vector2i mousePos = sf::Mouse::getPosition();	
 	GuiEntry* hovered = getEntry(mousePos.x, mousePos.y);
+	if (hovered) {
+		CORE_INFO("Hovered: %x", hovered);
+	}
+	if (_highlightedEntry) {
+		CORE_INFO("Highlit: %x", _highlightedEntry);
+	}
 	
 	if (_highlightedEntry != hovered) {
 		if (_highlightedEntry) {
@@ -61,6 +69,16 @@ void GuiComponent::draw(sf::RenderTarget& target,
 		target.draw(entry->getShape());
 		target.draw(entry->getText());
 	}
+
+	//sf::RectangleShape shape;
+	//shape.setFillColor(sf::Color::Transparent);
+	//shape.setOutlineColor(sf::Color::Cyan);
+	//shape.setOutlineThickness(-2.0f);
+	//shape.setSize(sf::Vector2f(_guiStyle->dimensions.X, _guiStyle->dimensions.Y));
+	//for (GuiEntry* entry : _entries) {
+	//	shape.setPosition(entry->getX(), entry->getY());
+	//	target.draw(shape);
+	//}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -87,8 +105,15 @@ void GuiComponent::addEntry(GuiEntry* entry, float x, float y) {
 GuiEntry* GuiComponent::getEntry(float x, float y) {
 	for (unsigned int i = 0; i < _entries.size(); ++i) {
 		GuiEntry* entry = _entries[i];
-		if (entry->getX() > x && entry->getX() + _guiStyle.dimensions.X < x &&
-			entry->getY() > y && entry->getY() + _guiStyle.dimensions.Y < y) {
+		//if (entry->getX() > x && entry->getX() + _guiStyle->dimensions.X < x &&
+		//	entry->getY() > y && entry->getY() + _guiStyle->dimensions.Y < y) {
+		//	
+		//	return entry;
+		//}
+		if (entry->getX() < x &&
+			entry->getX() + _guiEntryStyle->dimensions.X > x &&
+			entry->getY() < y &&
+			entry->getY() + _guiEntryStyle->dimensions.Y > y) {
 			
 			return entry;
 		}
@@ -108,4 +133,24 @@ void GuiComponent::resize(Vector2 newSize) {
 	float r_width = _size.X / newSize.X;
 	float r_height = _size.Y / newSize.Y;
 	_view.setViewport(sf::FloatRect(origin_x, origin_y, r_width, r_height));
+}
+
+void GuiComponent::onClick(int button, float window_x, float window_y,
+		float view_x, float view_y) {
+	
+	if (!isClickable()) {
+		return;
+	}
+	
+	GuiEntry* clicked = getEntry(view_x, view_y);
+
+	if (!clicked) {
+		return;
+	}
+
+	GuiButton* guiButton = dynamic_cast<GuiButton*>(clicked);
+
+	if (guiButton) {
+		guiButton->onClick();
+	}
 }
