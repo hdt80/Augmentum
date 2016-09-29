@@ -63,3 +63,8 @@ void GuiEntry::setHighlighted(bool b) {
 		_text.setFillColor(_style->textColor);
 	}
 }
+
+bool GuiEntry::contains(float x, float y) {
+	return (x >= getX() && x <= _style->dimensions.X + getX() &&
+			y >= getY() && y <= _style->dimensions.Y + getY());
+}

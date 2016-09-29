@@ -105,9 +105,7 @@ void Window::addComponent(GuiComponent* comp, int depth) {
 
 GuiComponent* Window::getClickedComponent(float x, float y) {
 	for (unsigned int i = 0; i < _components.size(); ++i) {
-		CORE_INFO("%d: %x", i, _components[i]);
 		if (_components[i]->hasClicked(x, y)) {
-			CORE_INFO("%d: %x - Clicked", i, _components[i]);
 			return _components[i];
 		}
 	}

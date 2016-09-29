@@ -38,6 +38,11 @@ public:
 	float getX() { return _shape.getPosition().x; }
 	float getY() { return _shape.getPosition().y; }
 
+	// Does this GuiEntry contain the points x and y
+	// x - X coord to check
+	// y - Y coord to check
+	bool contains(float x, float y);
+
 protected:
 	GuiEntryStyle* _style;
 	sf::RectangleShape _shape; // Drawn to the screen

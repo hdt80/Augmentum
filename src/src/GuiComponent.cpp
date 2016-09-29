@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "Window.h"
 #include "GuiButton.h"
+#include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -42,14 +43,8 @@ GuiComponent::~GuiComponent() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void GuiComponent::update(int diff) {
-	sf::Vector2i mousePos = sf::Mouse::getPosition();	
-	GuiEntry* hovered = getEntry(mousePos.x, mousePos.y);
-	if (hovered) {
-		CORE_INFO("Hovered: %x", hovered);
-	}
-	if (_highlightedEntry) {
-		CORE_INFO("Highlit: %x", _highlightedEntry);
-	}
+	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());	
+	GuiEntry* hovered = getEntry(mousePos.x + getX(), mousePos.y + getY());
 	
 	if (_highlightedEntry != hovered) {
 		if (_highlightedEntry) {
@@ -70,15 +65,15 @@ void GuiComponent::draw(sf::RenderTarget& target,
 		target.draw(entry->getText());
 	}
 
-	//sf::RectangleShape shape;
-	//shape.setFillColor(sf::Color::Transparent);
-	//shape.setOutlineColor(sf::Color::Cyan);
-	//shape.setOutlineThickness(-2.0f);
-	//shape.setSize(sf::Vector2f(_guiStyle->dimensions.X, _guiStyle->dimensions.Y));
-	//for (GuiEntry* entry : _entries) {
-	//	shape.setPosition(entry->getX(), entry->getY());
-	//	target.draw(shape);
-	//}
+	sf::RectangleShape shape;
+	shape.setFillColor(sf::Color::Transparent);
+	shape.setOutlineColor(sf::Color::Cyan);
+	shape.setOutlineThickness(-2.0f);
+	shape.setSize(sf::Vector2f(_guiEntryStyle->dimensions.X, _guiEntryStyle->dimensions.Y));
+	for (GuiEntry* entry : _entries) {
+		shape.setPosition(entry->getX(), entry->getY());
+		target.draw(shape);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -104,18 +99,8 @@ void GuiComponent::addEntry(GuiEntry* entry, float x, float y) {
 
 GuiEntry* GuiComponent::getEntry(float x, float y) {
 	for (unsigned int i = 0; i < _entries.size(); ++i) {
-		GuiEntry* entry = _entries[i];
-		//if (entry->getX() > x && entry->getX() + _guiStyle->dimensions.X < x &&
-		//	entry->getY() > y && entry->getY() + _guiStyle->dimensions.Y < y) {
-		//	
-		//	return entry;
-		//}
-		if (entry->getX() < x &&
-			entry->getX() + _guiEntryStyle->dimensions.X > x &&
-			entry->getY() < y &&
-			entry->getY() + _guiEntryStyle->dimensions.Y > y) {
-			
-			return entry;
+		if (_entries[i]->contains(x, y)) {
+			return _entries[i];
 		}
 	}
 	return nullptr;
