@@ -22,13 +22,15 @@ DebugWorldComponent::DebugWorldComponent(Window* window, GuiEntryStyle* style,
 	}
 
 	// Message doesn't matter now cause it's set during update
-	_fps = new GuiEntry(style, "");
-	_pos = new GuiEntry(style, "");
-	_speed = new GuiEntry(style, "");
+	_fps = new GuiEntry(style, getPos(), "");
+	_pos = new GuiEntry(style, getPos(), "");
+	_speed = new GuiEntry(style, getPos(), "");
+	_mousePos = new GuiEntry(style, getPos(), "");
 
 	addEntry(_fps, 0, 0);
 	addEntry(_pos, 0, 24);
 	addEntry(_speed, 0, 48);
+	addEntry(_mousePos, 0, 72);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +42,10 @@ void DebugWorldComponent::update(int diff) {
 	Ship* ship = _map->getSelected();
 	_fps->setMessage(convert::format("FPS: %u", Game::Fps.getFPS()));
 	_pos->setMessage(convert::format("Pos [%g %g]", ship->getX(), ship->getY()));
-	_speed->setMessage(convert::format("Speed: %g, %g",
+	_speed->setMessage(convert::format("Speed [%g %g]",
 				ship->getVelocity().X, ship->getVelocity().Y));
+
+	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());
+	_mousePos->setMessage(convert::format("Mouse [%d %d]",
+				mousePos.x, mousePos.y));
 }

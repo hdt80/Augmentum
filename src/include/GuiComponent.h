@@ -43,10 +43,14 @@ public:
 	// windowSize - Size of the window this component is a part of (pixels)
 	GuiComponent(Window* window, GuiEntryStyle* style,
 			Vector2 pos, Vector2 size, Vector2 windowSize);
+	// Dtor, remember to define each dtor in an inherited
 	virtual ~GuiComponent();
+
+	// Methods ////////////////////////////////////////////////////////////////
 
 	// Update this component based on how many microseconds have passed
 	void virtual update(int diff);
+
 	// Inherited from sf::Drawable
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 
@@ -65,7 +69,7 @@ public:
 	// y - Y position of the point clicked
 	virtual bool hasClicked(float x, float y);
 
-	// GuiEntry methods
+	// GuiEntry methods ////////////////////////////////////////////////////////
 
 	// Add a new GuiEntry at a position
 	// entry - GuiEntry to add
@@ -84,7 +88,7 @@ public:
 	// Get the GuiComponentStyle this GuiComponent uses
 	GuiComponentStyle* getComponentStyle() { return _guiCompStyle; }
 
-	// Events
+	// Events //////////////////////////////////////////////////////////////////
 	
 	// Called when this GuiComponent is clicked
 	// button - Button that was pressed, use sf::Mouse::Button::* to compare
@@ -95,9 +99,13 @@ public:
 	virtual void onClick(int button, float window_x, float window_y,
 					     float view_x, float view_y);
 
-	// Position getters and setters
+	// Position getters and setters ////////////////////////////////////////////
+	
+	// Position of the GuiComponent relative to the Window
+	Vector2 getPos() { return _pos; }
 	float getX() { return _pos.X; }
 	float getY() { return _pos.Y; }
+
 	void setPosition(Vector2 pos) { this->_pos = pos; }
 	void setX(float x) { _pos.X = x; }
 	void setY(float y) { _pos.Y = y; }
@@ -118,7 +126,7 @@ public:
 	// Get the view representing this GuiComponent
 	sf::View getView() { return _view; }
 
-	// Updating getter and setter
+	// Updating getter and setter //////////////////////////////////////////////
 	bool isUpdating() const { return _updating; }
 	void setUpdating(bool b) { this->_updating = b; }
 
@@ -129,11 +137,12 @@ public:
 	void setClickable(bool b) { this->_clickable = b; }
 
 protected:
-	Vector2 _pos; // Position of this component
-	Vector2 _size; // Dimension of the component. x = width, y = height
+	Vector2 _pos; // Position of this component relative to the Window
+	Vector2 _size; // Dimension of the component in pixels
 
 	GuiEntryStyle* _guiEntryStyle; // GuiStyle to use in this GuiComponent
 	GuiComponentStyle* _guiCompStyle; // GuiStyle to use
+
 	std::vector<GuiEntry*> _entries; // Entries to draw
 	GuiEntry* _highlightedEntry; // Entry being hovered over
 
@@ -143,7 +152,7 @@ protected:
 
 	sf::View _view; // View to draw to
 
-	Window* _window; // Window this is a part of
+	Window* _window; // Window this GuiComponent is drawn to
 };
 
 

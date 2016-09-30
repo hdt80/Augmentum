@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Vector2.h"
 
 struct GuiEntryStyle;
 
@@ -11,7 +12,7 @@ public:
 	// GuiEntry ctor - After this object is created is will not change
 	// style - Style to model the _shape and _text after
 	// msg - Message to display on the screen
-	GuiEntry(GuiEntryStyle* style, const std::string& msg);
+	GuiEntry(GuiEntryStyle* style, Vector2 origin, const std::string& msg);
 	virtual ~GuiEntry();
 
 	// Get the shape that will be drawn in a GuiComponent
@@ -35,8 +36,12 @@ public:
 	void setPosition(float x, float y);
 
 	// Get position
-	float getX() { return _shape.getPosition().x; }
-	float getY() { return _shape.getPosition().y; }
+	// These 2 are the absolute position relative to the screen
+	inline float getX() { return getOriginX() + _shape.getPosition().x; }
+	inline float getY() { return getOriginY() + _shape.getPosition().y; }
+
+	inline float getOriginX() { return _origin.X; }
+	inline float getOriginY() { return _origin.Y; }
 
 	// Does this GuiEntry contain the points x and y
 	// x - X coord to check
@@ -49,6 +54,7 @@ protected:
 	sf::Text _text; // Drawn to the screen
 	std::string _msg; // What message will be drawn
 	bool _highlighted; // Is this GuiEntry highlighted
+	Vector2 _origin; // Where this GuiEntry is relative to the GuiComponent
 };
 
 #endif

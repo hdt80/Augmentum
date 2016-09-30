@@ -66,9 +66,12 @@ GameWindow::GameWindow(Vector2 size) {
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
 				Vector2(_size.X - 180, 0), Vector2(180, _size.Y), size);
 
-	toolbar->addEntry(new GuiEntry(toolbar->getEntryStyle(), "File"));
-	toolbar->addEntry(new GuiEntry(toolbar->getEntryStyle(), "Edit"));
-	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(), "View", dComp));
+	toolbar->addEntry(
+			new GuiEntry(toolbar->getEntryStyle(), toolbar->getPos(), "File"));
+	toolbar->addEntry(
+			new GuiEntry(toolbar->getEntryStyle(), toolbar->getPos(), "Edit"));
+	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
+			toolbar->getPos(), "View", dComp));
 
 	addComponent(toolbar);
 	addComponent(worldComp);

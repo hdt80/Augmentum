@@ -3,6 +3,8 @@
 #include "Window.h"
 #include "GuiButton.h"
 #include "Game.h"
+#include "Convert.h"
+#include "FontCache.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -44,7 +46,7 @@ GuiComponent::~GuiComponent() {
 
 void GuiComponent::update(int diff) {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());	
-	GuiEntry* hovered = getEntry(mousePos.x + getX(), mousePos.y + getY());
+	GuiEntry* hovered = getEntry((float)mousePos.x, (float)mousePos.y);
 	
 	if (_highlightedEntry != hovered) {
 		if (_highlightedEntry) {
@@ -65,15 +67,30 @@ void GuiComponent::draw(sf::RenderTarget& target,
 		target.draw(entry->getText());
 	}
 
-	sf::RectangleShape shape;
-	shape.setFillColor(sf::Color::Transparent);
-	shape.setOutlineColor(sf::Color::Cyan);
-	shape.setOutlineThickness(-2.0f);
-	shape.setSize(sf::Vector2f(_guiEntryStyle->dimensions.X, _guiEntryStyle->dimensions.Y));
-	for (GuiEntry* entry : _entries) {
-		shape.setPosition(entry->getX(), entry->getY());
-		target.draw(shape);
-	}
+	//sf::RectangleShape shape;
+	//shape.setFillColor(sf::Color::Transparent);
+	//shape.setOutlineColor(sf::Color::Cyan);
+	//shape.setOutlineThickness(-2.0f);
+	//shape.setSize(sf::Vector2f(_guiEntryStyle->dimensions.X,
+	//			_guiEntryStyle->dimensions.Y));
+
+	//sf::Text text;
+	//text.setOutlineColor(sf::Color::Black);
+	//text.setOutlineThickness(1.0f);
+	//text.setFillColor(sf::Color::White);
+	//text.setFont(FontCache::getDefaultFont());
+	//text.setCharacterSize(18);
+	//target.setView(target.getDefaultView());
+	//for (GuiEntry* entry : _entries) {
+	//	shape.setPosition(entry->getX(), entry->getY());
+	//	text.setPosition(entry->getX(), entry->getY());
+	//	text.setString(convert::format("[%g %g]",
+	//				entry->getX(), entry->getY()));
+	//	target.draw(shape);
+	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
+	//		target.draw(text);
+	//	}
+	//}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -127,9 +144,10 @@ void GuiComponent::onClick(int button, float window_x, float window_y,
 		return;
 	}
 	
-	GuiEntry* clicked = getEntry(view_x, view_y);
+	GuiEntry* clicked = getEntry(window_x, window_y);
 
 	if (!clicked) {
+		CORE_INFO("No button");
 		return;
 	}
 

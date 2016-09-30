@@ -5,7 +5,7 @@
 
 class GuiButton : public GuiEntry {
 public:
-	GuiButton(GuiEntryStyle* style, const std::string& msg);
+	GuiButton(GuiEntryStyle* style, Vector2 origin, const std::string& msg);
 	virtual ~GuiButton();
 
 	virtual void onClick() {};

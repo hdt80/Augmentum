@@ -7,8 +7,9 @@
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiEntry::GuiEntry(GuiEntryStyle* style, const std::string& msg) {
+GuiEntry::GuiEntry(GuiEntryStyle* style, Vector2 orig, const std::string& msg) {
 	_style = style;
+	_origin = orig;
 	_shape.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_shape.setFillColor(style->bodyColor);
 	_shape.setOutlineColor(style->borderColor);
@@ -65,6 +66,7 @@ void GuiEntry::setHighlighted(bool b) {
 }
 
 bool GuiEntry::contains(float x, float y) {
+	//CORE_INFO("Checking (%g, %g) againist (%g, %g)", x, y, getX(), getY());
 	return (x >= getX() && x <= _style->dimensions.X + getX() &&
 			y >= getY() && y <= _style->dimensions.Y + getY());
 }

@@ -17,6 +17,7 @@ private:
 	GuiEntry* _fps;
 	GuiEntry* _pos;
 	GuiEntry* _speed;
+	GuiEntry* _mousePos;
 };
 
 #endif

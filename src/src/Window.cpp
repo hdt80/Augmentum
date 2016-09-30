@@ -153,7 +153,9 @@ void Window::mouseEvent(sf::Event& e) {
 
 	// Ensure there is a GuiComponent we clicked on
 	if (clicked != nullptr) {
+		// Mouse relative to the window
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
+		// Mouse relative to the clicked GuiComponent
 		sf::Vector2f worldPos = Game::getRenderWindow()
 			.mapPixelToCoords(pixelPos, clicked->getView());
 		clicked->onClick(e.mouseButton.button,

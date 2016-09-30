@@ -5,9 +5,9 @@
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiMenuButton::GuiMenuButton(GuiEntryStyle* style, const std::string& msg,
-		GuiComponent* comp)
-	: GuiButton(style, msg),
+GuiMenuButton::GuiMenuButton(GuiEntryStyle* style, Vector2 orig,
+		const std::string& msg,	GuiComponent* comp)
+	: GuiButton(style, orig, msg),
 		_guiComp(comp) {
 
 }
