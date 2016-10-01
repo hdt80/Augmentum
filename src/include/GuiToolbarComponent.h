@@ -7,13 +7,14 @@
 class GuiToolbarComponent : public GuiComponent {
 public:
 	// GuiComponent ctor
+	// entryStyle - GuiStyle to use when creating our entries
+	// compStyle - How to draw our background
 	// pos - Where on the screen this component should start (pixels)
-	// style - GuiStyle to use when creating our entries
 	// size - How much of the screen this component takes up (pixels)
-	// windowSize - Size of the window this component is a part of (pixels)
 	// vert - If all the GuiEntries are aligned vertically
-	GuiToolbarComponent(Window* window, GuiEntryStyle* style, Vector2 pos,
-			Vector2 size, Vector2 windowSize, bool vert);
+	GuiToolbarComponent(Window* window, const GuiEntryStyle* entryStyle,
+			const GuiComponentStyle* comStyle,
+			Vector2 pos, Vector2 size, bool vert);
 	virtual ~GuiToolbarComponent();
 
 	virtual void addEntry(GuiEntry* entry, float x = 0, float y = 0);

@@ -7,8 +7,8 @@ class Map;
 
 class WorldComponent : public GuiComponent {
 public:
-	WorldComponent(Window* window, GuiEntryStyle* style, Vector2 pos,
-			Vector2 size, Vector2 windowSize);		
+	WorldComponent(Window* window, const GuiEntryStyle* style,
+			const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size);		
 
 	virtual void update(int diff);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

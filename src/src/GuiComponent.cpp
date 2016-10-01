@@ -10,8 +10,8 @@
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiComponent::GuiComponent(Window* window, GuiEntryStyle* style,
-		Vector2 pos, Vector2 size, Vector2 windowSize) {
+GuiComponent::GuiComponent(Window* window, const GuiEntryStyle* style,
+		const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size) {
 
 	// Components start at (0, 0) and not the position because a view represents
 	// a view to a part of a drawing target, and we're drawn to (0, 0)
@@ -20,7 +20,13 @@ GuiComponent::GuiComponent(Window* window, GuiEntryStyle* style,
 	_pos = pos;
 	_size = size;
 
-	resize(windowSize);
+	resize(window->getSize());
+
+	_background.setSize(sf::Vector2f(_size.X, _size.Y));
+	_background.setPosition(0, 0);
+	_background.setFillColor(compStyle->bodyColor);
+	_background.setOutlineColor(compStyle->borderColor);
+	_background.setOutlineThickness(-compStyle->borderSize);
 
 	_visible = true;
 	_updating = true;
@@ -46,7 +52,7 @@ GuiComponent::~GuiComponent() {
 
 void GuiComponent::update(int diff) {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());	
-	GuiEntry* hovered = getEntry((float)mousePos.x, (float)mousePos.y);
+	GuiEntry* hovered = getEntry(mousePos.x, mousePos.y);
 	
 	if (_highlightedEntry != hovered) {
 		if (_highlightedEntry) {

@@ -38,7 +38,7 @@ GameWindow::GameWindow(Vector2 size) {
 	worldStyle->borderSize = 1.0f;
 	worldStyle->padding = 2;
 	worldStyle->textSize = -1;
-	GuiStyleCache::saveStyle("world_style", worldStyle);
+	Databases::GuiEntryStyleDatabase.store("world_style", *worldStyle);
 
 	GuiEntryStyle* debugStyle = new GuiEntryStyle();
 	debugStyle->font = &FontCache::getDefaultFont();
@@ -52,26 +52,32 @@ GameWindow::GameWindow(Vector2 size) {
 	debugStyle->borderSize = 1.0f;
 	debugStyle->padding = 2;
 	debugStyle->textSize = -1;
-	GuiStyleCache::saveStyle("debug_style", debugStyle);
+	Databases::GuiEntryStyleDatabase.store("debug_style", *debugStyle);
+
+	GuiComponentStyle* compStyle = new GuiComponentStyle();
+	compStyle->bodyColor = sf::Color(64, 64, 64);
+	compStyle->borderColor = sf::Color(180, 180, 180);
+	compStyle->borderSize = 1.0f;
+	Databases::GuiComponentStyleDatabase.store("style", *compStyle);
 
 	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
 	toolbarStyle->dimensions = Vector2(64, 24);
 
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
-				Vector2(16, 16), Vector2(_size.X - 48, 96), size, false);
+				Databases::GuiComponentStyleDatabase.get("style"),
+				Vector2(8, 8), Vector2(_size.X - 48, 96), true);
 
-	WorldComponent* worldComp = new WorldComponent(this, worldStyle,
-				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y), size);
+	WorldComponent* worldComp = new WorldComponent(this, worldStyle, compStyle,
+				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
 	
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
-				Vector2(_size.X - 180, 0), Vector2(180, _size.Y), size);
+				compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
-	toolbar->addEntry(
-			new GuiEntry(toolbar->getEntryStyle(), toolbar->getPos(), "File"));
-	toolbar->addEntry(
-			new GuiEntry(toolbar->getEntryStyle(), toolbar->getPos(), "Edit"));
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
-			toolbar->getPos(), "View", dComp));
+			toolbar->getPos(), "Debug", dComp));
+
+	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
+			toolbar->getPos(), "Debug2", dComp));
 
 	addComponent(toolbar);
 	addComponent(worldComp);

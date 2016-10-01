@@ -5,9 +5,10 @@
 // Ctro and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiToolbarComponent::GuiToolbarComponent(Window* window, GuiEntryStyle* style,
-		Vector2 pos, Vector2 size, Vector2 windowSize, bool vert)
-	: GuiComponent(window, style, pos, size, windowSize),
+GuiToolbarComponent::GuiToolbarComponent(Window* window,
+		const GuiEntryStyle* style, const GuiComponentStyle* compStyle,
+		Vector2 pos, Vector2 size, bool vert)
+	: GuiComponent(window, style, compStyle, pos, size),
 		_vertical(vert) {
 
 }
@@ -22,13 +23,15 @@ GuiToolbarComponent::~GuiToolbarComponent() {
 
 // Ignore the x and y coords
 void GuiToolbarComponent::addEntry(GuiEntry* entry, float x, float y) {
-	// TODO: This
+	float px = 0.0f;
+	float py = 0.0f;
 	if (_vertical) {
-		CORE_WARN("Vert GuiToolbarComp not added");
+		px = getX();
+		py = _guiEntryStyle->dimensions.Y * _entries.size();
 	} else {
-		float x = _guiEntryStyle->dimensions.X * _entries.size();
-		float y = getY();
-		entry->setPosition(x, y);
-		_entries.push_back(entry);
+		px = _guiEntryStyle->dimensions.X * _entries.size();
+		py = getY();
 	}
+	entry->setPosition(px, py);
+	_entries.push_back(entry);
 }

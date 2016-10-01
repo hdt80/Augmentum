@@ -10,9 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor
 ////////////////////////////////////////////////////////////////////////////////
-WorldComponent::WorldComponent(Window* window, GuiEntryStyle* style, Vector2 pos,
-		Vector2 size, Vector2 windowSize)
-	: GuiComponent(window, style, pos, size, windowSize) {
+WorldComponent::WorldComponent(Window* window, const GuiEntryStyle* style,
+		const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size)
+	: GuiComponent(window, style, compStyle, pos, size) {
 
 	GameWindow* gameWindow = nullptr;
 	if ((gameWindow = dynamic_cast<GameWindow*>(window)) != nullptr) {

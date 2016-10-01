@@ -7,7 +7,9 @@
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiEntry::GuiEntry(GuiEntryStyle* style, Vector2 orig, const std::string& msg) {
+GuiEntry::GuiEntry(const GuiEntryStyle* style,
+		Vector2 orig, const std::string& msg) {
+
 	_style = style;
 	_origin = orig;
 	_shape.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	

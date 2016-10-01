@@ -26,23 +26,24 @@ struct GuiEntryStyle {
 	int textSize; // Size of the message if negative, automatically find it
 };
 
-// Parameters to use when creating a GuiComponent
+// Parameters to use when drawing a GuiComponent
 struct GuiComponentStyle {
-	sf::Color bodyColor;
-	sf::Color borderColor;
+	sf::Color bodyColor; // Background color
+	sf::Color borderColor; // Color of the border
 	
-	float borderSize;
+	float borderSize; // Pixels
 };
 
 class GuiComponent : public sf::Drawable, public sf::Transformable {
 public:
 	// GuiComponent ctor
+	// window - Window this GuiComponent is being drawn to
+	// entryStyle - How to draw the GuiEntries in this GuiComponent
+	// compStyle - How to draw the background of this GuiComponent
 	// pos - Where on the screen this component should start (pixels)
-	// style - GuiStyle to use when creating our entries
 	// size - How much of the screen this component takes up (pixels)
-	// windowSize - Size of the window this component is a part of (pixels)
-	GuiComponent(Window* window, GuiEntryStyle* style,
-			Vector2 pos, Vector2 size, Vector2 windowSize);
+	GuiComponent(Window* window, const GuiEntryStyle* entryStyle,
+			const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size);
 	// Dtor, remember to define each dtor in an inherited
 	virtual ~GuiComponent();
 
@@ -83,10 +84,7 @@ public:
 	virtual GuiEntry* getEntry(float x, float y);
 
 	// Get the GuiStyle that this GuiComponent uses
-	GuiEntryStyle* getEntryStyle() { return _guiEntryStyle; }
-
-	// Get the GuiComponentStyle this GuiComponent uses
-	GuiComponentStyle* getComponentStyle() { return _guiCompStyle; }
+	const GuiEntryStyle* getEntryStyle() { return _guiEntryStyle; }
 
 	// Events //////////////////////////////////////////////////////////////////
 	
@@ -140,8 +138,9 @@ protected:
 	Vector2 _pos; // Position of this component relative to the Window
 	Vector2 _size; // Dimension of the component in pixels
 
-	GuiEntryStyle* _guiEntryStyle; // GuiStyle to use in this GuiComponent
-	GuiComponentStyle* _guiCompStyle; // GuiStyle to use
+	sf::RectangleShape _background; // Background to draw
+
+	const GuiEntryStyle* _guiEntryStyle; // GuiStyle to use in this GuiComponent
 
 	std::vector<GuiEntry*> _entries; // Entries to draw
 	GuiEntry* _highlightedEntry; // Entry being hovered over

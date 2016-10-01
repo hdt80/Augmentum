@@ -7,7 +7,7 @@
 // When clicked a GuiMenuButton will change the opened menu
 class GuiMenuButton : public GuiButton {
 public:	
-	GuiMenuButton(GuiEntryStyle* style, Vector2 origin,
+	GuiMenuButton(const GuiEntryStyle* style, Vector2 origin,
 			const std::string& msg, GuiComponent* comp);
 	virtual ~GuiMenuButton();
 

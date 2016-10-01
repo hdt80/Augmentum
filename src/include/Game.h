@@ -10,6 +10,7 @@
 #include "Vector2.h"
 #include "FPS.h"
 #include "DebugDraw.h"
+#include "Database.h"
 
 #define REFRESH_RATE 16666 // 60 FPS - 16.666ms between each frame
 

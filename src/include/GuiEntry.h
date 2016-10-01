@@ -11,8 +11,10 @@ class GuiEntry {
 public:
 	// GuiEntry ctor - After this object is created is will not change
 	// style - Style to model the _shape and _text after
+	// origin - Where the GuiComponent that this is a part of is at
 	// msg - Message to display on the screen
-	GuiEntry(GuiEntryStyle* style, Vector2 origin, const std::string& msg);
+	GuiEntry(const GuiEntryStyle* style,
+			Vector2 origin, const std::string& msg);
 	virtual ~GuiEntry();
 
 	// Get the shape that will be drawn in a GuiComponent
@@ -49,7 +51,7 @@ public:
 	bool contains(float x, float y);
 
 protected:
-	GuiEntryStyle* _style;
+	const GuiEntryStyle* _style;
 	sf::RectangleShape _shape; // Drawn to the screen
 	sf::Text _text; // Drawn to the screen
 	std::string _msg; // What message will be drawn
