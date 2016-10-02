@@ -4,7 +4,6 @@
 #include "Map.h"
 #include "GameWindow.h"
 #include "Ship.h"
-#include "FontCache.h"
 #include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////

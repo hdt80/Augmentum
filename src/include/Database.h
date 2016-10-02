@@ -33,7 +33,7 @@ public:
 
 	// Get the default value to return if no obj under a name if found
 	// returns: Copy of the default value
-	T getDefault() { return _default; }
+	T* getDefault() { return &_default; }
 
 	// Set the default value to return if no obj under a name if found
 	// def - Default value to return

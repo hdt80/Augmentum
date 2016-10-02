@@ -4,7 +4,6 @@
 #include "GuiButton.h"
 #include "Game.h"
 #include "Convert.h"
-#include "FontCache.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -67,6 +66,8 @@ void GuiComponent::update(int diff) {
 
 void GuiComponent::draw(sf::RenderTarget& target,
 		sf::RenderStates states) const {
+
+	target.draw(_background);
 
 	for (GuiEntry* entry : _entries) {
 		target.draw(entry->getShape());

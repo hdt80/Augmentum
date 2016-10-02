@@ -30,7 +30,6 @@ void ParticleEmitter::emit(ParticleDef* pDef,
 	for (unsigned int i = _particles.size() - amt; i < _particles.size(); ++i) {
 
 		float dirAng;
-		
 		if (angle >= 0) {
 			// Random angle between the angle and the dispersion
 			dirAng = Random::randInt(-pDef->coneOfDispersion / 2.0f,

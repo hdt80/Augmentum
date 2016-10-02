@@ -9,8 +9,6 @@
 #include "Ship.h"
 #include "components/WorldComponent.h"
 #include "components/DebugWorldComponent.h"
-#include "FontCache.h"
-#include "GuiStyleCache.h"
 #include "GuiToolbarComponent.h"
 #include "GuiButton.h"
 #include "GuiMenuButton.h"
@@ -24,10 +22,15 @@ GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
 
-	FontCache::setDefaultFont("res/Pixel.ttf");
+	sf::Font font;
+	if (font.loadFromFile("res/Pixel.ttf")) {
+		CORE_WARN("Couldn't load \'%s\'", "Pixel.ttf");
+	}
+
+	Databases::FontDatabase.setDefault(font);
 
 	GuiEntryStyle* worldStyle = new GuiEntryStyle();
-	worldStyle->font = &FontCache::getDefaultFont();
+	worldStyle->font = Databases::FontDatabase.getDefault();
 	worldStyle->bodyColor = sf::Color(128, 128, 128);
 	worldStyle->borderColor = sf::Color(180, 180, 180);
 	worldStyle->textColor = sf::Color::White;
@@ -41,7 +44,7 @@ GameWindow::GameWindow(Vector2 size) {
 	Databases::GuiEntryStyleDatabase.store("world_style", *worldStyle);
 
 	GuiEntryStyle* debugStyle = new GuiEntryStyle();
-	debugStyle->font = &FontCache::getDefaultFont();
+	debugStyle->font = Databases::FontDatabase.getDefault();
 	debugStyle->bodyColor = sf::Color::Transparent;
 	debugStyle->borderColor = sf::Color::Transparent;
 	debugStyle->textColor = sf::Color::White;
@@ -60,6 +63,12 @@ GameWindow::GameWindow(Vector2 size) {
 	compStyle->borderSize = 1.0f;
 	Databases::GuiComponentStyleDatabase.store("style", *compStyle);
 
+	GuiComponentStyle* transStyle = new GuiComponentStyle();
+	transStyle->bodyColor = sf::Color::Transparent;
+	transStyle->borderColor = sf::Color::Transparent;
+	transStyle->borderSize = 0;
+	Databases::GuiComponentStyleDatabase.store("trans", *transStyle);
+
 	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
 	toolbarStyle->dimensions = Vector2(64, 24);
 
@@ -67,7 +76,7 @@ GameWindow::GameWindow(Vector2 size) {
 				Databases::GuiComponentStyleDatabase.get("style"),
 				Vector2(8, 8), Vector2(_size.X - 48, 96), true);
 
-	WorldComponent* worldComp = new WorldComponent(this, worldStyle, compStyle,
+	WorldComponent* worldComp = new WorldComponent(this, worldStyle, transStyle,
 				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
 	
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
@@ -102,8 +111,6 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
-
-	FontCache::loadFont("pixel", "res/Pixel.ttf");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -163,41 +170,12 @@ void GameWindow::mouseMoveEvent(sf::Event& e) {
 	Window::mouseMoveEvent(e);
 }
 
-//
-void GameWindow::mouseEvent(sf::Event& e) {
-	Window::mouseEvent(e);
-	//int x = e.mouseButton.x;
-	//int y = e.mouseButton.y;
-
-	//GuiComponent* clicked = getClickedComponent(x, y);
-
-	//sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
-
-	//sf::Vector2f worldPos;
-
-	//if (clicked == nullptr) {
-	//	worldPos = Game::getRenderWindow().mapPixelToCoords(pixelPos);
-	//} else {
-	//	worldPos = Game::getRenderWindow()
-	//		.mapPixelToCoords(pixelPos, clicked->getView());
-	//}
-
-	//CORE_INFO("Window (%d, %d) :: Map (%g, %g)",
-	//	pixelPos.x, pixelPos.y, worldPos.x, worldPos.y);
-
-	//if (e.mouseButton.button == sf::Mouse::Left) {
-	//	_map.objects.push_back(new Ship(&_map, worldPos.x, worldPos.y, 20, Stats()));
-	//} else if (e.mouseButton.button == sf::Mouse::Middle) {
-
-	//}
-}
-
 void GameWindow::render(sf::RenderWindow& window) {
 	window.clear(sf::Color(180, 180, 180));
 	window.draw(GameWindow::Emitter);
-	window.draw(_cursor);
 
 	Window::render(window);
+	window.draw(_cursor); // Draw cursor on top
 }
 
 //void GameWindow::renderMap(sf::RenderWindow& window) {
