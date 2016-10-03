@@ -7,7 +7,7 @@
 
 struct GuiEntryStyle;
 
-class GuiEntry {
+class GuiEntry : public sf::Drawable {
 public:
 	// GuiEntry ctor - After this object is created is will not change
 	// style - Style to model the _shape and _text after
@@ -16,6 +16,14 @@ public:
 	GuiEntry(const GuiEntryStyle* style,
 			Vector2 origin, const std::string& msg);
 	virtual ~GuiEntry();
+
+	// Update the GuiEntry
+	// diff - Microseconds since the last update
+	// Most GuiEntries don't need to worry about this
+	virtual void update(int diff) {}
+
+	// Inherited from sf::Drawable
+	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 	// Get the shape that will be drawn in a GuiComponent
 	const sf::RectangleShape& getShape() { return _shape; }
@@ -35,7 +43,7 @@ public:
 	// Set the position of the GuiEntry
 	// x - X coord relative to the GuiComponent's origin
 	// y - Y coord relative to the GuiComponent's origin
-	void setPosition(float x, float y);
+	virtual void setPosition(float x, float y);
 
 	// Get position
 	// These 2 are the absolute position relative to the screen

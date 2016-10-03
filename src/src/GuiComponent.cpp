@@ -50,6 +50,10 @@ GuiComponent::~GuiComponent() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void GuiComponent::update(int diff) {
+	for (GuiEntry* entry : _entries) {
+		entry->update(diff);
+	}
+
 	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());	
 	GuiEntry* hovered = getEntry(mousePos.x, mousePos.y);
 	
@@ -70,8 +74,7 @@ void GuiComponent::draw(sf::RenderTarget& target,
 	target.draw(_background);
 
 	for (GuiEntry* entry : _entries) {
-		target.draw(entry->getShape());
-		target.draw(entry->getText());
+		target.draw(*entry);
 	}
 
 	//sf::RectangleShape shape;

@@ -43,6 +43,11 @@ GuiEntry::~GuiEntry() {}
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
+void GuiEntry::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	target.draw(_shape);
+	target.draw(_text);
+}
+
 void GuiEntry::setMessage(const std::string& msg) {
 	_msg = msg;
 	_text.setString(_msg);

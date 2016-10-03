@@ -12,6 +12,7 @@
 #include "GuiToolbarComponent.h"
 #include "GuiButton.h"
 #include "GuiMenuButton.h"
+#include "GuiProgressBar.h"
 
 ParticleEmitter GameWindow::Emitter;
 
@@ -57,6 +58,11 @@ GameWindow::GameWindow(Vector2 size) {
 	debugStyle->textSize = -1;
 	Databases::GuiEntryStyleDatabase.store("debug_style", *debugStyle);
 
+	GuiProgressBarStyle* progBar = new GuiProgressBarStyle();
+	progBar->minColor = sf::Color::Red;
+	progBar->maxColor = sf::Color::Green;
+	Databases::GuiProgressBarStyleDatabase.store("style", *progBar);
+
 	GuiComponentStyle* compStyle = new GuiComponentStyle();
 	compStyle->bodyColor = sf::Color(64, 64, 64);
 	compStyle->borderColor = sf::Color(180, 180, 180);
@@ -72,6 +78,9 @@ GameWindow::GameWindow(Vector2 size) {
 	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
 	toolbarStyle->dimensions = Vector2(64, 24);
 
+	GuiComponent* hud = new GuiComponent(this, worldStyle, transStyle,
+				Vector2(0, 60), Vector2(_size.X, 48));
+
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
 				Databases::GuiComponentStyleDatabase.get("style"),
 				Vector2(8, 8), Vector2(_size.X - 48, 96), true);
@@ -82,6 +91,10 @@ GameWindow::GameWindow(Vector2 size) {
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
 				compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
+	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), toolbar->getPos(),
+			"HP", progBar, &_map.getSelected()->getHealth(),
+			_map.getSelected()->getMaxHealth()));
+
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
 			toolbar->getPos(), "Debug", dComp));
 
@@ -91,6 +104,7 @@ GameWindow::GameWindow(Vector2 size) {
 	addComponent(toolbar);
 	addComponent(worldComp);
 	addComponent(dComp);
+	addComponent(hud);
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
