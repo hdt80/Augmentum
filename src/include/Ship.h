@@ -10,17 +10,20 @@ public:
 	//
 	Ship(Map* map, float x, float y, Stats s, int sides, sf::Color c);
 
-	int getSideCount() const { return _sides; }
-	const sf::Color& getColor() { return _color; }
+	// Get how many sides this Ship has
+	// returns: How many sides this Ship has
+	int getSideCount() const { return _shape.getPointCount(); }
 
-	virtual float getX() const { return _b2Box->GetPosition().x; }
-	virtual float getY() const { return _b2Box->GetPosition().y; }
-	virtual Vector2 getPosition() const { return Vector2(getX(), getY()); }
+	// Get the color of this Ship
+	// returns: The color of this Ship. The Color determines the level relative
+	//		to the player's Ship
+	const sf::Color& getColor() { return _shape.getFillColor(); }
+
+	// Set the color of the Ship's _shape
+	// c - New color to use
+	void setColor(sf::Color c) { _shape.setFillColor(c); }
 
 protected:
-
-	int _sides; // Number of sides on this Ship
-	sf::Color _color; // Color of the Ship
 };
 
 #endif

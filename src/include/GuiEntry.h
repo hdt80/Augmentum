@@ -50,6 +50,7 @@ public:
 	inline float getX() { return getOriginX() + _shape.getPosition().x; }
 	inline float getY() { return getOriginY() + _shape.getPosition().y; }
 
+	// Get where the origin of the GuiComp is
 	inline float getOriginX() { return _origin.X; }
 	inline float getOriginY() { return _origin.Y; }
 

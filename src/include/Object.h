@@ -41,7 +41,6 @@ public:
 
 	// If that point is within our collision box
 	bool contains(float x, float y) const;
-//	bool intersectsWith(BoundBox* b) const;
 
 	// Get the collision box of this Object
 	virtual sf::FloatRect getCollisionBox() const { return _shape.getGlobalBounds(); }
@@ -136,10 +135,6 @@ public:
 			_b2Box->GetLinearVelocity().y); }
 	virtual float getX() { return _b2Box->GetPosition().x; }
 	virtual float getY() { return _b2Box->GetPosition().y; }
-
-	////////////////////////////////////////////////////////////////////////////
-	// Bound box
-	////////////////////////////////////////////////////////////////////////////
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;

@@ -157,7 +157,7 @@ void GuiComponent::onClick(int button, float window_x, float window_y,
 	GuiEntry* clicked = getEntry(window_x, window_y);
 
 	if (!clicked) {
-		CORE_INFO("No button");
+//		CORE_INFO("[GuiComp %x] No button");
 		return;
 	}
 

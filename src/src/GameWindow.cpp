@@ -58,6 +58,9 @@ GameWindow::GameWindow(Vector2 size) {
 	debugStyle->textSize = -1;
 	Databases::GuiEntryStyleDatabase.store("debug_style", *debugStyle);
 
+	GuiEntryStyle* hudStyle = new GuiEntryStyle(*debugStyle);
+	hudStyle->dimensions = Vector2(600, 30);
+
 	GuiProgressBarStyle* progBar = new GuiProgressBarStyle();
 	progBar->minColor = sf::Color::Red;
 	progBar->maxColor = sf::Color::Green;
@@ -78,18 +81,18 @@ GameWindow::GameWindow(Vector2 size) {
 	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
 	toolbarStyle->dimensions = Vector2(64, 24);
 
-	GuiComponent* hud = new GuiComponent(this, worldStyle, transStyle,
-				Vector2(0, 60), Vector2(_size.X, 48));
+	GuiComponent* hud = new GuiComponent(this, hudStyle, transStyle,
+			Vector2(0, 60), Vector2(_size.X, 48));
 
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
-				Databases::GuiComponentStyleDatabase.get("style"),
-				Vector2(8, 8), Vector2(_size.X - 48, 96), true);
+			Databases::GuiComponentStyleDatabase.get("style"),
+			Vector2(8, 8), Vector2(_size.X - 48, 96), true);
 
 	WorldComponent* worldComp = new WorldComponent(this, worldStyle, transStyle,
-				Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
+			Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
 	
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
-				compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
+			compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
 	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), toolbar->getPos(),
 			"HP", progBar, &_map.getSelected()->getHealth(),

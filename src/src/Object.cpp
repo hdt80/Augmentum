@@ -154,7 +154,6 @@ void Object::setVelocity(float x, float y) {
 // Update the Object based on how much time has passed
 // diff - How much time has passed, in milliseconds
 void Object::update(int diff) {
-//	CORE_INFO("pos (%g, %g)", getX(), getY());
 	onUpdate(diff);
 
 	for (unsigned int i = 0; i < _perks.size(); ++i) {

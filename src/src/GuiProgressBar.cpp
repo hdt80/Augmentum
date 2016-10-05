@@ -45,7 +45,7 @@ GuiProgressBar::~GuiProgressBar() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-void GuiProgressBar::draw(sf::RenderTarget& target, 
+void GuiProgressBar::draw(sf::RenderTarget& target,
 		sf::RenderStates states) const {
 
 	target.draw(_bar);
