@@ -57,13 +57,17 @@ public:
 	// Does this GuiEntry contain the points x and y
 	// x - X coord to check
 	// y - Y coord to check
+	// returns: If this GuiEntry contains the points
 	bool contains(float x, float y);
 
 protected:
 	const GuiEntryStyle* _style;
+
 	sf::RectangleShape _shape; // Drawn to the screen
 	sf::Text _text; // Drawn to the screen
+
 	std::string _msg; // What message will be drawn
+
 	bool _highlighted; // Is this GuiEntry highlighted
 	Vector2 _origin; // Where this GuiEntry is relative to the GuiComponent
 };

@@ -7,7 +7,7 @@ struct GuiProgressBarStyle {
 	sf::Color minColor; // Color to draw the bar when value = 0
 	sf::Color maxColor; // Color to draw the bar when value = 100
 
-	bool vert; // If the bar should be up/down 
+	bool vert; // If the bar should be up/down  TODO: Add this
 };
 
 class GuiProgressBar : public GuiEntry {
@@ -58,6 +58,7 @@ protected:
 	sf::Text _maxText; // Text to draw at the max value
 
 	float* _value; // Pointer to the value
+	float _prevValue; // Previous value, used to check if the bar needs updating
 	float _max; // Max value of this, min is assumed to be 0
 };
 

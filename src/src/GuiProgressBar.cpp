@@ -11,7 +11,7 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		const std::string& msg, GuiProgressBarStyle* barStyle,
 		float* value, float max)
 	: GuiEntry(style, origin, msg),
-		_barStyle(barStyle), _value(value), _max(max) {
+		_barStyle(barStyle), _value(value), _prevValue(*value), _max(max) {
 
 	_bar.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_bar.setFillColor(barStyle->maxColor);
@@ -29,6 +29,7 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 	_currentText.setOutlineThickness(1.0f);
 	_currentText.setOutlineColor(sf::Color::Black);
 	_currentText.setCharacterSize(_text.getCharacterSize());
+	_currentText.setString(convert::toString(getCurrentValue()));
 
 	_maxText.setFont(*_text.getFont());
 	_maxText.setFillColor(barStyle->maxColor);
@@ -56,23 +57,18 @@ void GuiProgressBar::draw(sf::RenderTarget& target,
 }
 
 void GuiProgressBar::update(int diff) {
-	sf::Color cDiff = _barStyle->maxColor - _barStyle->minColor;
-
-//	_bar.setFillColor(convert::colorInterpolate(
-//				_barStyle->minColor, _barStyle->maxColor, 1 - getRatioDone()));
-	_bar.setFillColor(convert::colorInterpolate(
+	// Only update the progress bar if the value has changed
+	if (getCurrentValue() != _prevValue) {
+		_bar.setFillColor(convert::colorInterpolate(
 				_barStyle->minColor, _barStyle->maxColor, getRatioDone()));
 
-	//// Get the differences of each component
-	//float rd = cDiff.r * (1 - getRatioDone());
-	//float gd = cDiff.g * (1 - getRatioDone());
-	//float bd = cDiff.b * (1 - getRatioDone());
-	//float ad = cDiff.a * (1 - getRatioDone());
+		_currentText.setString(convert::toString(getCurrentValue()));
 
-	//_bar.setFillColor(_barStyle->maxColor +
-	//		sf::Color((int) rd, (int) gd, (int) bd, (int) ad));
+		_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(), 
+				_style->dimensions.Y));
 
-	//_currentText.setString(convert::toString(getCurrentValue()));
+		_prevValue = getCurrentValue();
+	}
 }
 
 void GuiProgressBar::setMax(float m) {
