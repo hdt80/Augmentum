@@ -37,6 +37,10 @@ public:
 	// returns: A ratio of how "done" the value is (0: 0%, 1: 100%)
 	inline float getRatioDone() { return getCurrentValue() / _max; }
 
+	// Get the ratio of how far from the value is to the max
+	// returns: A ration of how much of the value is needed to hit the max
+	inline float getRatioLeft() { return 1.0f - getRatioDone(); }
+
 	// Get the maximum value of this bar
 	// returns: The max value _value can be before it's considered "done"
 	inline float getMax() { return _max; }

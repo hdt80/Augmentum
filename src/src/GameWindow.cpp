@@ -30,6 +30,7 @@ GameWindow::GameWindow(Vector2 size) {
 
 	Databases::FontDatabase.setDefault(font);
 
+	// Style used in the world
 	GuiEntryStyle* worldStyle = new GuiEntryStyle();
 	worldStyle->font = Databases::FontDatabase.getDefault();
 	worldStyle->bodyColor = sf::Color(128, 128, 128);
@@ -40,31 +41,28 @@ GameWindow::GameWindow(Vector2 size) {
 	worldStyle->highlightedTextColor = sf::Color(80, 80, 160);
 	worldStyle->dimensions = Vector2(180, 20);
 	worldStyle->borderSize = 1.0f;
-	worldStyle->padding = 2;
+	worldStyle->padding = 0;
 	worldStyle->textSize = -1;
 	Databases::GuiEntryStyleDatabase.store("world_style", *worldStyle);
 
-	GuiEntryStyle* debugStyle = new GuiEntryStyle();
-	debugStyle->font = Databases::FontDatabase.getDefault();
+	// Style used in the debug panel
+	GuiEntryStyle* debugStyle = new GuiEntryStyle(*worldStyle);
 	debugStyle->bodyColor = sf::Color::Transparent;
 	debugStyle->borderColor = sf::Color::Transparent;
-	debugStyle->textColor = sf::Color::White;
 	debugStyle->highlightedColor = sf::Color::Transparent;
 	debugStyle->highlightedBorderColor = sf::Color::Transparent;
 	debugStyle->highlightedTextColor = sf::Color::Transparent;
-	debugStyle->dimensions = Vector2(180, 20);
-	debugStyle->borderSize = 1.0f;
-	debugStyle->padding = 2;
-	debugStyle->textSize = -1;
 	Databases::GuiEntryStyleDatabase.store("debug_style", *debugStyle);
 
+	// Style used in the HUD
 	GuiEntryStyle* hudStyle = new GuiEntryStyle(*debugStyle);
-	hudStyle->dimensions = Vector2(600, 30);
+	hudStyle->dimensions = Vector2(_size.X, 30);
 
+	// Progress bar for a health bar
 	GuiProgressBarStyle* progBar = new GuiProgressBarStyle();
 	progBar->minColor = sf::Color::Red;
 	progBar->maxColor = sf::Color::Green;
-	Databases::GuiProgressBarStyleDatabase.store("style", *progBar);
+	Databases::GuiProgressBarStyleDatabase.store("hp_bar", *progBar);
 
 	GuiComponentStyle* compStyle = new GuiComponentStyle();
 	compStyle->bodyColor = sf::Color(64, 64, 64);
@@ -82,7 +80,7 @@ GameWindow::GameWindow(Vector2 size) {
 	toolbarStyle->dimensions = Vector2(64, 24);
 
 	GuiComponent* hud = new GuiComponent(this, hudStyle, transStyle,
-			Vector2(0, 60), Vector2(_size.X, 48));
+			Vector2(0, 0), Vector2(_size.X, 48));
 
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
 			Databases::GuiComponentStyleDatabase.get("style"),
@@ -94,20 +92,17 @@ GameWindow::GameWindow(Vector2 size) {
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
 			compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
-	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), toolbar->getPos(),
+	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
 			"HP", progBar, &_map.getSelected()->getHealth(),
 			_map.getSelected()->getMaxHealth()));
 
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
 			toolbar->getPos(), "Debug", dComp));
 
-	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
-			toolbar->getPos(), "Debug2", dComp));
-
 	addComponent(toolbar);
 	addComponent(worldComp);
-	addComponent(dComp);
 	addComponent(hud);
+	addComponent(dComp);
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
@@ -179,6 +174,10 @@ void GameWindow::keyEvent(sf::Event& e) {
 			CORE_INFO("%d/%d :: (%g, %g)", i, _map.getWorld()->GetBodyCount(),
 					bodies[i].GetPosition().x, bodies[i].GetPosition().y);
 		}
+	} else if (e.key.code == sf::Keyboard::Y) {
+		_map.getSelected()->setHealth(_map.getSelected()->getHealth() - 1);
+	} else if (e.key.code == sf::Keyboard::U) {
+		_map.getSelected()->setHealth(_map.getSelected()->getHealth() + 1);
 	}
 }
 

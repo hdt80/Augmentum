@@ -1,5 +1,6 @@
 #include "Unit.h"
 #include "Map.h"
+#include "ExperienceHelper.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
@@ -9,7 +10,8 @@ Unit::Unit() {
 }
 
 Unit::Unit(Map* map, float x, float y, Stats s, int sides, sf::Color c)
-	: Object(map, x, y, s) {
+	: Object(map, x, y, s),
+		_health(30), _maxHealth(30), _exp(0.0f) {
 
 	_shape.setRadius(20);
 	_shape.setPointCount(sides);
@@ -47,4 +49,12 @@ Unit::~Unit() {}
 ////////////////////////////////////////////////////////////////////////////////
 void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 	target.draw(_shape);
+}
+
+int Unit::getExpToNextLevel() {
+	return ExperienceHelper::getRemainingExp(_exp);
+}
+
+int Unit::getLevel() {
+	return ExperienceHelper::expToLevel(_exp);
 }

@@ -1,6 +1,7 @@
 #include "GuiProgressBar.h"
 #include "GuiComponent.h"
 #include "Convert.h"
+#include "Logger.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -55,18 +56,23 @@ void GuiProgressBar::draw(sf::RenderTarget& target,
 }
 
 void GuiProgressBar::update(int diff) {
-	sf::Color cur = _bar.getFillColor();
-	sf::Color cDiff = _barStyle->maxColor - cur;
+	sf::Color cDiff = _barStyle->maxColor - _barStyle->minColor;
 
-	// Get the differences of each component
-	float rd = cDiff.r * getRatioDone();
-	float gd = cDiff.g * getRatioDone();
-	float bd = cDiff.b * getRatioDone();
-	float ad = cDiff.a * getRatioDone();
+//	_bar.setFillColor(convert::colorInterpolate(
+//				_barStyle->minColor, _barStyle->maxColor, 1 - getRatioDone()));
+	_bar.setFillColor(convert::colorInterpolate(
+				_barStyle->minColor, _barStyle->maxColor, getRatioDone()));
 
-	_bar.setFillColor(_barStyle->minColor + sf::Color(rd, gd, bd, ad));
+	//// Get the differences of each component
+	//float rd = cDiff.r * (1 - getRatioDone());
+	//float gd = cDiff.g * (1 - getRatioDone());
+	//float bd = cDiff.b * (1 - getRatioDone());
+	//float ad = cDiff.a * (1 - getRatioDone());
 
-	_currentText.setString(convert::toString(getCurrentValue()));
+	//_bar.setFillColor(_barStyle->maxColor +
+	//		sf::Color((int) rd, (int) gd, (int) bd, (int) ad));
+
+	//_currentText.setString(convert::toString(getCurrentValue()));
 }
 
 void GuiProgressBar::setMax(float m) {

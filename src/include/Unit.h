@@ -42,7 +42,7 @@ public:
 
 	// Get the current amount of exp this Unit has
 	// returns: The exp of this Unit
-	float getExp();
+	inline float getExp() { return _exp; };
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
