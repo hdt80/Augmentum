@@ -52,7 +52,8 @@ public:
 protected:
 	GuiProgressBarStyle* _barStyle;
 
-	sf::RectangleShape _bar;
+	sf::RectangleShape _bar; // Bar to draw, colored portion
+	sf::RectangleShape _barOutline; // Outline of the bar
 	sf::Text _zeroText; // Text to draw at the min value
 	sf::Text _currentText; // Text to draw the current values
 	sf::Text _maxText; // Text to draw at the max value

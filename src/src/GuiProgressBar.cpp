@@ -16,6 +16,11 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 	_bar.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_bar.setFillColor(barStyle->maxColor);
 
+	_barOutline.setFillColor(sf::Color::Transparent);
+	_barOutline.setOutlineThickness(-1.0f);
+	_barOutline.setOutlineColor(sf::Color::Black);
+	_barOutline.setSize(_bar.getSize());
+
 	// Set up all the texts used in a bar
 	_zeroText.setFont(*_text.getFont());
 	_zeroText.setFillColor(barStyle->minColor);
@@ -51,6 +56,7 @@ void GuiProgressBar::draw(sf::RenderTarget& target,
 		sf::RenderStates states) const {
 
 	target.draw(_bar);
+	target.draw(_barOutline);
 	target.draw(_zeroText);
 	target.draw(_currentText);
 	target.draw(_maxText);
@@ -79,9 +85,13 @@ void GuiProgressBar::setPosition(float x, float y) {
 	GuiEntry::setPosition(x, y);
 
 	_bar.setPosition(getX(), getY());
+	_barOutline.setPosition(getX(), getY());
 	_zeroText.setPosition(getX(), getY());
+
+	// Move the text back so it doesn't go off the screen
 	_currentText.setPosition(getX() + (_style->dimensions.X / 2.0f) 
 			- _currentText.getLocalBounds().width, getY());
+
 	_maxText.setPosition(getX() + _style->dimensions.X 
 			- _maxText.getLocalBounds().width, getY());
 }

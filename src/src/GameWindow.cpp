@@ -64,12 +64,14 @@ GameWindow::GameWindow(Vector2 size) {
 	progBar->maxColor = sf::Color::Green;
 	Databases::GuiProgressBarStyleDatabase.store("hp_bar", *progBar);
 
+	//
 	GuiComponentStyle* compStyle = new GuiComponentStyle();
 	compStyle->bodyColor = sf::Color(64, 64, 64);
 	compStyle->borderColor = sf::Color(180, 180, 180);
 	compStyle->borderSize = 1.0f;
 	Databases::GuiComponentStyleDatabase.store("style", *compStyle);
 
+	// Style with a transparent background
 	GuiComponentStyle* transStyle = new GuiComponentStyle();
 	transStyle->bodyColor = sf::Color::Transparent;
 	transStyle->borderColor = sf::Color::Transparent;
@@ -101,8 +103,8 @@ GameWindow::GameWindow(Vector2 size) {
 
 	addComponent(toolbar);
 	addComponent(worldComp);
-	addComponent(hud);
 	addComponent(dComp);
+	addComponent(hud);
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
