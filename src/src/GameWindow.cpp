@@ -62,6 +62,8 @@ GameWindow::GameWindow(Vector2 size) {
 	GuiProgressBarStyle* progBar = new GuiProgressBarStyle();
 	progBar->minColor = sf::Color::Red;
 	progBar->maxColor = sf::Color::Green;
+	progBar->outlineColor = sf::Color::Black;
+	progBar->backgroundColor = sf::Color(60, 60, 60);
 	Databases::GuiProgressBarStyleDatabase.store("hp_bar", *progBar);
 
 	//

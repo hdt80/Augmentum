@@ -6,6 +6,8 @@
 struct GuiProgressBarStyle {
 	sf::Color minColor; // Color to draw the bar when value = 0
 	sf::Color maxColor; // Color to draw the bar when value = 100
+	sf::Color outlineColor; // Color of the outline around the bar
+	sf::Color backgroundColor; // Color to fill when the bar isn't full
 
 	bool vert; // If the bar should be up/down  TODO: Add this
 };
@@ -54,6 +56,7 @@ protected:
 
 	sf::RectangleShape _bar; // Bar to draw, colored portion
 	sf::RectangleShape _barOutline; // Outline of the bar
+	sf::RectangleShape _barBackground; // Background of the bar
 	sf::Text _zeroText; // Text to draw at the min value
 	sf::Text _currentText; // Text to draw the current values
 	sf::Text _maxText; // Text to draw at the max value
