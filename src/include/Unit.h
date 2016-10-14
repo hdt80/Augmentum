@@ -10,6 +10,11 @@ public:
 	virtual ~Unit();
 
 	// Health getters and setters //////////////////////////////////////////////
+	
+	// Apply damage to a unit
+	// d - Damage applied. Negative damage will heal
+	// hitter - What Unit shot this Unit
+	void applyDamage(float d, Unit* hitter);
 
 	// Get the current health of this Unit
 	// returns: Current health of this Unit
@@ -42,7 +47,15 @@ public:
 
 	// Get the current amount of exp this Unit has
 	// returns: The exp of this Unit
-	inline float getExp() { return _exp; };
+	inline float& getExp() { return _exp; };
+
+	// Add exp to a unit
+	// e - Amount of exp to add
+	inline void addExp(float e) { _exp += e; }
+
+	// Set the exp of a unit
+	// e - How much exp this unit will have
+	inline void setExp(float e) { _exp = e; }
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;

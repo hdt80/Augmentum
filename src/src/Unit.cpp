@@ -51,6 +51,20 @@ void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 	target.draw(_shape);
 }
 
+void Unit::applyDamage(float d, Unit* hitter) {
+	_health += d;
+
+	// If d is negative (a heal) and we go above max health clamp it back
+	if (_health > _maxHealth) {
+		_health = _maxHealth;
+	}
+
+	// No health left? Kill this Unit off next update
+	if (_health <= 0) {
+		_toRemove = true;
+	}
+}
+
 int Unit::getExpToNextLevel() {
 	return ExperienceHelper::getRemainingExp(_exp);
 }

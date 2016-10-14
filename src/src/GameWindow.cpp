@@ -13,6 +13,7 @@
 #include "GuiButton.h"
 #include "GuiMenuButton.h"
 #include "GuiProgressBar.h"
+#include "ExperienceHelper.h"
 
 ParticleEmitter GameWindow::Emitter;
 
@@ -66,6 +67,14 @@ GameWindow::GameWindow(Vector2 size) {
 	progBar->backgroundColor = sf::Color(60, 60, 60);
 	Databases::GuiProgressBarStyleDatabase.store("hp_bar", *progBar);
 
+	// Progess bar for exp bar
+	GuiProgressBarStyle* expBarStyle = new GuiProgressBarStyle();
+	expBarStyle->minColor = sf::Color(255, 215, 0); // Goldish
+	expBarStyle->maxColor = expBarStyle->minColor;
+	expBarStyle->outlineColor = sf::Color::Black;
+	expBarStyle->backgroundColor = sf::Color(238, 232, 170); // Light yellow
+	Databases::GuiProgressBarStyleDatabase.store("exp_bar", *expBarStyle);
+
 	//
 	GuiComponentStyle* compStyle = new GuiComponentStyle();
 	compStyle->bodyColor = sf::Color(64, 64, 64);
@@ -83,8 +92,8 @@ GameWindow::GameWindow(Vector2 size) {
 	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
 	toolbarStyle->dimensions = Vector2(64, 24);
 
-	GuiComponent* hud = new GuiComponent(this, hudStyle, transStyle,
-			Vector2(0, 0), Vector2(_size.X, 48));
+	GuiToolbarComponent* hud = new GuiToolbarComponent(this, hudStyle, transStyle,
+			Vector2(0, 0), Vector2(_size.X, 60), true);
 
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
 			Databases::GuiComponentStyleDatabase.get("style"),
@@ -100,13 +109,18 @@ GameWindow::GameWindow(Vector2 size) {
 			"HP", progBar, &_map.getSelected()->getHealth(),
 			_map.getSelected()->getMaxHealth()));
 
+	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
+			"EXP", expBarStyle, &_map.getSelected()->getExp(),
+			ExperienceHelper::levelToExp(_map.getSelected()->
+			getLevel() + 1)), 0, 48);
+
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
 			toolbar->getPos(), "Debug", dComp));
 
-	addComponent(toolbar);
-	addComponent(worldComp);
-	addComponent(dComp);
+	//addComponent(toolbar);
+	//addComponent(dComp);
 	addComponent(hud);
+	addComponent(worldComp);
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
@@ -182,6 +196,10 @@ void GameWindow::keyEvent(sf::Event& e) {
 		_map.getSelected()->setHealth(_map.getSelected()->getHealth() - 1);
 	} else if (e.key.code == sf::Keyboard::U) {
 		_map.getSelected()->setHealth(_map.getSelected()->getHealth() + 1);
+	} else if (e.key.code == sf::Keyboard::H) {
+		_map.getSelected()->addExp(1.0f);
+	} else if (e.key.code == sf::Keyboard::J) {
+		_map.getSelected()->addExp(-1.0f);
 	}
 }
 
