@@ -13,6 +13,7 @@
 #include "GuiButton.h"
 #include "GuiMenuButton.h"
 #include "GuiProgressBar.h"
+#include "GuiExpProgressBar.h"
 #include "ExperienceHelper.h"
 
 ParticleEmitter GameWindow::Emitter;
@@ -109,10 +110,8 @@ GameWindow::GameWindow(Vector2 size) {
 			"HP", progBar, &_map.getSelected()->getHealth(),
 			_map.getSelected()->getMaxHealth()));
 
-	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
-			"EXP", expBarStyle, &_map.getSelected()->getExp(),
-			ExperienceHelper::levelToExp(_map.getSelected()->
-			getLevel() + 1)), 0, 48);
+	hud->addEntry(new GuiExpProgressBar(hud->getEntryStyle(), hud->getPos(),
+			"EXP", expBarStyle, _map.getSelected()), 0, 48);
 
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
 			toolbar->getPos(), "Debug", dComp));

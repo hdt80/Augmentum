@@ -14,10 +14,17 @@ struct GuiProgressBarStyle {
 
 class GuiProgressBar : public GuiEntry {
 public:
+	// GuiProgressBar ctor
+	// style - Style to draw this GuiEntry
+	// origin - Origin of the GuiComponent this GuiEntry is in
+	// msg - Message to display
+	// barStyle - How to style the bar
+	// value - Pointer to the value to track
+	// max - Max value that value can be
 	GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 			const std::string& msg,	GuiProgressBarStyle* barStyle,
 			float* value, float max);
-	~GuiProgressBar();
+	virtual ~GuiProgressBar();
 
 	// Inherited from sf::Drawable
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
@@ -33,11 +40,11 @@ public:
 
 	// Get the current value used by this bar
 	// returns: What the current value is
-	inline float getCurrentValue() { return *_value; }
+	virtual inline float getCurrentValue() { return *_value; }
 
 	// Get how close the value is to the max
 	// returns: A ratio of how "done" the value is (0: 0%, 1: 100%)
-	inline float getRatioDone() { return getCurrentValue() / _max; }
+	inline float getRatioDone() { return getCurrentValue() / getMax(); }
 
 	// Get the ratio of how far from the value is to the max
 	// returns: A ration of how much of the value is needed to hit the max
@@ -45,7 +52,7 @@ public:
 
 	// Get the maximum value of this bar
 	// returns: The max value _value can be before it's considered "done"
-	inline float getMax() { return _max; }
+	virtual inline float getMax() { return _max; }
 
 	// Set the max value of this bar
 	// m - New mav value to use

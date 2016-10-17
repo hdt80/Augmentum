@@ -11,7 +11,7 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		const std::string& msg, GuiProgressBarStyle* barStyle,
 		float* value, float max)
 	: GuiEntry(style, origin, msg),
-		_barStyle(barStyle), _value(value), _prevValue(*value), _max(max) {
+		_barStyle(barStyle), _value(value), _prevValue(-1), _max(max) {
 
 	_bar.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_bar.setFillColor(barStyle->maxColor);
@@ -37,7 +37,12 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 	_currentText.setOutlineThickness(1.0f);
 	_currentText.setOutlineColor(sf::Color::Black);
 	_currentText.setCharacterSize(_text.getCharacterSize());
-	_currentText.setString(convert::toString(getCurrentValue()));
+
+	if (_value == nullptr) {
+		_currentText.setString("0");
+	} else {
+		_currentText.setString(convert::toString(getCurrentValue()));
+	}
 
 	_maxText.setFont(*_text.getFont());
 	_maxText.setFillColor(barStyle->maxColor);
@@ -74,7 +79,7 @@ void GuiProgressBar::update(int diff) {
 
 		_currentText.setString(convert::toString(getCurrentValue()));
 
-		_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(), 
+		_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(),
 				_style->dimensions.Y));
 
 		_prevValue = getCurrentValue();
