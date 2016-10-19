@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Logger.h"
 #include "GameWindow.h"
+#include "ExperienceHelper.h"
 
 void Game::start() {
 	if (CurrentGameState != Uninitalized) {
@@ -22,6 +23,8 @@ void Game::start() {
 	b2DebugDrawer.setRenderWindow(&_window);
 
 	CurrentGameState = Playing;
+
+	ExperienceHelper::populateList();
 
 	_pauseWindow.setSize(_size);
 

@@ -30,7 +30,8 @@ public:
 
 protected:
 	Unit* _tracked; // Selected ship
-	float _prevMax;
+	int _prevLevel; // Previous level of the tracked unit
+	float _prevMax; // Previous exp needed to reach the next level
 };
 
 #endif

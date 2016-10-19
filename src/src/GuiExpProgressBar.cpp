@@ -11,8 +11,10 @@ GuiExpProgressBar::GuiExpProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		_tracked(unit) {
 	
 	_value = &_tracked->getExp();
+	_prevLevel = 0;
 
 	_currentText.setString(convert::format("%g", _tracked->getExp()));
+	_maxText.setString(convert::format("%g", getMax()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,9 +22,11 @@ GuiExpProgressBar::GuiExpProgressBar(const GuiEntryStyle* style, Vector2 origin,
 ////////////////////////////////////////////////////////////////////////////////
 
 void GuiExpProgressBar::update(int diff) {
-	if (getMax() != _prevMax) {
+	CORE_INFO("tracked lvl: %d", _tracked->getLevel());
+	if (_tracked->getLevel() != _prevLevel) {
+		CORE_INFO("upd");
+		_prevLevel = _tracked->getLevel();	
 		_maxText.setString(convert::format("%g", getMax()));
-		_prevMax = getMax();
 	}
 	GuiProgressBar::update(diff);
 }
