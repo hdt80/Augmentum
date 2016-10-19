@@ -24,6 +24,7 @@ std::string getType(Object* o) {
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
+
 Map::Map()
 		: _world(b2Vec2(0.0f, 0.0f)) {
 
@@ -33,7 +34,6 @@ Map::Map()
 	_selected->setMaxHealth(30.0f);
 
 	objects.push_back(_selected);
-
 
 	_contactListener = new ContactListener(&_world);
 }
@@ -49,7 +49,6 @@ Map::~Map() {
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
 
-// The diff is provided in milliseconds
 void Map::update(int diff) {
 	// Move first so the updates follow what the player would see
 	for (unsigned int i = 0; i < objects.size(); ++i) {
@@ -81,7 +80,8 @@ void Map::update(int diff) {
 
 	b2UpdateCounter += diff;
 	if (b2UpdateCounter >= 16667) {
-		_world.Step(b2UpdateCounter / 1000000.0f, velocityIterations, positionIterations);
+		_world.Step(b2UpdateCounter / 1000000.0f,
+				velocityIterations, positionIterations);
 		b2UpdateCounter = 0;
 	}
 
@@ -90,7 +90,6 @@ void Map::update(int diff) {
 	calcCollisions();
 }
 
-// Calculate all the collisions on the Map and call the collision events
 void Map::calcCollisions() {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		for (unsigned int j = 0; j < objects.size(); ++j) {
@@ -103,17 +102,10 @@ void Map::calcCollisions() {
 	}
 }
 
-// Get all Objects near a Target
-// t - Target to check
-// r - Radius, how close the Object must be to be included
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
 	return getObjectsInRange(t->getX(), t->getY(), r);
 }
 
-// Get all Objects near a Target
-// x - X coord to check
-// y - Y coord to check
-// r - Radius, how close the Object must be to be included
 std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	std::vector<Object*> objs;
 	for (unsigned int i = 0; i < objects.size(); ++i) {
@@ -124,19 +116,11 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	return objs;
 }
 
-// Check if there is a collision at the position
-// o - Object to ignore, or use nullptr to check all objects
-// x - x coord to check
-// y - y coord to check
 bool Map::collisionAtPlace(Object* o, float x, float y) {
 	// TODO: Temp code to test Box2d
 	return false;
 }
 
-// Return the Object at (x, y), or nullptr if no object is there
-// o - Object to ignore, use nullptr to check for all objects
-// x - X coord of the point
-// y - Y coord of the point
 Object* Map::objectAt(Object* o, float x, float y) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		if (objects[i] != o && objects[i]->contains(x, y)) {

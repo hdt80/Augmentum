@@ -48,20 +48,17 @@ Object::~Object() {
 // Events
 ////////////////////////////////////////////////////////////////////////////////
 
-//
 void Object::onCollision(Object* o) {
 	//CORE_INFO("%x collided with %x", this, o);
 };
 
 
-// Load all the functions related to the Object
 void Object::loadLua() {
 	if (_lua.isLoaded()) {
 		CORE_WARNING("Setting up a loaded Lua script!");
 	}
 }
 
-//
 void Object::onUpdate(int diff) {
 	_lua.callFunction("onUpdate", diff);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -69,7 +66,6 @@ void Object::onUpdate(int diff) {
 	}
 }
 
-//
 void Object::onMove(int diff) {
 	_lua.callFunction("onMove", diff);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -77,7 +73,6 @@ void Object::onMove(int diff) {
 	}
 }
 
-//
 void Object::onShoot(Object* target) {
 	_lua.callFunction("onShoot", target);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -85,7 +80,6 @@ void Object::onShoot(Object* target) {
 	}
 }
 
-//
 void Object::onDamageTaken(int dmg, Object* o) {
 	_lua.callFunction("onDamageTaken", dmg, o);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -93,14 +87,13 @@ void Object::onDamageTaken(int dmg, Object* o) {
 	}
 }
 
-//
 void Object::onDamageDealt(int dmg, Object* hit) {
+	_lua.callFunction("onDamageDealt", dmg, hit);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->onDamageDealt(dmg, hit);
 	}
 }
 
-//
 void Object::onDeath() {
 	_lua.callFunction("onDeath");
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
@@ -112,35 +105,24 @@ void Object::onDeath() {
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
 
-//
 void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 }
 
-// Check if another Object collides with this one
-// o - Object to check collision with
 bool Object::collidesWith(Object* o) const {
 	// TODO: Temp code to test Box2d
 	return false;
 }
 
-// Returns if a point is within the collision box of an Object
-// px - X coord to check
-// py - Y coord to check
 bool Object::contains(float px, float py) const {
 	// TODO: Temp code to test Box2d
 	return false;
 }
 
-// Move where this Object will be next update
-// diff - Milliseconds that have passed since the last update
 void Object::move(int diff) {
 	updatePosition(getX(), getY());
 }
 
-// Set the linear velocity of this Object
-// x - X acceleration to apply
-// y - Y acceleration to apply
 void Object::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();
 	b2Vec2 end(x, y);
@@ -151,8 +133,6 @@ void Object::setVelocity(float x, float y) {
 	_b2Box->ApplyLinearImpulseToCenter(diff, true);
 }
 
-// Update the Object based on how much time has passed
-// diff - How much time has passed, in milliseconds
 void Object::update(int diff) {
 	onUpdate(diff);
 
@@ -165,15 +145,10 @@ void Object::update(int diff) {
 	}
 }
 
-// Update the shape's position
-// x - X pos 
-// y - Y pos
-// This is used to ensure that _b2Box and _shape are synced
 void Object::updatePosition(float x, float y) {
 	_shape.setPosition(x, y);
 }
 
-//
 void Object::setStats(Stats s, bool relative) {
 	if (relative) {
 		_baseStats += s;
@@ -182,7 +157,6 @@ void Object::setStats(Stats s, bool relative) {
 	}
 }
 
-//
 void Object::applyStat(Stats s) {
     if (!s.percent) {
         CORE_WARNING("Object::applyStat> Stats isn't percent");
@@ -195,12 +169,10 @@ void Object::applyStat(Stats s) {
     _stats["accel"]     += _baseStats["accel"]     * s["accel"];
 }
 
-//
 void Object::removePerk(Perk* p) {
 	applyStat(-*p->getStats());
 }
 
-//
 void Object::addPerk(Perk* p) {
 	// If we already have the buff
 	if (getPerk(p->getName()) != nullptr) {
@@ -223,7 +195,6 @@ void Object::addPerk(Perk* p) {
 	}
 }
 
-//
 Perk* Object::getPerk(std::string name) {
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		if (_perks[i]->getName() == name) {
@@ -237,7 +208,6 @@ Perk* Object::getPerk(std::string name) {
 // Getters and setters
 ///////////////////////////////////////////////////////////////////////////////
 
-//
 void Object::setTarget(Target* t) {
 	// Are we already targetting the target?
 	if (_target == t) {
@@ -253,7 +223,6 @@ void Object::setTarget(Target* t) {
 	_target = t;
 }
 
-//
 void Object::setSkillTree(SkillTree* tree) {
 	_tree = tree->clone();
 	_tree->setAttached(this);

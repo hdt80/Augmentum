@@ -24,16 +24,32 @@ public:
 	Map();
 	~Map();
 
+	// Simulate the Map
+	// diff - Microseconds to simulate the Map for
 	void update(int diff);
+
+	// Calculate all the collisions between all the Objects in this Map
 	void calcCollisions();
 
 	// Get the Ship the player is using
+	// returns: Pointer to the ship the player controls
 	Ship* getSelected() { return _selected; }
 
+	// Get the Box2D world used by this Map
+	// returns: Point to the b2World used for the physics simulations
 	b2World* getWorld() { return &_world; }
 
 	// Get all Objects within a radius of a point
+	
+	// Get all the Objects within a radius of a point
+	// t - Point to find the Objects of
+	// range - Radius to look around
 	std::vector<Object*> getObjectsInRange(Target* t, float range);
+
+	// Get all the Objects within a radius of a point
+	// x - X coord of the world
+	// y - Y coord of the world
+	// range - Radius to look around
 	std::vector<Object*> getObjectsInRange(float x, float y, float range);
 
 	// Check if a collision at the point (x, y), ignoring Object o
@@ -58,6 +74,7 @@ protected:
 
 	b2World _world;
 	ContactListener* _contactListener;
+
 	// How many times to iterate the world
 	int velocityIterations = 6;
 	int positionIterations = 2;
