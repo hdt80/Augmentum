@@ -107,7 +107,7 @@ GameWindow::GameWindow(Vector2 size) {
 			compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
 	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
-			"HP", progBar, &_map.getSelected()->getHealth(),
+			"HP", progBar, &_map.getSelected()->getHealth(), 0,
 			_map.getSelected()->getMaxHealth()));
 
 	hud->addEntry(new GuiExpProgressBar(hud->getEntryStyle(), hud->getPos(),

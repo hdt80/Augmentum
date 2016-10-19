@@ -9,9 +9,10 @@
 
 GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		const std::string& msg, GuiProgressBarStyle* barStyle,
-		float* value, float max)
+		float* value, float min, float max)
 	: GuiEntry(style, origin, msg),
-		_barStyle(barStyle), _value(value), _prevValue(-1), _max(max) {
+		_barStyle(barStyle), _value(value), _prevValue(-1),
+		_min(min), _max(max) {
 
 	_bar.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_bar.setFillColor(barStyle->maxColor);
@@ -29,7 +30,7 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 	_zeroText.setFillColor(barStyle->minColor);
 	_zeroText.setOutlineThickness(1.0f);
 	_zeroText.setOutlineColor(sf::Color::Black);
-	_zeroText.setString("0");
+	_zeroText.setString(convert::format("%g", _min));
 	_zeroText.setCharacterSize(_text.getCharacterSize());
 
 	_currentText.setFont(*_text.getFont());
@@ -86,8 +87,14 @@ void GuiProgressBar::update(int diff) {
 	}
 }
 
+void GuiProgressBar::setMin(float m) {
+	_min = m;
+	_zeroText.setString(convert::format("%g", _min));
+}
+	
 void GuiProgressBar::setMax(float m) {
 	_max = m;
+	_maxText.setString(convert::format("%g", _max));
 }
 
 void GuiProgressBar::setPosition(float x, float y) {
@@ -100,9 +107,8 @@ void GuiProgressBar::setPosition(float x, float y) {
 	_zeroText.setPosition(getX(), getY());
 
 	// Move the text back so it doesn't go off the screen
-	_currentText.setPosition(getX() + (_style->dimensions.X / 2.0f) 
-			- _currentText.getLocalBounds().width, getY());
-
-	_maxText.setPosition(getX() + _style->dimensions.X 
-			- _maxText.getLocalBounds().width, getY());
+	_currentText.setPosition(getX() + (_style->dimensions.X / 2.0f)
+			- _currentText.getLocalBounds().width / 2.0f, getY());
+	_maxText.setPosition(getX() + _style->dimensions.X
+			- (_maxText.getLocalBounds().width + 4.0f), getY());
 }

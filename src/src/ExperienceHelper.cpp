@@ -8,7 +8,7 @@
 void ExperienceHelper::populateList() {
 	// TODO: Better level formula
 	for (int i = 0; i < _maxLevel + 1; ++i) {
-		_levelReqs[i] = i;
+		_levelReqs[i] = i * i;
 	}
 	_maxValue = _levelReqs[_maxLevel - 1];
 }
@@ -23,7 +23,7 @@ int ExperienceHelper::expToLevel(float exp) {
 	for (int i = 0; i < _maxLevel; ++i) {
 		// If the exp needed to reach that level is too high we've reached
 		// the min exp of the previous level
-		if (_levelReqs[i] >= exp) {
+		if (_levelReqs[i] > exp) {
 			return i - 1;
 		}
 	}

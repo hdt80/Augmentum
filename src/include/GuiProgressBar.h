@@ -2,6 +2,7 @@
 #define _GUI_PROGRESS_BAR_H
 
 #include "GuiEntry.h"
+#include "Logger.h"
 
 struct GuiProgressBarStyle {
 	sf::Color minColor; // Color to draw the bar when value = 0
@@ -23,7 +24,7 @@ public:
 	// max - Max value that value can be
 	GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 			const std::string& msg,	GuiProgressBarStyle* barStyle,
-			float* value, float max);
+			float* value, float min, float max);
 	virtual ~GuiProgressBar();
 
 	// Inherited from sf::Drawable
@@ -42,9 +43,14 @@ public:
 	// returns: What the current value is
 	virtual inline float getCurrentValue() { return *_value; }
 
+	// Get how much higher the value is from the min value
+	// returns: Remainder of value till max is hit
+	virtual inline float getRelativeValue() { return getCurrentValue() - _min; }
+
 	// Get how close the value is to the max
 	// returns: A ratio of how "done" the value is (0: 0%, 1: 100%)
-	inline float getRatioDone() { return getCurrentValue() / getMax(); }
+	inline float getRatioDone() { return getRelativeValue()
+			/ getRelativeMax(); }
 
 	// Get the ratio of how far from the value is to the max
 	// returns: A ration of how much of the value is needed to hit the max
@@ -54,9 +60,17 @@ public:
 	// returns: The max value _value can be before it's considered "done"
 	virtual inline float getMax() { return _max; }
 
+	// Get how much higher the max is from the min
+	// returns: How higher the max is from the min
+	virtual inline float getRelativeMax() { return _max - _min; }
+
 	// Set the max value of this bar
 	// m - New mav value to use
 	void setMax(float m);
+
+	// Set the min value of this bar
+	// m - New min value to use
+	void setMin(float m);
 
 protected:
 	GuiProgressBarStyle* _barStyle;
@@ -70,7 +84,8 @@ protected:
 
 	float* _value; // Pointer to the value
 	float _prevValue; // Previous value, used to check if the bar needs updating
-	float _max; // Max value of this, min is assumed to be 0
+	float _min; // Min value of the tracked valued
+	float _max; // Max value of this
 };
 
 #endif

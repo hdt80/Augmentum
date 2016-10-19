@@ -60,6 +60,10 @@ public:
 	// returns: If this GuiEntry contains the points
 	bool contains(float x, float y);
 
+	// Get the GuiEntryStyle used in this GuiEntry
+	// returns: Pointer to the style used in this GuiEntry
+	const GuiEntryStyle* getStyle() { return _style; }
+
 protected:
 	const GuiEntryStyle* _style;
 

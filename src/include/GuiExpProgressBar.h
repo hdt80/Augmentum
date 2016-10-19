@@ -28,6 +28,10 @@ public:
 	// returns: The exp required to hit the next level
 	virtual float getMax();
 
+	// Get the min exp needed to reach the current level
+	// returns: exp needed to reach the unit's current level
+	virtual float getMin();
+
 protected:
 	Unit* _tracked; // Selected ship
 	int _prevLevel; // Previous level of the tracked unit

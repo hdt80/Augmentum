@@ -39,7 +39,11 @@ public:
 
 	// Get the exp till the next level is reached
 	// returns: How much exp is needed till the next level is hit
-	int getExpToNextLevel();
+	float getExpToNextLevel();
+
+	// Get how much exp this Unit has for the current level
+	// returns: How much exp the Unit has towards the current level
+	float getExpForCurrentLevel();
 
 	// Get the current level of this Unit
 	// returns: The current level of this Unit

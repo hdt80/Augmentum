@@ -65,7 +65,12 @@ void Unit::applyDamage(float d, Unit* hitter) {
 	}
 }
 
-int Unit::getExpToNextLevel() {
+float Unit::getExpForCurrentLevel() {
+	return getExp() - ExperienceHelper::levelToExp(
+			ExperienceHelper::expToLevel(getExp()));
+}
+
+float Unit::getExpToNextLevel() {
 	return ExperienceHelper::getRemainingExp(_exp);
 }
 
