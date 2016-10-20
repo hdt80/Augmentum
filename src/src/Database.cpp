@@ -1,15 +1,13 @@
 #include "Database.h"
 
 #include "Logger.h"
-#include "GuiComponent.h"
-#include <SFML/Graphics.hpp>
-
 #include <typeinfo>
 
 REGISTER_DEMANGLED_TYPE(sf::Font);
 REGISTER_DEMANGLED_TYPE(GuiEntryStyle);
 REGISTER_DEMANGLED_TYPE(GuiComponentStyle);
 REGISTER_DEMANGLED_TYPE(GuiProgressBarStyle);
+REGISTER_DEMANGLED_TYPE(ParticleDef);
 
 template<typename T>
 void Database<T>::store(const std::string& name, T obj) {
@@ -47,6 +45,7 @@ template class Database<sf::Font>;
 template class Database<GuiEntryStyle>;
 template class Database<GuiComponentStyle>;
 template class Database<GuiProgressBarStyle>;
+template class Database<ParticleDef>;
 
 // Define all the databases used
 namespace Databases {
@@ -54,4 +53,5 @@ namespace Databases {
 	Database<GuiEntryStyle> GuiEntryStyleDatabase;
 	Database<GuiComponentStyle> GuiComponentStyleDatabase;
 	Database<GuiProgressBarStyle> GuiProgressBarStyleDatabase;
+	Database<ParticleDef> ParticleDefDatabase;
 }

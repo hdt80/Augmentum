@@ -13,6 +13,7 @@ struct ParticleDef {
 
 	// When given an angle to emit from how much varience will there be?
 	float coneOfDispersion;
+	float speedVariation; // How much faster or slow to go
 
 	sf::Color initColor; // What color the particles will start with
 	sf::Color endColor; // What color the particles will be just before removal
@@ -36,7 +37,7 @@ public:
 	// amt - Amount of particles to add
 	// angle - Angle to shoot the particles at
 	//			If angle is < 0, then a random angle between 0-360 is picked
-	void emit(ParticleDef* pDef, float x, float y, int amt, int angle);
+	void emit(const ParticleDef* pDef, float x, float y, int amt, int angle);
 
 	// Update all particles
 	// diff - Microseconds since last update
@@ -46,7 +47,7 @@ protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates states) const;
 
 	struct Particle {
-		ParticleDef* pDef;
+		const ParticleDef* pDef;
 		sf::Vector2f velocity;
 		float lifeLeft; // How many more seconds this particle will be around
 		bool done;

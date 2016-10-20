@@ -9,6 +9,17 @@ public:
 	Unit(Map* map, float x, float y, Stats s, int sides, sf::Color c);
 	virtual ~Unit();
 
+	// Methods /////////////////////////////////////////////////////////////////
+
+	// Simulate the update for an amount of time
+	// diff - Microseconds to simulate the Unit for
+	void update(int diff);
+
+	// Events //////////////////////////////////////////////////////////////////
+	
+	// Occurs when the Object levels up
+	virtual void onLevelUp();
+
 	// Health getters and setters //////////////////////////////////////////////
 	
 	// Apply damage to a unit
@@ -68,6 +79,7 @@ protected:
 	float _maxHealth; // Max health this Unit can have
 
 	float _exp; // Current experience of this Unit
+	int _prevLevel; // Used to check if the Unit has gone up a level
 };
 
 #endif

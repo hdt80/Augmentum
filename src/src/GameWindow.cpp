@@ -123,11 +123,24 @@ GameWindow::GameWindow(Vector2 size) {
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
+	def.speedVariation = 0.0f;
 	def.initColor = sf::Color(255, 0, 0);
 	def.endColor = def.initColor;
 	def.fade = true;
 	def.speed = 30.0f;
 	def.slowDown = false;
+	Databases::ParticleDefDatabase.store("test_parts", def);
+
+	ParticleDef levelPDef;
+	levelPDef.lifetime = 3.0f;
+	levelPDef.coneOfDispersion = 360.0f;
+	levelPDef.speedVariation = 20.0f;
+	levelPDef.initColor = sf::Color(80, 80, 255);
+	levelPDef.endColor = levelPDef.initColor;
+	levelPDef.fade = true;
+	levelPDef.speed = 50.0f;
+	levelPDef.slowDown = false;
+	Databases::ParticleDefDatabase.store("level_up", levelPDef);
 }
 
 GameWindow::~GameWindow() {
@@ -209,7 +222,7 @@ void GameWindow::mouseMoveEvent(sf::Event& e) {
 
 void GameWindow::render(sf::RenderWindow& window) {
 	window.clear(sf::Color(180, 180, 180));
-	window.draw(GameWindow::Emitter);
+//	window.draw(GameWindow::Emitter);
 
 	Window::render(window);
 	window.draw(_cursor); // Draw cursor on top

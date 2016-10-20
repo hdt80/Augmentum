@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "GuiComponent.h"
 #include "GuiProgressBar.h"
+#include "ParticleEmitter.h"
 
 // Macro to define mangled class names during compilation
 // To get the demangled name call TemplateTypeNames<T>; where T is the class
@@ -50,6 +51,7 @@ namespace Databases {
 	extern Database<GuiEntryStyle> GuiEntryStyleDatabase;
 	extern Database<GuiComponentStyle> GuiComponentStyleDatabase;
 	extern Database<GuiProgressBarStyle> GuiProgressBarStyleDatabase;
+	extern Database<ParticleDef> ParticleDefDatabase;
 }
 
 #endif

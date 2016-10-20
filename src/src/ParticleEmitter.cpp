@@ -19,7 +19,7 @@ ParticleEmitter::~ParticleEmitter() {
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
 
-void ParticleEmitter::emit(ParticleDef* pDef,
+void ParticleEmitter::emit(const ParticleDef* pDef,
 		float x, float y, int amt, int angle) {
 
 	// Resize both vectors
@@ -28,8 +28,10 @@ void ParticleEmitter::emit(ParticleDef* pDef,
 
 	// Only start where we added more particles
 	for (unsigned int i = _particles.size() - amt; i < _particles.size(); ++i) {
-
 		float dirAng;
+		float rSpeed = pDef->speed + Random::randInt(
+				-pDef->speedVariation, pDef->speedVariation);
+
 		if (angle >= 0) {
 			// Random angle between the angle and the dispersion
 			dirAng = Random::randInt(-pDef->coneOfDispersion / 2.0f,
@@ -43,8 +45,8 @@ void ParticleEmitter::emit(ParticleDef* pDef,
 		_particles[i].pDef = pDef;
 		_particles[i].lifeLeft = _particles[i].pDef->lifetime;
 		_particles[i].done = false;
-		_particles[i].velocity = sf::Vector2f(std::cos(dirAng) * pDef->speed,
-				std::sin(dirAng) * pDef->speed);
+		_particles[i].velocity = sf::Vector2f(std::cos(dirAng) * rSpeed,
+				std::sin(dirAng) * rSpeed);
 
 		_vertices[i].position = sf::Vector2f(x, y);
 		_vertices[i].color = pDef->initColor;

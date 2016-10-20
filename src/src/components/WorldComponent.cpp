@@ -39,6 +39,8 @@ void WorldComponent::update(int diff) {
 void WorldComponent::draw(sf::RenderTarget& target,
 		sf::RenderStates states) const {
 
+	target.draw(GameWindow::Emitter);
+
 	for (unsigned int i = 0; i < _map->objects.size(); ++i) {
 		target.draw(*(_map->objects[i]), states);
 	}

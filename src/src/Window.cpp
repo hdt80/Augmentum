@@ -103,7 +103,7 @@ void Window::addComponent(GuiComponent* comp, int depth) {
 	_components.push_back(comp);
 }
 
-GuiComponent* Window::getClickedComponent(float x, float y) {
+GuiComponent* Window::getComponentAt(float x, float y) {
 	for (unsigned int i = 0; i < _components.size(); ++i) {
 		if (_components[i]->hasClicked(x, y)) {
 			return _components[i];
@@ -149,7 +149,7 @@ void Window::keyEvent(sf::Event& e) {
 //
 void Window::mouseEvent(sf::Event& e) {
 	GuiComponent* clicked = 
-		getClickedComponent(e.mouseButton.x, e.mouseButton.y);
+		getComponentAt(e.mouseButton.x, e.mouseButton.y);
 
 	// Ensure there is a GuiComponent we clicked on
 	if (clicked != nullptr) {
@@ -165,7 +165,7 @@ void Window::mouseEvent(sf::Event& e) {
 
 void Window::mouseMoveEvent(sf::Event& e) {
 	if (_drawCompBounds) {
-		_hoveredComp = getClickedComponent(e.mouseButton.x, e.mouseButton.y);
+		_hoveredComp = getComponentAt(e.mouseButton.x, e.mouseButton.y);
 	}
 }
 

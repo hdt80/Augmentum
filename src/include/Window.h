@@ -73,15 +73,19 @@ public:
 protected:
 	Window();
 
-	//
+	// Add a new GuiComp to this Window
+	// comp - GuiComponent to add
+	// depth - How far down the GuiComp should be at. Depth of 0 is highest
 	void addComponent(GuiComponent* comp, int depth = 0);
 
-	//
-	GuiComponent* getClickedComponent(float x, float y);
+	// Get the GuiComp at point x, y
+	// x - X coord of the window
+	// y - Y coord of the window
+	// returns: The first GuiComp at x y, or nullptr if no GuiComp is there
+	GuiComponent* getComponentAt(float x, float y);
 
-
-	bool _drawCompBounds;
-	GuiComponent* _hoveredComp;
+	bool _drawCompBounds; // Draw the bounds of the components in this Window?
+	GuiComponent* _hoveredComp; // GuiComp the mouse has hovered over
 
 	std::string _name; // Internal name of the Window, should be unique
 
