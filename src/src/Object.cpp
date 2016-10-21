@@ -13,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 Object::Object(Map* map, float x, float y, Stats s)
 	: Target(x, y),
-		_map(map), _tree(nullptr),  _attackerCount(0),
+		_b2Box(nullptr), _map(map), _tree(nullptr),  _attackerCount(0),
 		_baseStats(s), _target(nullptr), _toRemove(false) {
 	
 	setObjectType(ObjectType::DEFAULT);
@@ -213,7 +213,22 @@ Perk* Object::getPerk(std::string name) {
 void Object::setObjectType(ObjectType type) {
 	_objType = type;
 
-	b2Filter filter = _b2Box->Get
+	int allTypes = std::pow((double) 2, ObjectType::COUNT) - 1;
+
+	if (!_b2Box) {
+		return;
+	}
+
+	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
+		b2Filter filt = fix->GetFilterData();
+
+		// Category bits = What I am
+		filt.categoryBits = type;
+		// Mask bits = What I collide with
+		filt.maskBits = allTypes & ~type;
+
+		fix->SetFilterData(filt);
+	}
 }
 
 void Object::setTarget(Target* t) {

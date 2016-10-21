@@ -31,6 +31,9 @@ void Cooldown::addTime(int i) {
 }
 
 void Cooldown::update(int diff) {
+	if (_timeLeft < 0) {
+		return;
+	}
 	_timeLeft -= diff;
 }
 

@@ -13,7 +13,7 @@ Unit::Unit() {
 
 Unit::Unit(Map* map, float x, float y, Stats s, int sides, sf::Color c)
 	: Object(map, x, y, s),
-		_health(30), _maxHealth(30), _exp(0.0f), _prevLevel(-1) {
+		_reload(4.0f), _health(30), _maxHealth(30), _exp(0.0f), _prevLevel(-1) {
 
 	_shape.setRadius(20);
 	_shape.setPointCount(sides);
@@ -64,11 +64,15 @@ void Unit::onLevelUp() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Unit::shoot(float x, float y) {
-	Projectile* p = new Projectile(_map,
-			new Target(x, y), this, Color(255, 255, 255, 255));	
-	p->setObjectType(getObjectType());
+	if (_reload.done()) {
+		Projectile* p = new Projectile(_map,
+				new Target(x, y), this, Color(255, 255, 255, 255));	
+		p->setObjectType(getObjectType());
 
-	_map->addObject(p);
+		_map->addObject(p);
+
+		_reload.start();
+	}
 }
 
 void Unit::shoot(Object* target) {

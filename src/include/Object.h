@@ -20,7 +20,9 @@ enum ObjectType {
 	DEFAULT		= 0x0001,
 	BOUNDARY	= 0x0002,
 	FRIENDLY	= 0x0004,
-	ENEMY		= 0x0008
+	ENEMY		= 0x0008,
+
+	COUNT		= 0x0004 // How many types there are
 };
 
 class Object : public Target, public sf::Drawable, public sf::Transformable {
