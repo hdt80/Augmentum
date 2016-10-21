@@ -44,22 +44,33 @@ public:
 	// Get all the Objects within a radius of a point
 	// t - Point to find the Objects of
 	// range - Radius to look around
+	// returns: A vector of all objects within the range of the target
 	std::vector<Object*> getObjectsInRange(Target* t, float range);
 
 	// Get all the Objects within a radius of a point
 	// x - X coord of the world
 	// y - Y coord of the world
 	// range - Radius to look around
+	// returns: A vector of all objects within the range of (x, y)
 	std::vector<Object*> getObjectsInRange(float x, float y, float range);
 
 	// Check if a collision at the point (x, y), ignoring Object o
 	// o - Object to ignore during checks
 	// x - X coord to check for a collision
 	// y - Y coord to check for a collision
+	// returns: If a collision exists at the point (x, y)
 	bool collisionAtPlace(Object* o, float x, float y);
 
 	// Return the Object at (x, y), ignoring Object o
+	// o - Object to ignore, nullptr means all objects
+	// x - X coord of the map
+	// y - Y coord of the map
+	// returns: Object at the point (x, y)
 	Object* objectAt(Object* o, float x, float y);
+
+	// Add an Object to this Map
+	// o - Object to add
+	void addObject(Object* o);
 
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;
@@ -68,7 +79,7 @@ public:
 	std::vector<Object*> toRemove;
 
 protected:
-	Vector2 _origin; // (0, 0)
+	Vector2 _origin; // (0, 0), used to calculate the distance from the middle
 
 	Ship* _selected; // Ship the player is controlling
 

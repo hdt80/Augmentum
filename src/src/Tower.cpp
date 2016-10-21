@@ -27,9 +27,7 @@ Tower::Tower(Map* map, float x, float y, Stats s)
 	loadLua();
 }
 
-Tower::~Tower() {
-	CORE_INFO("~~!!~~%x", this);
-}
+Tower::~Tower() {}
 
 void Tower::loadLua() {
 	if (_lua.isLoaded()) {
@@ -120,7 +118,7 @@ void Tower::shoot() {
 	Enemy* e = nullptr;
 	if (!_target->isSimpleTarget()) {
 		e = static_cast<Enemy*>(_target);
-		Projectile* p = new Projectile(_map, e, this, Color(127, 127, 127, 255));
+		//Projectile* p = new Projectile(_map, e, this, Color(127, 127, 127, 255));
 //		_map->shoot(this, p);
 		onShoot(e);
 	} else {

@@ -5,49 +5,74 @@
 #include "ParticleEmitter.h"
 #include "Perk.h"
 #include "Common.h"
-
+#include "Unit.h"
 #include "Logger.h"
+#include "Map.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
-Projectile::Projectile(Map* map, Enemy* e, Tower* t, Color c)
-	: Object(map, t->getX(), t->getY(), t->getStats()),
-		_color(c), _shooter(t) {
+Projectile::Projectile(Map* map, Target* t, Unit* shooter, Color c)
+	: Object(map, shooter->getX(), shooter->getY(), shooter->getStats()),
+		_color(c), _shooter(shooter) {
 
 	// Speed of this Projectile is stored in Tower's projSpeed, not speed
 	// so set it to the proper value
-	setSpeed(t->getProjSpeed());
+	setSpeed(shooter->getProjSpeed());
 
 	_shape.setRadius(PROJECTILE_WIDTH);
 	_shape.setFillColor(sf::Color(120, 120, 120));
 
 	// Set the angle we move at towards the enemy
-	_direction = (Vector2(e->getX(), e->getY()) - Vector2(x, y)).normalize();
+	_direction = (Vector2(t->getX(), t->getY()) - Vector2(x, y)).normalize();
+
+	_shape.setFillColor(c.toSF());
+	_shape.setOutlineColor(sf::Color::Black);
+	_shape.setOutlineThickness(-1.0f);
+
+	_b2Box = nullptr;
+
+	b2BodyDef bdf;
+	bdf.type = b2_dynamicBody;
+	bdf.position.Set(x, y);
+	bdf.angle = 0; // Radians
+	_b2Box = _map->getWorld()->CreateBody(&bdf);
+
+	b2CircleShape cs;
+	cs.m_p.Set(0, 0);
+	cs.m_radius = 5;
+
+	b2PolygonShape dBox;
+	dBox.SetAsBox(5.0f, 5.0f);
+
+	b2FixtureDef fd;
+	//fd.shape = &cs;
+	fd.shape = &dBox;
+	fd.density = 1.0f;
+	fd.friction = 0.4f;
+	_b2Box->CreateFixture(&fd);
 }
 
 Projectile::~Projectile() {}
 
-//
+///////////////////////////////////////////////////////////////////////////////
+// Methods
+///////////////////////////////////////////////////////////////////////////////
+
 void Projectile::loadLua() {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Methods
-///////////////////////////////////////////////////////////////////////////////
 void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(_shape);
 }
 
-//
 void Projectile::onCollision(Object* o) {
 	// Did we collide with an enemy?
 	Enemy* e = dynamic_cast<Enemy*>(o);
 	if (e == nullptr) {
 		return;
 	}
-//	ParticleEmit::emit(x, y, 10, _color);
 	e->applyDamage(getDamage(), _shooter);
 
 	_shooter->onDamageDealt(getDamage(), e);
@@ -58,13 +83,12 @@ void Projectile::onCollision(Object* o) {
 // Overload default Object move, we don't want it to stop ocne we reach the
 // target, we want it to keep moving
 void Projectile::move(int diff) {
-	double deltaMove = (double)getSpeed() * 0.000001f * diff;
-	x += _direction.X * deltaMove;
-	y += _direction.Y * deltaMove;
+	updatePosition(getX(), getY());
+	//double deltaMove = (double)getSpeed() * 0.000001f * diff;
+	//x += _direction.X * deltaMove;
+	//y += _direction.Y * deltaMove;
 }
 
 void Projectile::update(int diff) {
-	move(diff);
-
-	_shape.setPosition(getX() - PROJECTILE_WIDTH, getY() - PROJECTILE_WIDTH);
+	setVelocity(_direction.X * getSpeed(), _direction.Y * getSpeed());
 }

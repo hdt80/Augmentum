@@ -171,11 +171,6 @@ void GameWindow::update(int diff) {
 
 	_map.update(diff);
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-		sf::Vector2i pos = sf::Mouse::getPosition(Game::getRenderWindow());
-		GameWindow::Emitter.emit(&def, pos.x, pos.y, 5, -10);
-	}
-
 	GameWindow::Emitter.update(diff);
 	_cursor.update(diff);
 }
@@ -184,7 +179,6 @@ void GameWindow::update(int diff) {
 // SFML Method Wrapper
 ///////////////////////////////////////////////////////////////////////////////
 
-//
 void GameWindow::keyEvent(sf::Event& e) {
 	Window::keyEvent(e);
 	if (e.key.code == sf::Keyboard::N) {
@@ -215,14 +209,20 @@ void GameWindow::keyEvent(sf::Event& e) {
 	}
 }
 
-//
-void GameWindow::mouseMoveEvent(sf::Event& e) {
-	Window::mouseMoveEvent(e);
+void GameWindow::mouseEvent(sf::Event& e) {
+	GuiComponent* clicked = 
+		getComponentAt(e.mouseButton.x, e.mouseButton.y);
+	// Mouse relative to the window
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
+	// Mouse relative to the clicked GuiComponent
+	sf::Vector2f worldPos = Game::getRenderWindow()
+		.mapPixelToCoords(pixelPos, clicked->getView());
+
+	_map.getSelected()->shoot(worldPos.x, worldPos.y);
 }
 
 void GameWindow::render(sf::RenderWindow& window) {
 	window.clear(sf::Color(180, 180, 180));
-//	window.draw(GameWindow::Emitter);
 
 	Window::render(window);
 	window.draw(_cursor); // Draw cursor on top

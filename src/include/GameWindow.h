@@ -21,7 +21,7 @@ public:
 
 	// Event methods
 	virtual void keyEvent(sf::Event& e);
-	virtual void mouseMoveEvent(sf::Event& e);
+	virtual void mouseEvent(sf::Event& e);
 
 	//
 	virtual void render(sf::RenderWindow& window);

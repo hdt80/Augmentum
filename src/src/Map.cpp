@@ -30,6 +30,7 @@ Map::Map()
 
 	Stats s;
 	s["speed"] = 20.0f;
+	s["projSpeed"] = 50.0f;
 	_selected = new Ship(this, 0.0f, 0.0f, s, 4, sf::Color::Blue);
 	_selected->setMaxHealth(30.0f);
 
@@ -119,6 +120,10 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 bool Map::collisionAtPlace(Object* o, float x, float y) {
 	// TODO: Temp code to test Box2d
 	return false;
+}
+
+void Map::addObject(Object* o) {
+	objects.push_back(o);
 }
 
 Object* Map::objectAt(Object* o, float x, float y) {

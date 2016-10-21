@@ -16,10 +16,12 @@ Object::Object(Map* map, float x, float y, Stats s)
 		_map(map), _tree(nullptr),  _attackerCount(0),
 		_baseStats(s), _target(nullptr), _toRemove(false) {
 	
+	setObjectType(ObjectType::DEFAULT);
 }
 
 Object::Object()
 	: Object(nullptr, 0.0f, 0.0f, Stats()) {
+
 }
 
 // Object dtor
@@ -207,6 +209,12 @@ Perk* Object::getPerk(std::string name) {
 ///////////////////////////////////////////////////////////////////////////////
 // Getters and setters
 ///////////////////////////////////////////////////////////////////////////////
+
+void Object::setObjectType(ObjectType type) {
+	_objType = type;
+
+	b2Filter filter = _b2Box->Get
+}
 
 void Object::setTarget(Target* t) {
 	// Are we already targetting the target?

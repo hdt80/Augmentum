@@ -16,6 +16,13 @@
 class Map;
 class Perk;
 
+enum ObjectType {
+	DEFAULT		= 0x0001,
+	BOUNDARY	= 0x0002,
+	FRIENDLY	= 0x0004,
+	ENEMY		= 0x0008
+};
+
 class Object : public Target, public sf::Drawable, public sf::Transformable {
 public:
 	// A default constructor must be defined for Sol for some reason.
@@ -46,6 +53,7 @@ public:
 
 	// Occurs when this Object fires a Projectile at another
 	// target - Object this Object shot at
+	//		the target will be nullptr if the Projectile is not targeted
 	virtual void onShoot(Object* target);
 	
 	// Occurs when this Object took damage
@@ -121,13 +129,36 @@ public:
 
 	// Other getters ///////////////////////////////////////////////////////////
 	
+	// Get what type of Object this is
+	// returns: Enum of _objType
+	ObjectType getObjectType() { return _objType; }
+
+	// Set the ObjectType of this Object
+	// type - Type to set the ObjectType to
+	void setObjectType(ObjectType type);// { _objType = type; }
+
+	// Get the Map this Object is on
+	// returns: Pointer to the Map this Object is on
 	Map* getMap() const { return _map; }
+
+	// Get the perks attached to this Object
+	// returns: Reference to the vector of perks this Object has
 	std::vector<Perk*>& getPerks() { return _perks; }
+
+	// Get where this Object is moving towards
+	// returns: Pointer to the target of this Object
 	Target* getTarget() const { return _target; }
+
+	//
 	Vector2 getDirection() const { return _direction; }
+
+	// Get if this Object is to be removed in the next update of the Map
+	// return: _toRemove
 	bool isToRemove() const { return _toRemove; }
+
+	// Get the SkillTree this Object uses
+	// returns: Pointer to the SkillTree this Object uses
 	SkillTree* getTree() const { return _tree; }
-	int getAttackerCount() const { return _attackerCount; }
 
 	// Utility getters /////////////////////////////////////////////////////////
 	
@@ -140,6 +171,10 @@ public:
 	void setAttackerCount(int c) { _attackerCount = c; }
 	void incAttackerCount() { ++_attackerCount; }
 	void decAttackerCount() { --_attackerCount; }
+
+	// Get how many Objects have a pointer to this Object while targetting
+	// returns: _attackerCount
+	int getAttackerCount() const { return _attackerCount; }
 
 	// Other setters ///////////////////////////////////////////////////////////
 	
@@ -182,6 +217,7 @@ protected:
 	SkillTree* _tree; // Skill tree attached to this Object
 	std::vector<Perk*> _perks; // Perks of this Object
 
+	ObjectType _objType; // What type of Object this is
 	int _attackerCount; // Number of Objects that have targetted us
 
 	// Base stats are the stats that all perks base off of

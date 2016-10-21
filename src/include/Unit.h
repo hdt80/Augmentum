@@ -2,6 +2,7 @@
 #define _UNIT_H
 
 #include "Object.h"
+#include "Cooldown.h"
 
 class Unit : public Object {
 public:
@@ -19,6 +20,21 @@ public:
 	
 	// Occurs when the Object levels up
 	virtual void onLevelUp();
+
+	// Shooting methods ////////////////////////////////////////////////////////
+	
+	// Check if this Unit can shoot
+	// returns: If the _reload Cooldown is completed
+	inline bool canShoot() { return _reload.done(); }
+
+	// Shoot towards a point
+	// x - X coord of the Map to shoot at
+	// y - Y coord of the Map to shoot at
+	void shoot(float x, float y);
+
+	// Shoot towards an Object
+	// target - Object to shoot towards
+	void shoot(Object* target);
 
 	// Health getters and setters //////////////////////////////////////////////
 	
@@ -75,11 +91,14 @@ public:
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
+	Cooldown _reload; // Time till you can shoot again
+
 	float _health; // Current health of this Unit
 	float _maxHealth; // Max health this Unit can have
 
 	float _exp; // Current experience of this Unit
 	int _prevLevel; // Used to check if the Unit has gone up a level
+
 };
 
 #endif
