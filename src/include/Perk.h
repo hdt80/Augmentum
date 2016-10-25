@@ -11,17 +11,31 @@ class Object;
 // changed, and when removed the opposite of the Perk is removed.
 class Perk {
 public:
-	// More than one max stack means a perk is stackable
+	// Ctor for Perk
+	// name - Display name to use
+	// s - Stats of thie Perk
+	// dur - How many seconds the Perk will last
+	// lua - If there is an attached lua script
+	// maxStacks - How many stacks of the Perk there can be
 	Perk(std::string name, Stats s, float dur, bool lua, int maxStacks = 0);
+
+	// Perk dtor
 	~Perk();
 
+	// Load the lua script used when events occur
 	void loadLua();
 
+	// Clone the Perk
+	// returns: A copy of the cloned Perk
 	Perk* clone();
 
+	// SImulate the Perk for an amount of time
+	// diff - Microseconds to simulate the Perk for
 	void update(int diff);
 
-	// Each event is called when the attached Object calls it
+	// Events //////////////////////////////////////////////////////////////////
+
+	// Object events
 	void onUpdate(int diff);
 	void onMove(int diff);
 	void onShoot(Object* target);
@@ -29,6 +43,11 @@ public:
 	void onDamageTaken(int dmg, Object* hitter);
 	void onDeath();
     void onApply(Object* attached);
+
+	// Unit events
+	void onLevelUp();
+
+	// Getters and setters /////////////////////////////////////////////////////
 
 	void setAttached(Object* attached);
 	Object* getAttached() { return _attached; }
@@ -58,14 +77,15 @@ protected:
 	// Scripts to be called when the Object calls each respective Method
 	// _name is the path of the script under ./lua/$(_name).lua
 	LuaScript _lua;
+
 	Object* _attached; // Object we're attached to
 
 	Stats _stats; // Stats applied to the Object
 	float _duration; // -1 duration means infinite
 	float _maxDuration; //_duration changes each update, but _maxDuration doesnt
 
-	int _stacks;
-	int _maxStacks;
+	int _stacks; // How many stacks of this Perk there currently are
+	int _maxStacks; // How many stacks this Perk can have at any time
 	// If statckable applying a new perk with the same name will add a stack
 	// If not stackable and applying the same perk the _duration will be reset
 	// to the new perks duration

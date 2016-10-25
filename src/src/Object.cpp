@@ -213,11 +213,11 @@ Perk* Object::getPerk(std::string name) {
 void Object::setObjectType(ObjectType type) {
 	_objType = type;
 
-	int allTypes = std::pow((double) 2, ObjectType::COUNT) - 1;
-
 	if (!_b2Box) {
 		return;
 	}
+
+	int allTypes = std::pow((double) 2, ObjectType::COUNT) - 1;
 
 	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
 		b2Filter filt = fix->GetFilterData();

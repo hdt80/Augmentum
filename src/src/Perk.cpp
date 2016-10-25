@@ -122,3 +122,7 @@ void Perk::onDamageTaken(int dmg, Object* attacker) {
 void Perk::onDeath() {
 	_lua.callFunction("onDeath");
 }
+
+void Perk::onLevelUp() {
+	_lua.callFunction("onLevelUp");
+}

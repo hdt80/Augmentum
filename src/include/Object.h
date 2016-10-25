@@ -27,10 +27,18 @@ enum ObjectType {
 
 class Object : public Target, public sf::Drawable, public sf::Transformable {
 public:
-	// A default constructor must be defined for Sol for some reason.
+	// A default constructor must be defined for Sol for some reason
 	// This constructor should never be used and is only for Sol
 	Object();
+
+	// Object ctor
+	// map - Map this Object is on
+	// x - X position of the map to create the Object at
+	// y - Y position of the map to create the Object at
+	// s - Stats this Object spawns with
 	Object(Map* map, float x, float y, Stats s);
+
+	// Object dtor
 	virtual ~Object();
 
 	// If Object* o collides with us

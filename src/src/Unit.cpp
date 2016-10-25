@@ -7,13 +7,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
-Unit::Unit() {
-	
-}
+Unit::Unit() {}
 
 Unit::Unit(Map* map, float x, float y, Stats s, int sides, sf::Color c)
 	: Object(map, x, y, s),
-		_reload(4.0f), _health(30), _maxHealth(30), _exp(0.0f), _prevLevel(-1) {
+		_reload(4 * 1000000), _health(30), _maxHealth(30), _exp(0.0f),
+		_prevLevel(-1) {
 
 	_shape.setRadius(20);
 	_shape.setPointCount(sides);
@@ -57,6 +56,11 @@ Unit::~Unit() {}
 void Unit::onLevelUp() {
 	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("level_up"),
 			getX(), getY(), 500, -1);
+
+	_lua.callFunction("onLevelUp");
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		_perks[i]->onLevelUp();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +76,8 @@ void Unit::shoot(float x, float y) {
 		_map->addObject(p);
 
 		_reload.start();
+	} else {
+		CORE_WARN("reloading...");
 	}
 }
 
