@@ -98,7 +98,6 @@ protected:
 
 	float _exp; // Current experience of this Unit
 	int _prevLevel; // Used to check if the Unit has gone up a level
-
 };
 
 #endif

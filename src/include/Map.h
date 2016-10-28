@@ -21,8 +21,15 @@ class Ship;
 
 class Map {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+	
+	// ctor
 	Map();
+
+	// dtor
 	~Map();
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// Simulate the Map
 	// diff - Microseconds to simulate the Map for
@@ -39,7 +46,7 @@ public:
 	// returns: Point to the b2World used for the physics simulations
 	b2World* getWorld() { return &_world; }
 
-	// Get all Objects within a radius of a point
+	// Get all Objects within a radius of a point //////////////////////////////
 	
 	// Get all the Objects within a radius of a point
 	// t - Point to find the Objects of
@@ -71,6 +78,14 @@ public:
 	// Add an Object to this Map
 	// o - Object to add
 	void addObject(Object* o);
+
+	// Spawn a new Enemy of the type at the map coords (x, y)
+	// x - X coord of the map to spawn at
+	// y - Y coord of the map to spawn at
+	// type - What type the Enemy should be
+	// level - What level to spawn the Enemy at, -1 means use the distance from
+	//		the map's origin as the level
+	void spawnEnemy(float x, float y, EnemyType type, int level = -1);
 
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;

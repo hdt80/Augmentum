@@ -11,6 +11,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
+
 Object::Object(Map* map, float x, float y, Stats s)
 	: Target(x, y),
 		_b2Box(nullptr), _map(map), _tree(nullptr),  _attackerCount(0),
@@ -53,7 +54,6 @@ Object::~Object() {
 void Object::onCollision(Object* o) {
 	//CORE_INFO("%x collided with %x", this, o);
 };
-
 
 void Object::loadLua() {
 	if (_lua.isLoaded()) {

@@ -135,3 +135,7 @@ Object* Map::objectAt(Object* o, float x, float y) {
 	}
 	return nullptr;
 }
+
+void Map::spawnEnemy(float x, float y, EnemyType type, int level) {
+
+}

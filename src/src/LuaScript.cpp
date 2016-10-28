@@ -131,7 +131,7 @@ void LuaScript::definePerk() {
 void LuaScript::defineEnemy() {
 	lua.new_usertype<Enemy> (
 		"Enemy", sol::constructors<
-				sol::types<Map*, float, Stats, Path*>>(),
+				sol::types<Map*, float, float, EnemyType>>(),
 		// Target methods
 		"getX", &Enemy::getX,
 		"getY", &Enemy::getY,
@@ -151,11 +151,8 @@ void LuaScript::defineEnemy() {
 		"applyDamage", &Enemy::applyDamage,
 		"getHealth", &Enemy::getHealth,
 		"getMaxHealth", &Enemy::getMaxHealth,
-		"getPath", &Enemy::getPath,
 		"setHealth", &Enemy::setHealth,
 		"setMaxHealth", &Enemy::setMaxHealth,
-		"setTarget", &Enemy::setTarget,
-		"setPath", &Enemy::setPath
-
+		"setTarget", &Enemy::setTarget
 	);
 }

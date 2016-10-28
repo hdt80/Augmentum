@@ -18,9 +18,9 @@
 
 ParticleEmitter GameWindow::Emitter;
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Creation Methods
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
@@ -218,7 +218,12 @@ void GameWindow::mouseEvent(sf::Event& e) {
 	sf::Vector2f worldPos = Game::getRenderWindow()
 		.mapPixelToCoords(pixelPos, clicked->getView());
 
-	_map.getSelected()->shoot(worldPos.x, worldPos.y);
+	if (e.mouseButton.button == sf::Mouse::Left) {
+		_map.getSelected()->shoot(worldPos.x, worldPos.y);
+	} else if (e.mouseButton.button == sf::Mouse::Right) {
+		_map.spawnEnemy(worldPos.x, worldPos.y, EnemyType::getById(0), 5);
+	}
+
 }
 
 void GameWindow::render(sf::RenderWindow& window) {
