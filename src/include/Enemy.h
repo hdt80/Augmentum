@@ -46,16 +46,26 @@ public:
 	// Get the EnemyType from the id
 	// id - Id to get the EnemyType of
 	// returns: The EnemyType with the matching id
-	static EnemyType getById(int id);
+	static EnemyType* getById(int id);
 
 	// Create a new EnemyType
-	// id - ID to use internally
+	// id - requested id, not gaurenteed to give this id
 	// name - Display name to use
 	// sides -  How many sides the this EnemyType uses
 	// defStats - Default stats of the EnemyType
 	// levelDiff - The stat different each level
-	static void createEnemyType(int id, const std::string& name, int sides,
+	// returns: The id used to store the created EnemyType
+	static int createEnemyType(int id, const std::string& name, int sides,
 			Stats defStats, Stats levelDiff);
+
+	// Get the default EnemyType returned when getById doesn't have that id
+	// returns: _defaultType
+	static EnemyType* getDefaultType();
+
+	// See if an EnemyType is already in use
+	// id - Id to check
+	// returns: If _types contains id
+	static bool idInUse(unsigned int id);
 
 protected:
 	int _id; // ID to use internally
@@ -66,7 +76,8 @@ protected:
 
 	// Static vars /////////////////////////////////////////////////////////////
 	
-	std::vector<EnemyType> _types; // _id to EnemyType
+	static std::vector<EnemyType> _types; // _id to EnemyType
+	static EnemyType _defaultType; // Default type to use
 };
 
 class Enemy : public Unit {
@@ -91,15 +102,21 @@ public:
 
 	// Update the enemy depending on its target, updating its coords
 	// diff - Milliseconds since last update call
-	virtual void update(int diff);
+	//virtual void update(int diff);
 
 	// A simple target is just an (x, y) coord point. Because an Object
 	// isn't just a coord point it isn't a simple target
 	virtual bool isSimpleTarget() const { return false; }
 
+	// Get the EnemyType this Enemy uses
+	// returns: _enemyType
+	const EnemyType& getEnemyType() { return _enemyType; }
+
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 	sf::RectangleShape _hpBar;
+
+	const EnemyType _enemyType;
 };
 
 #endif

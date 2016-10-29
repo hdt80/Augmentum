@@ -82,10 +82,10 @@ public:
 	// Spawn a new Enemy of the type at the map coords (x, y)
 	// x - X coord of the map to spawn at
 	// y - Y coord of the map to spawn at
-	// type - What type the Enemy should be
+	// enemyId - What type the Enemy should be
 	// level - What level to spawn the Enemy at, -1 means use the distance from
 	//		the map's origin as the level
-	void spawnEnemy(float x, float y, EnemyType type, int level = -1);
+	void spawnEnemy(float x, float y, int enemyId, int level = -1);
 
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;

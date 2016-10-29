@@ -2,7 +2,12 @@
 
 #include "Logger.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// Stats ctor
+////////////////////////////////////////////////////////////////////////////////
+
 Stats::Stats(bool perc) : percent(perc)  {
+	// Add default stats
 	addStat("range", 0.0f);
 	addStat("fireRate", 0.0f);
 	addStat("damage", 0.0f);
@@ -11,7 +16,10 @@ Stats::Stats(bool perc) : percent(perc)  {
 	addStat("accel", 0.0f);
 }
 
-// Return all the stats of this Stats, but negative
+////////////////////////////////////////////////////////////////////////////////
+// Operator overloads
+////////////////////////////////////////////////////////////////////////////////
+
 Stats Stats::operator- () const {
 	Stats s;
 	for (auto i : stats) {
@@ -44,18 +52,20 @@ void Stats::operator+= (const Stats& o) {
 	*this = *this + o;
 }
 
-// Getter
-float Stats::operator[](std::string s) const {
+float Stats::operator[](const std::string& s) const {
 	if (hasStat(s)) {
 		return getStat(s);
 	}
 	return 0.0f;
 }
 
-// Setter
-float& Stats::operator[](std::string s) {
+float& Stats::operator[](const std::string& s) {
 	return stats[s];
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
 
 void Stats::print() const {
 	CORE_INFO("[Stats %x]", this);
@@ -64,13 +74,15 @@ void Stats::print() const {
 	}
 }
 
-// If this stats keeps track of a certain name
-bool Stats::hasStat(std::string name) const {
+////////////////////////////////////////////////////////////////////////////////
+// Getter and setters
+////////////////////////////////////////////////////////////////////////////////
+
+bool Stats::hasStat(const std::string& name) const {
 	return (stats.find(name) != stats.end());
 }
 
-// Get the stat that maps to the name
-float Stats::getStat(std::string name) const {
+float Stats::getStat(const std::string& name) const {
 	if (!hasStat(name)) {
 		CORE_WARN("[Stats %x] \'%s\' isn't in this stats", this, name.c_str());
 		return 0;
@@ -82,10 +94,7 @@ float Stats::getStat(std::string name) const {
 	}
 }
 
-// Add a stat
-// name - Name to use
-// value - Value to set the named stat to
-void Stats::addStat(std::string name, float value) {
+void Stats::addStat(const std::string& name, float value) {
 	if (hasStat(name)) {
 		CORE_WARN("[Stats %x] Already contains \'%s\': %g",
 			this, name.c_str(), getStat(name));
@@ -93,6 +102,6 @@ void Stats::addStat(std::string name, float value) {
 	stats.insert({name, value});
 }
 
-void Stats::setStat(std::string name, float value) {
+void Stats::setStat(const std::string& name, float value) {
 	stats.at(name) = value;
 }

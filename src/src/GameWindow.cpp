@@ -221,9 +221,8 @@ void GameWindow::mouseEvent(sf::Event& e) {
 	if (e.mouseButton.button == sf::Mouse::Left) {
 		_map.getSelected()->shoot(worldPos.x, worldPos.y);
 	} else if (e.mouseButton.button == sf::Mouse::Right) {
-		_map.spawnEnemy(worldPos.x, worldPos.y, EnemyType::getById(0), 5);
+		_map.spawnEnemy(worldPos.x, worldPos.y, 0, 5);
 	}
-
 }
 
 void GameWindow::render(sf::RenderWindow& window) {
