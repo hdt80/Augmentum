@@ -63,7 +63,8 @@ EnemyType::EnemyType(int id, const std::string& name, int sides,
 ///////////////////////////////////////////////////////////////////////////////
 
 Enemy::Enemy(Map* map, float x, float y, EnemyType type)
-	: Unit(map, x, y, type.getDefaultStats(), type.getSides(), sf::Color::Red) {
+	: Unit(map, x, y, type.getDefaultStats(), type.getSides(), sf::Color::Red),
+		_enemyType(type) {
 
 	_shape.setRadius(20);
 	_shape.setFillColor(sf::Color::Red);
