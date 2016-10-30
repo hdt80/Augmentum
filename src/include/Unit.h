@@ -32,9 +32,13 @@ public:
 	// y - Y coord of the Map to shoot at
 	void shoot(float x, float y);
 
-	// Shoot towards an Object
-	// target - Object to shoot towards
-	void shoot(Object* target);
+	// Shoot towards a Target
+	// target - Target to shoot towards
+	void shoot(Target* target);
+
+	// Stats ///////////////////////////////////////////////////////////////////
+	
+	virtual float getStat(const std::string& name) const;
 
 	// Health getters and setters //////////////////////////////////////////////
 	
@@ -66,19 +70,23 @@ public:
 
 	// Get the exp till the next level is reached
 	// returns: How much exp is needed till the next level is hit
-	float getExpToNextLevel();
+	float getExpToNextLevel() const;
 
 	// Get how much exp this Unit has for the current level
 	// returns: How much exp the Unit has towards the current level
-	float getExpForCurrentLevel();
+	float getExpForCurrentLevel() const;
 
 	// Get the current level of this Unit
 	// returns: The current level of this Unit
-	int getLevel();
+	int getLevel() const;
+
+	// Get the current amount of exp this Unit has
+	// returns: Reference to exp of this Unit
+	inline float& getExp() { return _exp; }
 
 	// Get the current amount of exp this Unit has
 	// returns: The exp of this Unit
-	inline float& getExp() { return _exp; };
+	inline float getExp() const { return _exp; }
 
 	// Add exp to a unit
 	// e - Amount of exp to add
@@ -88,10 +96,16 @@ public:
 	// e - How much exp this unit will have
 	inline void setExp(float e) { _exp = e; }
 
+	// Set the level of this Unit
+	// level - Level to set the Unit to
+	void setLevel(int level);
+
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 	Cooldown _reload; // Time till you can shoot again
+
+	Stats _levelDiff; // How much the stats will grow each level
 
 	float _health; // Current health of this Unit
 	float _maxHealth; // Max health this Unit can have

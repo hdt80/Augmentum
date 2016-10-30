@@ -36,6 +36,9 @@ protected:
 	ParticleDef def;
 
 	Cursor _cursor;
+
+	bool _drawFps; // Draw the FPS counter
+	sf::Text _fpsText; // FPS text to draw
 };
 
 #endif

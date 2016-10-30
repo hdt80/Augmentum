@@ -9,7 +9,7 @@
 #include "Perk.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-// Constructor
+// Constructor and dtor
 ///////////////////////////////////////////////////////////////////////////////
 
 Object::Object(Map* map, float x, float y, Stats s)
@@ -25,7 +25,6 @@ Object::Object()
 
 }
 
-// Object dtor
 Object::~Object() {
 	if (_b2Box) {
 		_map->getWorld()->DestroyBody(_b2Box);
@@ -51,15 +50,15 @@ Object::~Object() {
 // Events
 ////////////////////////////////////////////////////////////////////////////////
 
-void Object::onCollision(Object* o) {
-	//CORE_INFO("%x collided with %x", this, o);
-};
-
 void Object::loadLua() {
 	if (_lua.isLoaded()) {
 		CORE_WARNING("Setting up a loaded Lua script!");
 	}
 }
+
+void Object::onCollision(Object* o) {
+	//CORE_INFO("%x collided with %x", this, o);
+};
 
 void Object::onUpdate(int diff) {
 	_lua.callFunction("onUpdate", diff);
@@ -117,22 +116,17 @@ bool Object::collidesWith(Object* o) const {
 }
 
 bool Object::contains(float px, float py) const {
-	// TODO: Temp code to test Box2d
+	b2Vec2 vec(px, py);
+	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
+		if (fix->TestPoint(vec)) {
+			return true;
+		}
+	}
 	return false;
 }
 
 void Object::move(int diff) {
 	updatePosition(getX(), getY());
-}
-
-void Object::setVelocity(float x, float y) {
-	b2Vec2 vel = _b2Box->GetLinearVelocity();
-	b2Vec2 end(x, y);
-	end *= getSpeed();
-
-	b2Vec2 diff = end - vel;
-	diff *= getSpeed();
-	_b2Box->ApplyLinearImpulseToCenter(diff, true);
 }
 
 void Object::update(int diff) {
@@ -147,6 +141,16 @@ void Object::update(int diff) {
 	}
 }
 
+void Object::setVelocity(float x, float y) {
+	b2Vec2 vel = _b2Box->GetLinearVelocity();
+	b2Vec2 end(x, y);
+	end *= getSpeed();
+
+	b2Vec2 diff = end - vel;
+	diff *= getSpeed();
+	_b2Box->ApplyLinearImpulseToCenter(diff, true);
+}
+
 void Object::updatePosition(float x, float y) {
 	_shape.setPosition(x, y);
 }
@@ -157,6 +161,14 @@ void Object::setStats(Stats s, bool relative) {
 	} else {
 		_baseStats = s;
 	}
+}
+
+float Object::getStat(const std::string& name) const {
+	return _baseStats[name] + _stats[name];
+}
+
+void Object::setStat(const std::string& name, float value) {
+	_stats[name] = value;
 }
 
 void Object::applyStat(Stats s) {

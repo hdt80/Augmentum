@@ -81,8 +81,8 @@ void Unit::shoot(float x, float y) {
 	}
 }
 
-void Unit::shoot(Object* target) {
-
+void Unit::shoot(Target* target) {
+	shoot(target->getX(), target->getY());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -121,18 +121,31 @@ void Unit::applyDamage(float d, Unit* hitter) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Stat methods
+////////////////////////////////////////////////////////////////////////////////
+
+float Unit::getStat(const std::string& name) const {
+	// Add the stats gained from the levels
+	return _baseStats[name] + (_levelDiff[name] * getLevel()) + _stats[name];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Exp methods
 ////////////////////////////////////////////////////////////////////////////////
 
-float Unit::getExpForCurrentLevel() {
+float Unit::getExpForCurrentLevel() const {
 	return getExp() - ExperienceHelper::levelToExp(
 			ExperienceHelper::expToLevel(getExp()));
 }
 
-float Unit::getExpToNextLevel() {
+float Unit::getExpToNextLevel() const {
 	return ExperienceHelper::getRemainingExp(_exp);
 }
 
-int Unit::getLevel() {
+int Unit::getLevel() const {
 	return ExperienceHelper::expToLevel(_exp);
+}
+
+void Unit::setLevel(int level) {
+	_exp = ExperienceHelper::levelToExp(level);
 }

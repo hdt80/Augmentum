@@ -70,6 +70,12 @@ public:
 	// Render to the target window
 	virtual void render(sf::RenderWindow&);
 
+	// Get the GuiComp at point x, y
+	// x - X coord of the window
+	// y - Y coord of the window
+	// returns: The first GuiComp at x y, or nullptr if no GuiComp is there
+	GuiComponent* getComponentAt(float x, float y);
+
 protected:
 	Window();
 
@@ -77,12 +83,6 @@ protected:
 	// comp - GuiComponent to add
 	// depth - How far down the GuiComp should be at. Depth of 0 is highest
 	void addComponent(GuiComponent* comp, int depth = 0);
-
-	// Get the GuiComp at point x, y
-	// x - X coord of the window
-	// y - Y coord of the window
-	// returns: The first GuiComp at x y, or nullptr if no GuiComp is there
-	GuiComponent* getComponentAt(float x, float y);
 
 	bool _drawCompBounds; // Draw the bounds of the components in this Window?
 	GuiComponent* _hoveredComp; // GuiComp the mouse has hovered over

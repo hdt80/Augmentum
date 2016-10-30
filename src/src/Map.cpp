@@ -1,4 +1,5 @@
 #include "Map.h"
+
 #include <string>
 
 #include "Logger.h"
@@ -8,7 +9,6 @@ bool isEnemy(Object* o) { return dynamic_cast<Enemy*>(o) != nullptr; }
 bool isTower(Object* o) { return dynamic_cast<Tower*>(o) != nullptr; }
 bool isProjectile(Object* o) { return dynamic_cast<Projectile*>(o) != nullptr; }
 
-// String representation of an Object
 std::string getType(Object* o) {
 	if (isEnemy(o)) {
 		return "Enemy";
@@ -137,5 +137,27 @@ Object* Map::objectAt(Object* o, float x, float y) {
 }
 
 void Map::spawnEnemy(float x, float y, int enemyId, int level) {
+	Enemy* e = nullptr;
+	if (EnemyType::idInUse(enemyId)) {
+		e = new Enemy(this, x, y, *EnemyType::getById(enemyId));	
+	} else { 
+		e = new Enemy(this, x, y, *EnemyType::getDefaultType());
+	}
 
+	if (e == nullptr) {
+		CORE_ERROR("e is null???");
+		return;
+	}
+
+	// Level of -1 means scale the Enemy with the distance from (0, 0)
+	if (level == -1) {
+		level = e->distanceWith(_origin.X, _origin.Y);
+	}
+
+	e->setLevel(level);
+
+	CORE_INFO("Spawning at enemy at (%g, %g), Type: %d, Level: %d",
+			x, y, enemyId, level);
+
+	addObject(e);
 }

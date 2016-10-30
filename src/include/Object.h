@@ -111,23 +111,33 @@ public:
 	Stats getStats() const { return _stats + _baseStats; }
     Stats getBaseStats() const { return _baseStats; };
 
-	// Get specific stats
-	int getSpeed() const { return _stats["speed"] + _baseStats["speed"]; }
-	int getRange() const { return _stats["range"] + _baseStats["range"]; }
-	float getFireRate() const { return _stats["fireRate"]
-		+ _baseStats["fireRate"]; }
-	float getDamage() const { return _stats["damage"] + _baseStats["damage"] ; }
-	float getAccel() const { return _stats["accel"] + _baseStats["accel"] ; }
-	float getProjSpeed() const { return _stats["projSpeed"]
-		+ _baseStats["projSpeed"]; }
+	// Get a stat
+	// name - Name of the stat to get
+	// returns: The value of the stat with the matching name
+	virtual float getStat(const std::string& name) const;
 
-	// Stats setters
-	void setRange(int r) { _stats["range"] = r; }
-	void setFireRate(float r) { _stats["fireRate"] = r; }
-	void setDamage(float d) { _stats["damage"] = d; }
-	void setSpeed(int s) { _stats["speed"] = s; }
-	void setAccel(float f) { _stats["accel"] = f; }
-	void setProjSpeed(float f) { _stats["projSpeed"] = f; }
+	// Set the value of a stat
+	// name - Name of the stat to set
+	// value - Value to set the stat to
+	void setStat(const std::string& name, float value);
+
+	// Specific stat getters ///////////////////////////////////////////////////
+	
+	// Getters
+	float getSpeed() const { return getStat("speed"); }
+	float getRange() const { return getStat("range"); }
+	float getFireRate() const { return getStat("fireRate"); }
+	float getDamage() const { return getStat("damage"); }
+	float getAccel() const { return getStat("accel"); }
+	float getProjSpeed() const { return getStat("projSpeed"); }
+
+	// Setters
+	void setRange(int r) { setStat("range",  r); }
+	void setFireRate(float r) { setStat("fireRate",  r); }
+	void setDamage(float d) { setStat("damage", d); }
+	void setSpeed(int s) { setStat("speed", s); }
+	void setAccel(float f) { setStat("accel", f); }
+	void setProjSpeed(float f) { setStat("projSpeed",f); }
 
 	// Perk methods ////////////////////////////////////////////////////////////
 	
@@ -159,7 +169,8 @@ public:
 	// returns: Pointer to the target of this Object
 	Target* getTarget() const { return _target; }
 
-	//
+	// Get the direction this Object is heading towards
+	// returns: _direction
 	Vector2 getDirection() const { return _direction; }
 
 	// Get if this Object is to be removed in the next update of the Map
@@ -210,15 +221,20 @@ public:
 	Vector2 getVelocity() { return Vector2(_b2Box->GetLinearVelocity().x,
 			_b2Box->GetLinearVelocity().y); }
 
+	// Get the world position of this Object
+	// returns: the X coord of the world position
 	virtual float getX() { return _b2Box->GetPosition().x; }
+
+	// Get the world position of this Object
+	// returns: the Y coord of the world position
 	virtual float getY() { return _b2Box->GetPosition().y; }
 
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
-	sf::CircleShape _shape;
+	sf::CircleShape _shape; // Shape to draw the OBject with
 
-	b2Body* _b2Box;
+	b2Body* _b2Box; // Collision box used in Box2D
 
 	Map* _map; // Map this object is located on
 
@@ -237,7 +253,7 @@ protected:
 	Stats _stats;
 
 	Target* _target; // Target the enemy is running to (can be coord or enemy)
-	Vector2 _direction;
+	Vector2 _direction; // Direction this Object is moving in
 
 	bool _toRemove; // Is this object marked for removal?
 };

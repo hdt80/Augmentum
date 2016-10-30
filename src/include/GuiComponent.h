@@ -122,9 +122,11 @@ public:
 	const Window* getWindow() { return _window; }
 
 	// Get the view representing this GuiComponent
+	// returns: _view
 	sf::View getView() { return _view; }
 
 	// Updating getter and setter //////////////////////////////////////////////
+	
 	bool isUpdating() const { return _updating; }
 	void setUpdating(bool b) { this->_updating = b; }
 
@@ -153,6 +155,5 @@ protected:
 
 	Window* _window; // Window this GuiComponent is drawn to
 };
-
 
 #endif

@@ -42,10 +42,11 @@ public:
 	void setDefault(T def) { _default = def; }
 
 protected:
-	std::map<std::string, T> _database;
-	 T _default;
+	std::map<std::string, T> _database; // Mapped stored objects
+	 T _default; // Default value
 };
 
+// Database types that are allowed
 namespace Databases {
 	extern Database<sf::Font> FontDatabase;
 	extern Database<GuiEntryStyle> GuiEntryStyleDatabase;

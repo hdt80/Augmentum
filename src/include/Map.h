@@ -98,8 +98,8 @@ protected:
 
 	Ship* _selected; // Ship the player is controlling
 
-	b2World _world;
-	ContactListener* _contactListener;
+	b2World _world; // b2World used for simulations
+	ContactListener* _contactListener; // Contact listener for Box2D collisions
 
 	// How many times to iterate the world
 	int velocityIterations = 6;

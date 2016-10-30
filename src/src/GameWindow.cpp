@@ -15,15 +15,22 @@
 #include "GuiProgressBar.h"
 #include "GuiExpProgressBar.h"
 #include "ExperienceHelper.h"
+#include "components/UnitStatsComponent.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// Static vars
+////////////////////////////////////////////////////////////////////////////////
 
 ParticleEmitter GameWindow::Emitter;
 
 ////////////////////////////////////////////////////////////////////////////////
-// Creation Methods
+// ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
+
 GameWindow::GameWindow(Vector2 size) {
 	_size = size;
 	_name = "Game Window";
+	_drawFps = false;
 
 	sf::Font font;
 	if (font.loadFromFile("res/Pixel.ttf")) {
@@ -31,6 +38,12 @@ GameWindow::GameWindow(Vector2 size) {
 	}
 
 	Databases::FontDatabase.setDefault(font);
+
+	_fpsText.setPosition(12, _size.Y - 40);
+	_fpsText.setFont(*Databases::FontDatabase.getDefault());
+	_fpsText.setOutlineThickness(1.0f);
+	_fpsText.setOutlineColor(sf::Color::Black);
+	_fpsText.setFillColor(sf::Color::White);
 
 	// Style used in the world
 	GuiEntryStyle* worldStyle = new GuiEntryStyle();
@@ -106,6 +119,9 @@ GameWindow::GameWindow(Vector2 size) {
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
 			compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
+	UnitStatsComponent* usComp = new UnitStatsComponent(this, debugStyle,
+			transStyle, Vector2(8, 64), Vector2(240, _size.Y - 24));
+
 	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
 			"HP", progBar, &_map.getSelected()->getHealth(), 0,
 			_map.getSelected()->getMaxHealth()));
@@ -120,6 +136,7 @@ GameWindow::GameWindow(Vector2 size) {
 	//addComponent(dComp);
 	addComponent(hud);
 	addComponent(worldComp);
+	addComponent(usComp);
 
 	def.lifetime = 3.0f;
 	def.coneOfDispersion = 15.0f;
@@ -150,6 +167,7 @@ GameWindow::~GameWindow() {
 ///////////////////////////////////////////////////////////////////////////////
 // State Methods
 ///////////////////////////////////////////////////////////////////////////////
+
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
@@ -158,6 +176,7 @@ void GameWindow::init() {
 ///////////////////////////////////////////////////////////////////////////////
 // Updating Methods
 ///////////////////////////////////////////////////////////////////////////////
+
 void GameWindow::update(int diff) {
 	Window::update(diff);
 	
@@ -173,6 +192,10 @@ void GameWindow::update(int diff) {
 
 	GameWindow::Emitter.update(diff);
 	_cursor.update(diff);
+
+	if (_drawFps) {
+		_fpsText.setString(convert::format("%d", Game::Fps.getFPS()));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -206,6 +229,8 @@ void GameWindow::keyEvent(sf::Event& e) {
 		_map.getSelected()->addExp(1.0f);
 	} else if (e.key.code == sf::Keyboard::J) {
 		_map.getSelected()->addExp(-1.0f);
+	} else if (e.key.code == sf::Keyboard::F) {
+		_drawFps = !_drawFps;
 	}
 }
 
@@ -221,7 +246,7 @@ void GameWindow::mouseEvent(sf::Event& e) {
 	if (e.mouseButton.button == sf::Mouse::Left) {
 		_map.getSelected()->shoot(worldPos.x, worldPos.y);
 	} else if (e.mouseButton.button == sf::Mouse::Right) {
-		_map.spawnEnemy(worldPos.x, worldPos.y, 0, 5);
+		_map.spawnEnemy(worldPos.x, worldPos.y, 0, -1);
 	}
 }
 
@@ -230,6 +255,10 @@ void GameWindow::render(sf::RenderWindow& window) {
 
 	Window::render(window);
 	window.draw(_cursor); // Draw cursor on top
+
+	if (_drawFps) {
+		window.draw(_fpsText);
+	}
 }
 
 //void GameWindow::renderMap(sf::RenderWindow& window) {
