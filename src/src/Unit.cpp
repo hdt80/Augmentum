@@ -41,6 +41,10 @@ Unit::Unit(Map* map, float x, float y, Stats s, int sides, sf::Color c)
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
 	_b2Box->CreateFixture(&fd);
+
+	if (_b2Box) {
+		_b2Box->SetUserData(this);
+	}
 }
 
 Unit::~Unit() {}

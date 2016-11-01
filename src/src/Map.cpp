@@ -93,15 +93,15 @@ void Map::update(int diff) {
 }
 
 void Map::calcCollisions() {
-	for (unsigned int i = 0; i < objects.size(); ++i) {
-		for (unsigned int j = 0; j < objects.size(); ++j) {
-			// Ensure that we aren't checking with ourself
-			if (objects[i] != objects[j] &&
-					objects[i]->collidesWith(objects[j])) {
-				objects[i]->onCollision(objects[j]);
-			}
-		}
-	}
+	//for (unsigned int i = 0; i < objects.size(); ++i) {
+	//	for (unsigned int j = 0; j < objects.size(); ++j) {
+	//		// Ensure that we aren't checking with ourself
+	//		if (objects[i] != objects[j] &&
+	//				objects[i]->collidesWith(objects[j])) {
+	//			objects[i]->onCollision(objects[j]);
+	//		}
+	//	}
+	//}
 }
 
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {

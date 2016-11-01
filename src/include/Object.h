@@ -21,8 +21,9 @@ enum ObjectType {
 	BOUNDARY	= 0x0002,
 	FRIENDLY	= 0x0004,
 	ENEMY		= 0x0008,
+	PROJECTILE  = 0x0016,
 
-	COUNT		= 0x0004 // How many types there are
+	COUNT		= 0x0005 // How many types there are
 };
 
 class Object : public Target, public sf::Drawable, public sf::Transformable {
@@ -132,12 +133,12 @@ public:
 	float getProjSpeed() const { return getStat("projSpeed"); }
 
 	// Setters
-	void setRange(int r) { setStat("range",  r); }
+	void setRange(int r) { setStat("range", r); }
 	void setFireRate(float r) { setStat("fireRate",  r); }
 	void setDamage(float d) { setStat("damage", d); }
 	void setSpeed(int s) { setStat("speed", s); }
 	void setAccel(float f) { setStat("accel", f); }
-	void setProjSpeed(float f) { setStat("projSpeed",f); }
+	void setProjSpeed(float f) { setStat("projSpeed", f); }
 
 	// Perk methods ////////////////////////////////////////////////////////////
 	
@@ -229,8 +230,28 @@ public:
 	// returns: the Y coord of the world position
 	virtual float getY() { return _b2Box->GetPosition().y; }
 
+	// Collision methods ///////////////////////////////////////////////////////
+	
+	// Add a new Object to the collision
+	// o - Object to add
+	void addCollision(Object* o);
+
+	// Remove an Object from the collisions
+	// o - Object to remove
+	void removeCollision(Object* o);
+
+	// Clear all collisions
+	void clearCollisions();
+
+	// See if an Object is collided with an Object
+	// o - Object to check
+	// returns: If o is found in _collisions
+	bool hasCollision(Object* o) const;
+
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
+
+	std::vector<Object*> _collisions; // Vector of collisions
 
 	sf::CircleShape _shape; // Shape to draw the OBject with
 

@@ -6,14 +6,16 @@
 // Stats ctor
 ////////////////////////////////////////////////////////////////////////////////
 
-Stats::Stats(bool perc) : percent(perc)  {
+Stats::Stats(bool perc)
+		: percent(perc)  {
+
 	// Add default stats
-	addStat("range", 0.0f);
-	addStat("fireRate", 0.0f);
-	addStat("damage", 0.0f);
-	addStat("speed", 1.0f);
-	addStat("projSpeed", 0.0f);
-	addStat("accel", 0.0f);
+	addStat("range", 500.0f);
+	addStat("fireRate", 2.0f); // Attacks per second
+	addStat("damage", 2.0f);
+	addStat("speed", 20.0f);
+	addStat("projSpeed", 50.0f);
+	addStat("accel", 20.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

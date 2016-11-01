@@ -18,6 +18,10 @@ Object::Object(Map* map, float x, float y, Stats s)
 		_baseStats(s), _target(nullptr), _toRemove(false) {
 	
 	setObjectType(ObjectType::DEFAULT);
+
+	if (_b2Box) {
+		_b2Box->SetUserData(this);
+	}
 }
 
 Object::Object()
@@ -111,7 +115,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 bool Object::collidesWith(Object* o) const {
-	// TODO: Temp code to test Box2d
+	return hasCollision(o);
 	return false;
 }
 
@@ -123,6 +127,24 @@ bool Object::contains(float px, float py) const {
 		}
 	}
 	return false;
+}
+
+void Object::addCollision(Object* o) {
+	_collisions.push_back(o);
+
+	this->onCollision(o);
+}
+
+void Object::removeCollision(Object* o) {
+	auto it = std::find(_collisions.begin(), _collisions.end(), o);
+	if (it != _collisions.end()) {
+		_collisions.erase(it);
+	}
+}
+
+bool Object::hasCollision(Object* o) const {
+	return std::find(_collisions.begin(), _collisions.end(), o)
+		!= _collisions.end();
 }
 
 void Object::move(int diff) {

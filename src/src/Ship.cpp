@@ -24,32 +24,8 @@ Ship::Ship(Map* map, float x, float y, Stats s)
 // color - What color to draw this Ship
 Ship::Ship(Map* map, float x, float y, Stats s,	int sides, sf::Color color)
  	: Unit(map, x, y, s, sides, color) {
-	
-	//_shape.setRadius(20);
-	//_shape.setPointCount(sides);
-	//_shape.setFillColor(color);
-	//_shape.setOutlineColor(sf::Color::Black);
-	//_shape.setOutlineThickness(-3.0f);
 
-	//_b2Box = nullptr;
-
-	//b2BodyDef bdf;
-	//bdf.type = b2_dynamicBody;
-	//bdf.position.Set(x, y);
-	//bdf.angle = 0; // Radians
-	//_b2Box = map->getWorld()->CreateBody(&bdf);
-
-	//b2CircleShape cs;
-	//cs.m_p.Set(0, 0);
-	//cs.m_radius = 20;
-
-	//b2PolygonShape dBox;
-	//dBox.SetAsBox(10.0f, 10.0f);
-
-	//b2FixtureDef fd;
-	////fd.shape = &cs;
-	//fd.shape = &dBox;
-	//fd.density = 1.0f;
-	//fd.friction = 0.4f;
-	//_b2Box->CreateFixture(&fd);
+	if (_b2Box) {
+		_b2Box->SetUserData(this);
+	}
 }

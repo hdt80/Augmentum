@@ -50,6 +50,7 @@ public:
 	// Methods ////////////////////////////////////////////////////////////////
 
 	// Update this component based on how many microseconds have passed
+	// diff - Microseconds to simulate the GuiEntry for
 	void virtual update(int diff);
 
 	// Inherited from sf::Drawable

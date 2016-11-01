@@ -8,6 +8,7 @@
 #include "Unit.h"
 #include "Logger.h"
 #include "Map.h"
+#include "BitWise.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -51,6 +52,10 @@ Projectile::Projectile(Map* map, Target* t, Unit* shooter, Color c)
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
 	_b2Box->CreateFixture(&fd);
+
+	BitWise::bitOn(_objType, ObjectType::PROJECTILE);
+
+	_b2Box->SetUserData(this);
 }
 
 Projectile::~Projectile() {}
