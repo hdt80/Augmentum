@@ -62,11 +62,12 @@ EnemyType::EnemyType(int id, const std::string& name, int sides,
 // Constuctor and deconstrctor
 ///////////////////////////////////////////////////////////////////////////////
 
-Enemy::Enemy(Map* map, float x, float y, EnemyType type)
-	: Unit(map, x, y, type.getDefaultStats(), type.getSides(), sf::Color::Red),
+Enemy::Enemy(Map* map, float x, float y, int size, EnemyType type)
+	: Unit(map, x, y, type.getDefaultStats(), size,
+			type.getSides(), sf::Color::Red),
 		_enemyType(type) {
 
-	_shape.setRadius(20);
+	_shape.setRadius(size);
 	_shape.setFillColor(sf::Color::Red);
 
 	_hpBar.setFillColor(sf::Color::Green);

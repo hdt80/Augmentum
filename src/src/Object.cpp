@@ -12,7 +12,7 @@
 // Constructor and dtor
 ///////////////////////////////////////////////////////////////////////////////
 
-Object::Object(Map* map, float x, float y, Stats s)
+Object::Object(Map* map, float x, float y, Stats s, int size)
 	: Target(x, y),
 		_b2Box(nullptr), _map(map), _tree(nullptr),  _attackerCount(0),
 		_baseStats(s), _target(nullptr), _toRemove(false) {
@@ -25,7 +25,7 @@ Object::Object(Map* map, float x, float y, Stats s)
 }
 
 Object::Object()
-	: Object(nullptr, 0.0f, 0.0f, Stats()) {
+	: Object(nullptr, 0.0f, 0.0f, Stats(), 20) {
 
 }
 

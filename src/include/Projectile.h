@@ -10,10 +10,11 @@ class Projectile : public Object {
 public:
 	// Projectile Ctor
 	// map - Map 
+	// size - Size in pixels of this Projectile
 	// t - Target to move towards
 	// shooter - Who shot this Projectile
 	// color - Color to draw the Projectile as
-	Projectile(Map* map, Target* t, Unit* shooter, Color c);
+	Projectile(Map* map, int size, Target* t, Unit* shooter, Color c);
 	virtual ~Projectile();
 
 	//

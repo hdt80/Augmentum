@@ -89,8 +89,9 @@ public:
 	// map - Map to create this Enemy at
 	// x - X coord of the map to create the Enemy at
 	// y - Y coord of the map to create the Enemy at
+	// size - Size in pixels of this Enemy
 	// type - EnemyType this is
-	Enemy(Map* map, float x, float y, EnemyType type);
+	Enemy(Map* map, float x, float y, int size, EnemyType type);
 
 	// Enemy dtor
 	virtual ~Enemy();

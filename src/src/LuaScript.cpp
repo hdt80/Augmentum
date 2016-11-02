@@ -81,7 +81,7 @@ void LuaScript::defineTower() {
 void LuaScript::defineObject() {
 	lua.new_usertype<Object> (
 		"Object", sol::constructors<
-				sol::types<Map*, float, float, Stats>>(),
+				sol::types<Map*, float, float, Stats, int>>(),
 		"getX", &Object::getX,
 		"getY", &Object::getY,
 		// Object methods
@@ -131,7 +131,7 @@ void LuaScript::definePerk() {
 void LuaScript::defineEnemy() {
 	lua.new_usertype<Enemy> (
 		"Enemy", sol::constructors<
-				sol::types<Map*, float, float, EnemyType>>(),
+				sol::types<Map*, float, float, int, EnemyType>>(),
 		// Target methods
 		"getX", &Enemy::getX,
 		"getY", &Enemy::getY,

@@ -6,8 +6,22 @@
 
 class Unit : public Object {
 public:
+	// ctor and dtor ///////////////////////////////////////////////////////////
+	
+	// nullary ctor
 	Unit();
-	Unit(Map* map, float x, float y, Stats s, int sides, sf::Color c);
+
+	// Unit ctor
+	// map - Map this Unit is a part of
+	// x - X coord of the world to create this Unit at
+	// y - Y coord of the world to create this Unit at 
+	// s - Stats this Unit will use
+	// size - Size in pixels of this Unit
+	// sides - How many sides this Unit has
+	// c - Color to draw this Unit
+	Unit(Map* map, float x, float y, Stats s, int size, int sides, sf::Color c);
+
+	// Unit dtor
 	virtual ~Unit();
 
 	// Methods /////////////////////////////////////////////////////////////////

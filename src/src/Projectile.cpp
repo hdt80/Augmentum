@@ -13,8 +13,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
-Projectile::Projectile(Map* map, Target* t, Unit* shooter, Color c)
-	: Object(map, shooter->getX(), shooter->getY(), shooter->getStats()),
+Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
+	: Object(map, shooter->getX(), shooter->getY(), shooter->getStats(), size),
 		_color(c), _shooter(shooter) {
 
 	// Speed of this Projectile is stored in Tower's projSpeed, not speed

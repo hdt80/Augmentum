@@ -8,7 +8,7 @@ public:
 	//
 	Ship(Map* map, float x, float y, Stats s);
 	//
-	Ship(Map* map, float x, float y, Stats s, int sides, sf::Color c);
+	Ship(Map* map, float x, float y, Stats s, int size, int sides, sf::Color c);
 
 	// Get how many sides this Ship has
 	// returns: How many sides this Ship has

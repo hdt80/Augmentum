@@ -12,7 +12,7 @@
 // Constuctor and deconstrctor
 ///////////////////////////////////////////////////////////////////////////////
 Tower::Tower(Map* map, float x, float y, Stats s)
-	: Object(map, x, y, s),
+	: Object(map, x, y, s, 20),
 		_lastShot(0.0f) {
 
 	_shape.setRadius(TOWER_WIDTH);
@@ -70,7 +70,7 @@ void Tower::update(int diff) {
 	if (_target == nullptr) {
 		std::vector<Object*>& enemies = _map->objects;
 		for (unsigned int i = 0; i < enemies.size(); ++i) {
-			if (isEnemy(enemies[i])) {
+			if (Map::toEnemy(enemies[i])) {
 				if (distanceWith(enemies[i]) < getRange()) {
 					_target = enemies[i];
 					// We are attacking this enemy. Add one attacker

@@ -37,7 +37,8 @@ public:
 	// x - X position of the map to create the Object at
 	// y - Y position of the map to create the Object at
 	// s - Stats this Object spawns with
-	Object(Map* map, float x, float y, Stats s);
+	// size - Size in pixels of this Object
+	Object(Map* map, float x, float y, Stats s, int size);
 
 	// Object dtor
 	virtual ~Object();
@@ -148,7 +149,7 @@ public:
 	Perk* getPerk(int index) { return _perks[index]; }
 	Perk* getPerk(std::string name); // nullptr if no Perk with that name
 
-	// Other getters ///////////////////////////////////////////////////////////
+	// Object type getter and setter ///////////////////////////////////////////
 	
 	// Get what type of Object this is
 	// returns: Enum of _objType
@@ -158,9 +159,15 @@ public:
 	// type - Type to set the ObjectType to
 	void setObjectType(ObjectType type);// { _objType = type; }
 
+	// Other getters ///////////////////////////////////////////////////////////
+	
 	// Get the Map this Object is on
 	// returns: Pointer to the Map this Object is on
 	Map* getMap() const { return _map; }
+
+	// Get the size of this Object
+	// returns: _size
+	int getSize() const { return _size; }
 
 	// Get the perks attached to this Object
 	// returns: Reference to the vector of perks this Object has
@@ -203,6 +210,10 @@ public:
 	void setTarget(Target* t);
 	void setToRemove(bool b) { _toRemove = b; }
 	void setSkillTree(SkillTree* tree);
+
+	// Set the size of this Object
+	// size - New size to use
+	void setSize(int size) { _size = size; }
 
 	// Movement methods ////////////////////////////////////////////////////////
 	
@@ -266,6 +277,8 @@ protected:
 
 	ObjectType _objType; // What type of Object this is
 	int _attackerCount; // Number of Objects that have targetted us
+
+	int _size; // How many pixels wide this Object is
 
 	// Base stats are the stats that all perks base off of
 	// Base stats only change on a level

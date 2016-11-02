@@ -5,20 +5,20 @@
 #include "Logger.h"
 #include "Ship.h"
 
-bool isEnemy(Object* o) { return dynamic_cast<Enemy*>(o) != nullptr; }
-bool isTower(Object* o) { return dynamic_cast<Tower*>(o) != nullptr; }
-bool isProjectile(Object* o) { return dynamic_cast<Projectile*>(o) != nullptr; }
+////////////////////////////////////////////////////////////////////////////////
+// Static methods
+////////////////////////////////////////////////////////////////////////////////
 
-std::string getType(Object* o) {
-	if (isEnemy(o)) {
-		return "Enemy";
-	} else if (isProjectile(o)) {
-		return "Projectile";
-	} else if (isTower(o)) {
-		return "Tower";
-	} else {
-		return "Object (Unknown)";
-	}
+Enemy* Map::toEnemy(Object* o) {
+	return dynamic_cast<Enemy*>(o);
+}
+
+Ship* Map::toShip(Object* o) {
+	return dynamic_cast<Ship*>(o);
+}
+
+Projectile* Map::toProjectile(Object* o) {
+	return dynamic_cast<Projectile*>(o);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ Map::Map()
 	Stats s;
 	s["speed"] = 20.0f;
 	s["projSpeed"] = 50.0f;
-	_selected = new Ship(this, 0.0f, 0.0f, s, 4, sf::Color::Blue);
+	_selected = new Ship(this, 0.0f, 0.0f, s, 20, 4, sf::Color::Blue);
 	_selected->setMaxHealth(30.0f);
 	_selected->setObjectType(ObjectType::FRIENDLY);
 
@@ -120,6 +120,7 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 
 bool Map::collisionAtPlace(Object* o, float x, float y) {
 	// TODO: Temp code to test Box2d
+	return objectAt(o, x, y) != nullptr;
 	return false;
 }
 
@@ -139,9 +140,9 @@ Object* Map::objectAt(Object* o, float x, float y) {
 void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 	Enemy* e = nullptr;
 	if (EnemyType::idInUse(enemyId)) {
-		e = new Enemy(this, x, y, *EnemyType::getById(enemyId));	
+		e = new Enemy(this, x, y, 20, *EnemyType::getById(enemyId));	
 	} else { 
-		e = new Enemy(this, x, y, *EnemyType::getDefaultType());
+		e = new Enemy(this, x, y, 20, *EnemyType::getDefaultType());
 	}
 
 	if (e == nullptr) {
