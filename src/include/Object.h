@@ -83,11 +83,6 @@ public:
 
 	// Update methods //////////////////////////////////////////////////////////
 	
-	// If that point is within our collision box
-	// x - X coord of the map to check
-	// y - Y coord of the map to check
-	// returns: If the point (x, y) is within the boundbox of this Object
-	bool contains(float x, float y) const;
 
 	// Moves the object depending on it's target, updating it's position
 	// diff - Milliseconds the object is supposed to move for
@@ -259,6 +254,12 @@ public:
 	// returns: If o is found in _collisions
 	bool hasCollision(Object* o) const;
 
+	// If that point is within our collision box
+	// x - X coord of the map to check
+	// y - Y coord of the map to check
+	// returns: If the point (x, y) is within the boundbox of this Object
+	bool contains(float x, float y) const;
+
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
@@ -278,7 +279,7 @@ protected:
 	ObjectType _objType; // What type of Object this is
 	int _attackerCount; // Number of Objects that have targetted us
 
-	int _size; // How many pixels wide this Object is
+	int _size; // Radius in pixels of this Object
 
 	// Base stats are the stats that all perks base off of
 	// Base stats only change on a level

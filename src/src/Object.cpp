@@ -15,7 +15,7 @@
 Object::Object(Map* map, float x, float y, Stats s, int size)
 	: Target(x, y),
 		_b2Box(nullptr), _map(map), _tree(nullptr),  _attackerCount(0),
-		_baseStats(s), _target(nullptr), _toRemove(false) {
+		_size(size), _baseStats(s), _target(nullptr), _toRemove(false) {
 	
 	setObjectType(ObjectType::DEFAULT);
 
@@ -154,6 +154,7 @@ void Object::move(int diff) {
 void Object::update(int diff) {
 	onUpdate(diff);
 
+	// Update each perk
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->update(diff);
 		if (_perks[i]->isToRemove()) {
@@ -174,7 +175,7 @@ void Object::setVelocity(float x, float y) {
 }
 
 void Object::updatePosition(float x, float y) {
-	_shape.setPosition(x, y);
+	_shape.setPosition(getX() - getSize(), getY() - getSize());
 }
 
 void Object::setStats(Stats s, bool relative) {
