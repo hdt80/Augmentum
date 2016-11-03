@@ -82,7 +82,6 @@ public:
 	virtual void onDeath();
 
 	// Update methods //////////////////////////////////////////////////////////
-	
 
 	// Moves the object depending on it's target, updating it's position
 	// diff - Milliseconds the object is supposed to move for
@@ -221,7 +220,7 @@ public:
 	// Update the position of this Object all all vars
 	// x - X coord of the map to update to
 	// y - Y coord of the map to update to
-	void updatePosition(float x, float y);
+	virtual void updatePosition(float x, float y);
 
 	// Get the current linear velocity
 	// returns: A Vector2 of the current linear velocity of this Object

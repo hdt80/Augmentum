@@ -18,7 +18,7 @@ EnemyType* EnemyType::getById(int id) {
 }
 
 bool EnemyType::idInUse(unsigned int id) {
-	return id < _types.size();
+	return (id < _types.size());
 }
 
 int EnemyType::createEnemyType(int id, const std::string& name, int sides,
@@ -64,13 +64,10 @@ EnemyType::EnemyType(int id, const std::string& name, int sides,
 
 Enemy::Enemy(Map* map, float x, float y, int size, EnemyType type)
 	: Unit(map, x, y, type.getDefaultStats(), size,
-			type.getSides(), sf::Color::Red),
-		_enemyType(type) {
+			type.getSides(), sf::Color::Red), _enemyType(type) {
 
 	_shape.setRadius(size);
 	_shape.setFillColor(sf::Color::Red);
-
-	_hpBar.setFillColor(sf::Color::Green);
 
 	loadLua();
 	_lua.loadScript("./lua/enemy.lua");
@@ -90,12 +87,3 @@ void Enemy::loadLua() {
 
 	_lua.lua.set("me", this);
 }
-
-void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(_shape);
-	target.draw(_hpBar);
-}
-
-//void Enemy::update(int diff) {
-//	Object::update(diff);
-//}

@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include "Object.h"
 #include "Unit.h"
+#include "FloatingProgressBar.h"
 
 class EnemyType {
 protected:
@@ -114,10 +115,7 @@ public:
 	const EnemyType& getEnemyType() { return _enemyType; }
 
 protected:
-	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
-	sf::RectangleShape _hpBar;
-
-	const EnemyType _enemyType;
+	const EnemyType _enemyType; // Type of this Enemy
 };
 
 #endif

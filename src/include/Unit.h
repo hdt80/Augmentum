@@ -3,6 +3,7 @@
 
 #include "Object.h"
 #include "Cooldown.h"
+#include "FloatingProgressBar.h"
 
 class Unit : public Object {
 public:
@@ -52,7 +53,17 @@ public:
 
 	// Stats ///////////////////////////////////////////////////////////////////
 	
+	// Get a stat of this Unit
+	// name - Name of the stat to get
+	// returns: The value of the stat with the matching name
 	virtual float getStat(const std::string& name) const;
+
+	// Position methods ////////////////////////////////////////////////////////
+	
+	// Update the position of this Unit
+	// x - X pos to update to
+	// y - Y pos to update to
+	virtual void updatePosition(float x, float y);
 
 	// Health getters and setters //////////////////////////////////////////////
 	
@@ -74,11 +85,11 @@ public:
 
 	// Set the current health of this Unit
 	// h - New health of this Unit
-	virtual void setHealth(float h) { _health = h; }
+	virtual void setHealth(float h);
 	
 	// Set the max health a Unit can have
 	// h - Max health of this unit
-	virtual void setMaxHealth(float h) { _maxHealth = h; }
+	virtual void setMaxHealth(float h);
 
 	// Exp helper methods //////////////////////////////////////////////////////
 
@@ -123,6 +134,7 @@ protected:
 
 	float _health; // Current health of this Unit
 	float _maxHealth; // Max health this Unit can have
+	FloatingProgressBar _hpBar; // Health bar
 
 	float _exp; // Current experience of this Unit
 	int _prevLevel; // Used to check if the Unit has gone up a level

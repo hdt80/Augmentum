@@ -7,13 +7,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
-Unit::Unit() {}
+Unit::Unit()
+	: Unit(nullptr, 0, 0, Stats(), 0, 0, sf::Color::Black) {
+	
+}
 
 Unit::Unit(Map* map, float x, float y, Stats s, int size,
 		int sides, sf::Color c)
 	: Object(map, x, y, s, size),
-		_reload(4 * 1000000), _health(30), _maxHealth(30), _exp(0.0f),
-		_prevLevel(-1) {
+		_reload(4 * 1000000), _health(30), _maxHealth(30),
+		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
+			0, _maxHealth, _health),
+		_exp(0.0f),	_prevLevel(-1) {
 
 	_shape.setRadius(size);
 	_shape.setPointCount(sides);
@@ -31,14 +36,10 @@ Unit::Unit(Map* map, float x, float y, Stats s, int size,
 
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);
-	cs.m_radius = 20;
-
-	b2PolygonShape dBox;
-	dBox.SetAsBox(10.0f, 10.0f);
+	cs.m_radius = getSize();
 
 	b2FixtureDef fd;
-	//fd.shape = &cs;
-	fd.shape = &dBox;
+	fd.shape = &cs;
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
 	_b2Box->CreateFixture(&fd);
@@ -94,6 +95,12 @@ void Unit::shoot(Target* target) {
 // Updating methods
 ////////////////////////////////////////////////////////////////////////////////
 
+void Unit::updatePosition(float x, float y) {
+	Object::updatePosition(x, y);	
+
+	_hpBar.setPosition(x - getSize(), y - getSize());
+}
+
 void Unit::update(int diff) {
 	_reload.update(diff);
 	if (getLevel() != _prevLevel) {
@@ -105,6 +112,7 @@ void Unit::update(int diff) {
 
 void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 	target.draw(_shape);
+	target.draw(_hpBar);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,15 +120,15 @@ void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Unit::applyDamage(float d, Unit* hitter) {
-	_health += d;
+	setHealth(getHealth() + d);
 
 	// If d is negative (a heal) and we go above max health clamp it back
-	if (_health > _maxHealth) {
-		_health = _maxHealth;
+	if (getHealth() > getMaxHealth()) {
+		setHealth(getMaxHealth());
 	}
 
 	// No health left? Kill this Unit off next update
-	if (_health <= 0) {
+	if (getHealth() <= 0) {
 		_toRemove = true;
 	}
 }
@@ -132,6 +140,20 @@ void Unit::applyDamage(float d, Unit* hitter) {
 float Unit::getStat(const std::string& name) const {
 	// Add the stats gained from the levels
 	return _baseStats[name] + (_levelDiff[name] * getLevel()) + _stats[name];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Health methods
+////////////////////////////////////////////////////////////////////////////////
+
+void Unit::setHealth(float f) {
+	_health = f;
+	_hpBar.setCurrentValue(getHealth());
+}
+
+void Unit::setMaxHealth(float f) {
+	_maxHealth = f;
+	_hpBar.setMaxValue(getMaxHealth());
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -31,28 +31,33 @@ public:
 	static void pause();
 
 	// Get if the game is currently shutting down
+	// returns: Tue if the CurrentGameState equals Ending
 	static bool toClose() { return CurrentGameState == Ending; }
+
 	// Set the current GameSate
+	// state - New state of the Game
 	static void setState(GameState state) { CurrentGameState = state; }
 
 	// Add a new Window to the StateManager and begin updating that one
+	// w - Window to follow
 	static void followWindow(Window* w);
 
 	// Get the sf::RenderWindow that we draw everything to
+	// returns: A reference to the SFML RenderWindow used
 	static sf::RenderWindow& getRenderWindow() { return _window; }
 
-	static GameState CurrentGameState;
-	static Window* CurrentWindow;
-	static StateManager WindowManager;
+	static GameState CurrentGameState; // Current state of the game
+	static Window* CurrentWindow; // Current Window being drawn
+	static StateManager WindowManager; // Window manager
 
-	static FPS Fps;
+	static FPS Fps; // FPS Counter
 
-	static DebugDrawer b2DebugDrawer;
+	static DebugDrawer b2DebugDrawer; // Debug drawer
 
 protected:
-	static sf::RenderWindow _window;
+	static sf::RenderWindow _window; // SFML Render being rendered to
 	static PauseWindow _pauseWindow; // Global pause window
-	static Vector2 _size;
+	static Vector2 _size; // Size of the window
 };
 
 #endif

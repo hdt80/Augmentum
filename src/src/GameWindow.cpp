@@ -158,6 +158,17 @@ GameWindow::GameWindow(Vector2 size) {
 	levelPDef.speed = 50.0f;
 	levelPDef.slowDown = false;
 	Databases::ParticleDefDatabase.store("level_up", levelPDef);
+
+	ParticleDef hitDef;
+	hitDef.lifetime = 2.0f;
+	hitDef.coneOfDispersion = 30.0f;
+	hitDef.speedVariation = 20.0f;
+	hitDef.initColor = sf::Color(255, 0, 0);
+	hitDef.endColor = sf::Color(220, 0, 0);
+	hitDef.fade = true;
+	hitDef.speed = 30.0f;
+	hitDef.slowDown = false;
+	Databases::ParticleDefDatabase.store("hit", hitDef);
 }
 
 GameWindow::~GameWindow() {

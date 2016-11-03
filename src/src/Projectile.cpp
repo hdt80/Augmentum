@@ -9,10 +9,13 @@
 #include "Logger.h"
 #include "Map.h"
 #include "BitWise.h"
+#include "GameWindow.h"
+#include "Database.h"
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Constructor
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
 	: Object(map, shooter->getX(), shooter->getY(), shooter->getStats(), size),
 		_color(c), _shooter(shooter) {
@@ -21,7 +24,7 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
 	// so set it to the proper value
 	setSpeed(shooter->getProjSpeed());
 
-	_shape.setRadius(PROJECTILE_WIDTH);
+	_shape.setRadius(size);
 	_shape.setFillColor(sf::Color(120, 120, 120));
 
 	// Set the angle we move at towards the enemy
@@ -41,16 +44,17 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
 
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);
-	cs.m_radius = 5;
+	cs.m_radius = size;
 
 	b2PolygonShape dBox;
-	dBox.SetAsBox(5.0f, 5.0f);
+	dBox.SetAsBox(size, size);
 
 	b2FixtureDef fd;
 	//fd.shape = &cs;
 	fd.shape = &dBox;
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
+	fd.isSensor = true;
 	_b2Box->CreateFixture(&fd);
 
 	BitWise::bitOn(_objType, ObjectType::PROJECTILE);
@@ -82,16 +86,14 @@ void Projectile::onCollision(Object* o) {
 
 	_shooter->onDamageDealt(getDamage(), e);
 
+	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("hit"),
+		getX(), getY(), 30, -1);
+
 	_toRemove = true;
 }
 
-// Overload default Object move, we don't want it to stop ocne we reach the
-// target, we want it to keep moving
 void Projectile::move(int diff) {
 	updatePosition(getX(), getY());
-	//double deltaMove = (double)getSpeed() * 0.000001f * diff;
-	//x += _direction.X * deltaMove;
-	//y += _direction.Y * deltaMove;
 }
 
 void Projectile::update(int diff) {

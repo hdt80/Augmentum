@@ -2,6 +2,7 @@
 #include "Logger.h"
 
 #include "Object.h"
+#include "BitWise.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and Dtor
@@ -32,6 +33,11 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
 	if (userDataB) {
 		b = static_cast<Object*>(userDataB);
+	}
+
+	if (BitWise::bitSet(a->getObjectType(), ObjectType::PROJECTILE) ||
+			BitWise::bitSet(b->getObjectType(), ObjectType::PROJECTILE)) {
+		CORE_INFO("Collision with bullets");
 	}
 
 	if (a && b) {
