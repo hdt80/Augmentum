@@ -161,7 +161,7 @@ GameWindow::GameWindow(Vector2 size) {
 
 	ParticleDef hitDef;
 	hitDef.lifetime = 2.0f;
-	hitDef.coneOfDispersion = 30.0f;
+	hitDef.coneOfDispersion = 45.0f;
 	hitDef.speedVariation = 20.0f;
 	hitDef.initColor = sf::Color(255, 0, 0);
 	hitDef.endColor = sf::Color(220, 0, 0);

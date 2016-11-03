@@ -11,6 +11,7 @@
 #include "BitWise.h"
 #include "GameWindow.h"
 #include "Database.h"
+#include "Convert.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -86,8 +87,10 @@ void Projectile::onCollision(Object* o) {
 
 	_shooter->onDamageDealt(getDamage(), e);
 
+	float angle = convert::toDeg((-_direction).angle());
+
 	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("hit"),
-		getX(), getY(), 30, -1);
+		getX(), getY(), 50, angle);
 
 	_toRemove = true;
 }

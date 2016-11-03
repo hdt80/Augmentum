@@ -8,10 +8,23 @@ public:
 	Vector2(const Vector2& v) : X(v.X), Y(v.Y) {}
 	~Vector2() {};
 
+	// Get the Euclidean distance of this Vector
+	// returns: Euclidean distance of this Vector
 	float length();
+
+	// Get the Euclidean distance squared of this Vector
+	// returns: Euclidean distance of this Vector squared
 	float sqrtLength();
+
+	// Turn this Vector into an angle
+	// returns: Angle of the Vector in degrees
+	float angle();
+
+	// Normalize the Vector
+	// returns: This Vector normalized
 	Vector2 normalize();
-	float X, Y;
+
+	float X, Y; // Coords of this Vector
 
 	void operator = (const Vector2& a_V) {
 		X = a_V.X;
