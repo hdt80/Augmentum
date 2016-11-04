@@ -125,7 +125,7 @@ namespace convert {
 		return toReturn;
 	}
 
-	int toInt(std::string str) {
+	int toInt(const std::string& str) {
 		return strtol(str.c_str(), nullptr, 10);
 	}
 

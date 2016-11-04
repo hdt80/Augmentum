@@ -50,11 +50,11 @@ public:
 	// Size methods ////////////////////////////////////////////////////////////
 
 	// Get the width of this bar
-	// returns: the width of _valueBar
+	// returns: the width of _backgroundBar
 	float getWidth();
 
 	// Get the height of this bar
-	// returns: the height of _valueBar
+	// returns: the height of _backgroundBar
 	float getHeight();
 
 	// Getters /////////////////////////////////////////////////////////////////
@@ -71,21 +71,30 @@ public:
 	// returns: _minValue
 	inline float getMinValue() const { return _minValue; }
 
+	// Get how full the FloatingProgressBar is
+	// returns: _curValue / _maxValue
+	inline float getRatioFull() const {
+		return getCurrentValue() / getMaxValue(); }
+
 	// Setters /////////////////////////////////////////////////////////////////
 	
 	// Set the max value of this bar
 	// f - Max value to set
-	inline void setMaxValue(float f) { _maxValue = f; }
+	void setMaxValue(float f);
 
 	// Set the current value of this bar
 	// f - Current value to set
-	inline void setCurrentValue(float f) { _curValue = f; }
+	void setCurrentValue(float f);
 
 	// Set the min value of this bar
 	// f - Min value to set
-	inline void setMinValue(float f) { _minValue = f; }
+	void setMinValue(float f);
 
 protected:
+	
+	// Update the _valueBar to match the values
+	void updateBar();
+
 	sf::RectangleShape _backgroundBar; // Shape to draw the background
 	sf::RectangleShape _valueBar; // Shape to draw the current value
 

@@ -68,7 +68,7 @@ public:
 	// Health getters and setters //////////////////////////////////////////////
 	
 	// Apply damage to a unit
-	// d - Damage applied. Negative damage will heal
+	// d - Damage applied. Negative damage will heal the Unit
 	// hitter - What Unit shot this Unit
 	void applyDamage(float d, Unit* hitter);
 

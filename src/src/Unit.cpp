@@ -15,10 +15,12 @@ Unit::Unit()
 Unit::Unit(Map* map, float x, float y, Stats s, int size,
 		int sides, sf::Color c)
 	: Object(map, x, y, s, size),
-		_reload(4 * 1000000), _health(30), _maxHealth(30),
+		_reload(1), _health(30), _maxHealth(30),
 		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
 			0, _maxHealth, _health),
 		_exp(0.0f),	_prevLevel(-1) {
+	
+	_reload.setMaxCooldown((1 / getFireRate()) * 1000000);
 
 	_shape.setRadius(size);
 	_shape.setPointCount(sides);
@@ -120,7 +122,7 @@ void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Unit::applyDamage(float d, Unit* hitter) {
-	setHealth(getHealth() + d);
+	setHealth(getHealth() - d);
 
 	// If d is negative (a heal) and we go above max health clamp it back
 	if (getHealth() > getMaxHealth()) {

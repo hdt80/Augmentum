@@ -60,7 +60,7 @@ namespace convert {
 	std::vector<std::string> split(std::string str, char delim);
 
 	// Convert a string to an int
-	int toInt(std::string str);
+	int toInt(const std::string& str);
 
 	// Get the directory that the program is running from
 	// returns: The absolute director the program is running in
@@ -87,6 +87,7 @@ namespace convert {
 	// Format a string similar to how printf does
 	// format - String to format
 	// args - Arguments to format in
+	// returns: A formatted string like how prinf would format it
 	template<typename ... Args>
 	std::string format(const std::string& format, Args ... args) {
 		size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1;
