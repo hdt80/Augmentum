@@ -84,7 +84,6 @@ protected:
 	// depth - How far down the GuiComp should be at. Depth of 0 is highest
 	void addComponent(GuiComponent* comp, int depth = 0);
 
-	bool _drawCompBounds; // Draw the bounds of the components in this Window?
 	GuiComponent* _hoveredComp; // GuiComp the mouse has hovered over
 
 	std::string _name; // Internal name of the Window, should be unique
@@ -92,6 +91,8 @@ protected:
 	Vector2 _size; // width and height of the Window
 
 	WindowState _currState; // Current state the window is in
+
+	bool _drawCompBounds; // Draw the bounds of the components in this Window?
 
 	std::vector<GuiComponent*> _components; // Components in the Window
 };

@@ -33,7 +33,7 @@ int ExperienceHelper::expToLevel(float exp) {
 
 float ExperienceHelper::levelToExp(int level) {
 	if (level > _maxLevel) {
-		return _maxLevel;
+		return _maxValue;
 	}
 	return _levelReqs[level];
 }

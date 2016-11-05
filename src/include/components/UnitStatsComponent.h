@@ -30,6 +30,7 @@ private:
 
 	GuiEntry* _unitPos; // Position of the Unit
 	GuiEntry* _unitVelocity; // Current velocity of the Unit
+	GuiEntry* _unitLevel; // Level/Exp of the Unit
 	GuiEntry* _unitSpeed; // Stat speed of the Unit
 	GuiEntry* _unitRange; // Stat range of the Unit
 	GuiEntry* _unitDamage; // Stat damage of the Unit

@@ -33,7 +33,7 @@ GameWindow::GameWindow(Vector2 size) {
 	_drawFps = false;
 
 	sf::Font font;
-	if (font.loadFromFile("res/Pixel.ttf")) {
+	if (!font.loadFromFile("res/Pixel.ttf")) {
 		CORE_WARN("Couldn't load \'%s\'", "Pixel.ttf");
 	}
 
@@ -242,6 +242,14 @@ void GameWindow::keyEvent(sf::Event& e) {
 		_map.getSelected()->addExp(-1.0f);
 	} else if (e.key.code == sf::Keyboard::F) {
 		_drawFps = !_drawFps;
+	} else if (e.key.code == sf::Keyboard::L) {
+		Unit* u = nullptr;
+		for (Object* o : _map.objects) {
+			if (u = Map::toUnit(o)) {
+				CORE_INFO("%x == Lvl: %d || Exp: %g", u,
+					u->getLevel(), u->getExp());
+			}
+		}
 	}
 }
 
@@ -257,7 +265,7 @@ void GameWindow::mouseEvent(sf::Event& e) {
 	if (e.mouseButton.button == sf::Mouse::Left) {
 		_map.getSelected()->shoot(worldPos.x, worldPos.y);
 	} else if (e.mouseButton.button == sf::Mouse::Right) {
-		_map.spawnEnemy(worldPos.x, worldPos.y, 0, -1);
+		_map.spawnEnemy(worldPos.x, worldPos.y, 1, -1);
 	}
 }
 

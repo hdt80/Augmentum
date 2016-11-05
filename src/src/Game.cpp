@@ -28,6 +28,7 @@ void Game::start() {
 
 	_pauseWindow.setSize(_size);
 
+
 	loop();
 }
 

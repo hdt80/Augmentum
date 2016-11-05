@@ -15,7 +15,7 @@ Stats::Stats(bool perc)
 	addStat("damage", 2.0f);
 	addStat("speed", 20.0f);
 	addStat("projSpeed", 50.0f);
-	addStat("accel", 20.0f);
+	addStat("accel", 1.1f); // % increase
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 #include "Map.h"
 
 #include <string>
+#include <algorithm>
 
 #include "Logger.h"
 #include "Ship.h"
@@ -21,12 +22,16 @@ Projectile* Map::toProjectile(Object* o) {
 	return dynamic_cast<Projectile*>(o);
 }
 
+Unit* Map::toUnit(Object* o) {
+	return dynamic_cast<Unit*>(o);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
 
 Map::Map()
-		: _world(b2Vec2(0.0f, 0.0f)) {
+		: _world(b2Vec2(0.0f, 0.0f)), b2UpdateCounter(0) {
 
 	Stats s;
 	s["speed"] = 20.0f;
@@ -38,6 +43,35 @@ Map::Map()
 	objects.push_back(_selected);
 
 	_contactListener = new ContactListener(&_world);
+
+	Stats et1Def;
+	et1Def["speed"] = 20.0f;
+	et1Def["range"] = 1000.0f;
+	et1Def["fireRate"] = 1.0f;
+	et1Def["accel"] = 5.0f;
+	et1Def["projSpeed"] = 50.0f;
+
+	Stats et1Diff;
+	et1Diff["speed"] = 1.0f;
+	et1Diff["range"] = 50.0f;
+	et1Diff["fireRate"] = 0.08f;
+	et1Diff["accel"] = 0.2f;
+	et1Diff["projSpeed"] = 2.5f;
+
+	EnemyType::createEnemyType(1, "Default", 3, et1Def, et1Diff);
+
+	CORE_INFO("Distances: ");
+	int level = 0;
+	int prevLevel = -1;
+	Target t(0, 0);
+	for (int i = 0; level < 100; ++i) {
+		level = std::sqrt(t.distanceWith(0, i / 10));
+
+		if (level != prevLevel) {
+			CORE_INFO("Distance %d: %d", i, level);
+			prevLevel = level;
+		}
+	}
 }
 
 Map::~Map() {
@@ -152,7 +186,8 @@ void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 
 	// Level of -1 means scale the Enemy with the distance from (0, 0)
 	if (level == -1) {
-		level = e->distanceWith(_origin.X, _origin.Y);
+		level = std::max(1.0f,
+			std::sqrt(e->distanceWith(_origin.X, _origin.Y) / 100));
 	}
 
 	e->setLevel(level);

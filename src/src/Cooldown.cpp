@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 Cooldown::Cooldown(int maxCooldown)
-	: _maxCooldown(maxCooldown) {
+	: _timeLeft(0), _maxCooldown(maxCooldown) {
 
 }
 

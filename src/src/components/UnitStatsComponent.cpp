@@ -23,6 +23,7 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 
 	_unitPos = new GuiEntry(style, pos, "");
 	_unitVelocity = new GuiEntry(style, pos, "");
+	_unitLevel = new GuiEntry(style, pos, "");
 	_unitSpeed = new GuiEntry(style, pos, "");
 	_unitRange = new GuiEntry(style, pos, "");
 	_unitDamage = new GuiEntry(style, pos, "");
@@ -32,12 +33,13 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 
 	addEntry(_unitPos, 0, 0);
 	addEntry(_unitVelocity, 0, 20);
-	addEntry(_unitSpeed, 0, 40);
-	addEntry(_unitRange, 0, 60);
-	addEntry(_unitDamage, 0, 80);
-	addEntry(_unitFireRate, 0, 100);
-	addEntry(_unitProjSpeed, 0, 120);
-	addEntry(_unitAccel, 0, 140);
+	addEntry(_unitLevel, 0, 40);
+	addEntry(_unitSpeed, 0, 60);
+	addEntry(_unitRange, 0, 80);
+	addEntry(_unitDamage, 0, 100);
+	addEntry(_unitFireRate, 0, 120);
+	addEntry(_unitProjSpeed, 0, 140);
+	addEntry(_unitAccel, 0, 160);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +68,8 @@ void UnitStatsComponent::update(int diff) {
 			_hovered->getX(), _hovered->getY()));
 		_unitVelocity->setMessage(convert::format("Vel [%g, %g]",
 			_hovered->getVelocity().X, _hovered->getVelocity().Y));
+		_unitLevel->setMessage(convert::format("Lvl: %d, Exp: %g",
+			_hovered->getLevel(), _hovered->getExp()));
 		_unitSpeed->setMessage(convert::format("Speed: %g", 
 			_hovered->getSpeed()));
 		_unitRange->setMessage(convert::format("Range: %g",
@@ -81,6 +85,7 @@ void UnitStatsComponent::update(int diff) {
 	} else {
 		_unitPos->setMessage("");
 		_unitVelocity->setMessage("");
+		_unitLevel->setMessage("");
 		_unitSpeed->setMessage("");
 		_unitRange->setMessage("");
 		_unitDamage->setMessage("");
@@ -95,6 +100,7 @@ void UnitStatsComponent::draw(sf::RenderTarget& target,
 	
 	target.draw(*_unitPos);
 	target.draw(*_unitVelocity);
+	target.draw(*_unitLevel);
 	target.draw(*_unitSpeed);
 	target.draw(*_unitRange);
 	target.draw(*_unitDamage);

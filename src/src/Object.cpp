@@ -166,11 +166,10 @@ void Object::update(int diff) {
 
 void Object::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();
-	b2Vec2 end(x, y);
-	end *= getSpeed();
+	b2Vec2 end(x * getSpeed(), y * getSpeed());
 
 	b2Vec2 diff = end - vel;
-	diff *= getSpeed();
+	diff *= getAccel();
 	_b2Box->ApplyLinearImpulseToCenter(diff, true);
 }
 

@@ -43,8 +43,10 @@ Unit::Unit(Map* map, float x, float y, Stats s, int size,
 	b2FixtureDef fd;
 	fd.shape = &cs;
 	fd.density = 1.0f;
-	fd.friction = 0.4f;
+	fd.friction = 0.8f;
 	_b2Box->CreateFixture(&fd);
+
+	_b2Box->SetLinearDamping(0.4f);
 
 	if (_b2Box) {
 		_b2Box->SetUserData(this);

@@ -7,9 +7,7 @@
 #include <random>
 
 #include "Logger.h"
-
 #include "Game.h"
-
 #include "Convert.h"
 
 #ifdef _WIN32

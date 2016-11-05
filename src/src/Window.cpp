@@ -7,17 +7,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 ///////////////////////////////////////////////////////////////////////////////
-Window::Window(const std::string& name, Vector2 size) {
-	_size = size;
-	_name = name;
-	_currState = Uninitalized;
-	_drawCompBounds = false;
+Window::Window(const std::string& name, Vector2 size) 
+	: _name(name), _size(size), _currState(Uninitalized),
+		_drawCompBounds(false) {
+
 }
 
-Window::Window() {
-	_name = _name;
-	_size = _size;
-	_currState = Uninitalized;
+Window::Window()
+	: Window("DEFAULT", Vector2(0.0f, 0.0f)) {
 }
 
 Window::~Window() {
