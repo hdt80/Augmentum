@@ -9,11 +9,12 @@ class LuaScript {
 public:
 	LuaScript(bool loadedClasses = true);
 
-	bool isLoaded() { return _loaded; }
-	void setLoaded(bool b) { _loaded = b; }
+	inline bool isLoaded() { return _loaded; }
+	inline void setLoaded(bool b) { _loaded = b; }
 
 	// Load the file at that path. Any filetype can be used
 	void loadScript(const std::string& path);
+
 	// Print the table of the script loaded. 
 	// Useful for debug when objects are nil
 	void printTable();

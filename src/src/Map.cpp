@@ -60,18 +60,18 @@ Map::Map()
 
 	EnemyType::createEnemyType(1, "Default", 3, et1Def, et1Diff);
 
-	CORE_INFO("Distances: ");
-	int level = 0;
-	int prevLevel = -1;
-	Target t(0, 0);
-	for (int i = 0; level < 100; ++i) {
-		level = std::sqrt(t.distanceWith(0, i / 10));
-
-		if (level != prevLevel) {
-			CORE_INFO("Distance %d: %d", i, level);
-			prevLevel = level;
-		}
-	}
+//	CORE_INFO("Distances: ");
+//	int level = 0;
+//	int prevLevel = -1;
+//	Target t(0, 0);
+//	for (int i = 0; level < 100; ++i) {
+//		level = std::sqrt(t.distanceWith(0, i / 10));
+//
+//		if (level != prevLevel) {
+//			CORE_INFO("Distance %d: %d", i, level);
+//			prevLevel = level;
+//		}
+//	}
 }
 
 Map::~Map() {

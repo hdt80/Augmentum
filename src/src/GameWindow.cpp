@@ -16,6 +16,7 @@
 #include "GuiExpProgressBar.h"
 #include "ExperienceHelper.h"
 #include "components/UnitStatsComponent.h"
+#include "LuaConfig.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static vars
@@ -182,6 +183,10 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
+
+	LuaConfig config;
+	config.openConfigFile("./lua/config.lua");
+	CORE_INFO("%d", config.readInt("key"));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -245,7 +250,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 	} else if (e.key.code == sf::Keyboard::L) {
 		Unit* u = nullptr;
 		for (Object* o : _map.objects) {
-			if (u = Map::toUnit(o)) {
+			if ((u = Map::toUnit(o))) { // Extra paren to stop warnings
 				CORE_INFO("%x == Lvl: %d || Exp: %g", u,
 					u->getLevel(), u->getExp());
 			}

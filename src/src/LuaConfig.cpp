@@ -1,0 +1,76 @@
+#include "LuaConfig.h"
+#include "Logger.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
+
+LuaConfig::LuaConfig()
+	: _loaded(false) {
+
+}
+
+LuaConfig::~LuaConfig() {
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
+
+void LuaConfig::openConfigFile(const std::string& path) {
+	try {
+		_name = path;
+		_lua.script_file(path);
+		setLoaded(true);
+
+		sol::table config = _lua["config"];
+
+		_configTable = config.get<sol::table>("config");
+
+	} catch (sol::error e) {
+		setLoaded(false);
+		CORE_ERROR("[Lua Config %x] Error when loading from \"%s\": %s",
+			this, path.c_str(), e.what());
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Reading methods
+////////////////////////////////////////////////////////////////////////////////
+
+float LuaConfig::readFloat(const std::string& key) {
+	return _configTable.get<float>(key);
+}
+
+int LuaConfig::readInt(const std::string& key) {
+	return _configTable.get<int>(key);
+}
+
+bool LuaConfig::readBool(const std::string& key) {
+	return _configTable.get<bool>(key);
+}
+
+std::string LuaConfig::readString(const std::string& key) {
+	return _configTable.get<std::string>(key);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Writing methods
+////////////////////////////////////////////////////////////////////////////////
+
+void LuaConfig::writeFloat(const std::string& key, const float& value) {
+	_lua[key] = value;
+}
+
+void LuaConfig::writeInt(const std::string& key, const int& value) {
+	_lua[key] = value;
+}
+
+void LuaConfig::writeBool(const std::string& key, const bool& value) {
+	_lua[key] = value;
+}
+
+void LuaConfig::writeString(const std::string& key, const std::string& value) {
+	_lua[key] = value;
+}
