@@ -24,10 +24,7 @@ void LuaConfig::openConfigFile(const std::string& path) {
 		_lua.script_file(path);
 		setLoaded(true);
 
-		sol::table config = _lua["config"];
-
-		_configTable = config.get<sol::table>("config");
-
+		_configTable = _lua.get<sol::table>("config");
 	} catch (sol::error e) {
 		setLoaded(false);
 		CORE_ERROR("[Lua Config %x] Error when loading from \"%s\": %s",
@@ -39,20 +36,44 @@ void LuaConfig::openConfigFile(const std::string& path) {
 // Reading methods
 ////////////////////////////////////////////////////////////////////////////////
 
-float LuaConfig::readFloat(const std::string& key) {
-	return _configTable.get<float>(key);
+float LuaConfig::readFloat(const std::string& key) const {
+	try {
+		return _configTable.get<float>(key);
+	} catch (sol::error e) {
+		CORE_ERROR("[Lua Config %x] Error when reading \'%s\' from \"%s\": %s",
+			this, key.c_str(), _name.c_str(), e.what());
+		return -1;
+	}
 }
 
-int LuaConfig::readInt(const std::string& key) {
-	return _configTable.get<int>(key);
+int LuaConfig::readInt(const std::string& key) const {
+	try {
+		return _configTable.get<int>(key);
+	} catch (sol::error e) {
+		CORE_ERROR("[Lua Config %x] Error when reading \'%s\' from \"%s\": %s",
+			this, key.c_str(), _name.c_str(), e.what());
+		return -1;
+	}
 }
 
-bool LuaConfig::readBool(const std::string& key) {
-	return _configTable.get<bool>(key);
+bool LuaConfig::readBool(const std::string& key) const {
+	try {
+		return _configTable.get<bool>(key);
+	} catch (sol::error e) {
+		CORE_ERROR("[Lua Config %x] Error when reading \'%s\' from \"%s\": %s",
+			this, key.c_str(), _name.c_str(), e.what());
+		return false;
+	}
 }
 
-std::string LuaConfig::readString(const std::string& key) {
-	return _configTable.get<std::string>(key);
+std::string LuaConfig::readString(const std::string& key) const {
+	try {
+		return _configTable.get<std::string>(key);
+	} catch (sol::error e) {
+		CORE_ERROR("[Lua Config %x] Error when reading \'%s\' from \"%s\": %s",
+			this, key.c_str(), _name.c_str(), e.what());
+		return "";
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

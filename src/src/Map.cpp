@@ -60,6 +60,8 @@ Map::Map()
 
 	EnemyType::createEnemyType(1, "Default", 3, et1Def, et1Diff);
 
+	EnemyType::loadEnemyType("./lua/config.lua");
+
 //	CORE_INFO("Distances: ");
 //	int level = 0;
 //	int prevLevel = -1;

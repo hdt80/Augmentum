@@ -3,8 +3,9 @@
 
 #include <string>
 #include <map>
+#include "LuaConfigEntry.h"
 
-class Stats {
+class Stats : public LuaConfigEntry {
 public:
 	// Stats ctor //////////////////////////////////////////////////////////////
 	
@@ -40,6 +41,11 @@ public:
 	// s - Stat to get
 	// returns: The value of the stat that matches s
 	float operator[](const std::string& s) const;
+
+	// Methods /////////////////////////////////////////////////////////////////
+	
+	// Inheritred from LuaConfigEntry
+	virtual void readFromTable(const sol::table& table);
 
 	// Print all the value in this Stats
 	void print() const;

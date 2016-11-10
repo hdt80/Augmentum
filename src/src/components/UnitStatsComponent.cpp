@@ -21,6 +21,7 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 		_map = gameWindow->getMap();
 	}
 
+	_unitName = new GuiEntry(style, pos, "");
 	_unitPos = new GuiEntry(style, pos, "");
 	_unitVelocity = new GuiEntry(style, pos, "");
 	_unitLevel = new GuiEntry(style, pos, "");
@@ -40,6 +41,7 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 	addEntry(_unitFireRate, 0, 120);
 	addEntry(_unitProjSpeed, 0, 140);
 	addEntry(_unitAccel, 0, 160);
+	addEntry(_unitName, 0, 180);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,13 @@ void UnitStatsComponent::update(int diff) {
 			_hovered->getAccel()));
 		_unitProjSpeed->setMessage(convert::format("ProjSpeed: %g",
 			_hovered->getProjSpeed()));
+
+		Enemy* e = nullptr;
+
+		if ((e = Map::toEnemy(_hovered))) {
+			_unitName->setMessage(convert::format("Type: %s",
+				e->getEnemyType().getName()));
+		}
 	} else {
 		_unitPos->setMessage("");
 		_unitVelocity->setMessage("");
@@ -92,6 +101,7 @@ void UnitStatsComponent::update(int diff) {
 		_unitFireRate->setMessage("");
 		_unitAccel->setMessage("");
 		_unitProjSpeed->setMessage("");
+		_unitName->setMessage("");
 	}
 }
 
@@ -107,5 +117,5 @@ void UnitStatsComponent::draw(sf::RenderTarget& target,
 	target.draw(*_unitFireRate);
 	target.draw(*_unitAccel);
 	target.draw(*_unitProjSpeed);
-
+	target.draw(*_unitName);
 }

@@ -1,0 +1,27 @@
+#include "LuaConfigEntry.h"
+#include "Logger.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
+
+void LuaConfigEntry::readFromFile(const std::string& path) {
+	LuaConfig config;
+	config.openConfigFile(path);
+
+	if (!config.isLoaded()) {
+		CORE_ERROR("[LuaConfigEntry %x] Failed to load \"%s\"", this,
+			path.c_str());
+	}
+
+	readFromConfig(config);
+}
+
+void LuaConfigEntry::readFromConfig(const LuaConfig& config) {
+	// This only loads the first one
+	readFromTable(config.getConfigTable()[getName()]);
+}

@@ -183,10 +183,6 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
-
-	LuaConfig config;
-	config.openConfigFile("./lua/config.lua");
-	CORE_INFO("%d", config.readInt("key"));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

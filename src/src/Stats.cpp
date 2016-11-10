@@ -7,7 +7,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 Stats::Stats(bool perc)
-		: percent(perc)  {
+	: LuaConfigEntry("Stats"),
+		percent(perc)  {
 
 	// Add default stats
 	addStat("range", 500.0f);
@@ -68,6 +69,24 @@ float& Stats::operator[](const std::string& s) {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
+
+void Stats::readFromTable(const sol::table& table) {
+	// Iterator vars
+	std::string key;
+	float value;
+
+	// Iterate through each value in the table
+	auto iter = table.begin();
+	CORE_DEBUG("Stats iter:");
+	while (iter != table.end()) {
+		key = (*iter).first.as<std::string>();
+		value = (*iter).second.as<float>();
+		setStat(key, value);
+		CORE_DEBUG("\t%s : %g", key.c_str(), value);
+
+		++iter;
+	}
+}
 
 void Stats::print() const {
 	CORE_INFO("[Stats %x]", this);

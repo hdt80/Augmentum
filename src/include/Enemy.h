@@ -5,8 +5,9 @@
 #include "Object.h"
 #include "Unit.h"
 #include "FloatingProgressBar.h"
+#include "LuaConfigEntry.h"
 
-class EnemyType {
+class EnemyType : public LuaConfigEntry {
 protected:
 	// Ctor and dtor ///////////////////////////////////////////////////////////
 
@@ -21,22 +22,29 @@ protected:
 public:
 
 	// Methods /////////////////////////////////////////////////////////////////
+	
+	// Inherited from LuaConfigEntry
+	void readFromTable(const sol::table& table);
 
 	// Get the internal id to use
 	// returns: _id
-	int getId() { return _id; }
+	int getId() const { return _id; }
+
+	// Set the internal id to use
+	// i = new id to use
+	void setId(int i) { _id = i; }
 
 	// Get the display name of this EnemyType
 	// returns: _name
-	const std::string& getName() { return _name; }
+	const std::string& getName() const { return _name; }
 
 	// Get the number of sides this EnemyType uses
 	// returns: _sides
-	int getSides() { return _sides; }
+	int getSides() const { return _sides; }
 
 	// Get the default stats this EnemyType will have at level 1
 	// returns: _defaultStats
-	const Stats& getDefaultStats() { return _defaultStats; }
+	const Stats& getDefaultStats() const { return _defaultStats; }
 
 	// Get the stats at a certain level
 	// returns: What the stats will be at level of this EnemyType
@@ -59,6 +67,17 @@ public:
 	static int createEnemyType(int id, const std::string& name, int sides,
 			Stats defStats, Stats levelDiff);
 
+	// Add a pre-existing EnemyType to the _types vector
+	// type - Type to add
+	// returns: The id used to store the added EnemyType
+	static int addEnemyType(EnemyType& type);
+
+	// Load an EnemyType from a lua file at the path
+	//		The info should be subtabled in a subtable called Config{}
+	// path - Path to the lua file, file extension included
+	// returns: ID of the EnemyType created
+	static int loadEnemyType(const std::string& path);
+
 	// Get the default EnemyType returned when getById doesn't have that id
 	// returns: _defaultType
 	static EnemyType* getDefaultType();
@@ -77,7 +96,10 @@ protected:
 
 	// Static vars /////////////////////////////////////////////////////////////
 	
-	static std::vector<EnemyType> _types; // _id to EnemyType
+	//static std::vector<EnemyType> _types; // _id to EnemyType
+
+	static std::map<int, EnemyType> _types;
+
 	static EnemyType _defaultType; // Default type to use
 };
 

@@ -33,27 +33,31 @@ public:
 	// returns: _name
 	inline const std::string& getName() { return _name; }
 
+	// Get the config table used in LuaConfig
+	// returns: A reference to _configTable
+	inline const sol::table& getConfigTable() const { return _configTable; }
+
 	// Reading methods /////////////////////////////////////////////////////////
 	
 	// Read a float value from the file
 	// key - Key to read
 	// returns: The value matching the key, or -1 if no key matches
-	float readFloat(const std::string& key);
+	float readFloat(const std::string& key) const;
 
 	// Read an int value from the file
 	// key - Key to read
 	// returns: The value matching the key, or -1 if no key matches
-	int readInt(const std::string& key);
+	int readInt(const std::string& key) const;
 
 	// Read a bool value from the file
 	// key - Key to read
 	// returns: The value matching the key, or false if no key matches
-	bool readBool(const std::string& key);
+	bool readBool(const std::string& key) const;
 
 	// Read a string value from the file
 	// key - Key to read
 	// returns: The value matching the key, or an empty string if no match
-	std::string readString(const std::string& key);
+	std::string readString(const std::string& key) const;
 
 	// Writing methods /////////////////////////////////////////////////////////
 

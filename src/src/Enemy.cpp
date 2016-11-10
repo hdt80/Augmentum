@@ -6,6 +6,10 @@
 #include "Logger.h"
 
 ////////////////////////////////////////////////////////////////////////////////
+// EnemyType
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
 // EnemyType static methods
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -14,11 +18,12 @@ EnemyType* EnemyType::getById(int id) {
 		CORE_WARN("getById: id not in use! (%d)", id);
 		return getDefaultType();
 	}
-	return &_types[id];
+	return &_types.at(id);
 }
 
 bool EnemyType::idInUse(unsigned int id) {
-	return (id < _types.size());
+	std::map<int, EnemyType>::iterator it = _types.find(id);
+	return (it != _types.end());
 }
 
 int EnemyType::createEnemyType(int id, const std::string& name, int sides,
@@ -31,7 +36,13 @@ int EnemyType::createEnemyType(int id, const std::string& name, int sides,
 		return createEnemyType(++id, name, sides, defStats, levelDiff);
 	}
 
-	_types.push_back(EnemyType(id, name, sides, defStats, levelDiff));
+	_types.insert(std::map<int, EnemyType>
+		::value_type(id, EnemyType(id, name, sides, defStats, levelDiff)));
+
+	CORE_DEBUG("Created enemy type");
+	CORE_DEBUG("\tid: %d", id);
+	CORE_DEBUG("\tname: %s", name.c_str());
+	CORE_DEBUG("\tsides: %d", sides);
 
 	return id;
 }
@@ -40,31 +51,89 @@ EnemyType* EnemyType::getDefaultType() {
 	return &_defaultType;
 }
 
+int EnemyType::loadEnemyType(const std::string& path) {
+	// Create a temp EnemyType to load the values into
+	EnemyType type(0, "", 0, Stats(), Stats());
+
+	type.readFromFile(path);
+
+	addEnemyType(type);
+
+	// Because we're passing as a reference the id is correct
+	return type.getId();
+}
+
+int EnemyType::addEnemyType(EnemyType& type) {
+	// If the id is already in use try to use the next one
+	CORE_INFO("idInUse(%d) : %d", type.getId(), idInUse(type.getId()));
+	if (idInUse(type.getId())) {
+		CORE_WARN("AddEnemyType: id %d is already in use!", type.getId());
+		CORE_WARN("Type to use %d to add", type.getId() + 1);
+		type.setId(type.getId() + 1);
+		return addEnemyType(type);
+	}
+
+	_types.insert(std::map<int, EnemyType>::value_type(type.getId(), type));
+
+	CORE_DEBUG("Created enemy type");
+	CORE_DEBUG("\tid: %d", type.getId());
+	CORE_DEBUG("\tname: %s", type.getName().c_str());
+	CORE_DEBUG("\tsides: %d", type.getSides());
+
+	return type.getId();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // EnemyType static vars
 ////////////////////////////////////////////////////////////////////////////////
 
-std::vector<EnemyType> EnemyType::_types;
+std::map<int, EnemyType> EnemyType::_types;
 EnemyType EnemyType::_defaultType(0, "DEFAULT", 4, Stats(), Stats());
 
-///////////////////////////////////////////////////////////////////////////////
-// Constuctor and deconstrctor
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
 
 EnemyType::EnemyType(int id, const std::string& name, int sides,
 		Stats defStats, Stats levelDiff)
-	: _id(id), _name(name), _sides(sides), _defaultStats(defStats),
+	: LuaConfigEntry("EnemyType"),
+		_id(id), _name(name), _sides(sides), _defaultStats(defStats),
 		_levelDiff(levelDiff) {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Constuctor and deconstrctor
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
+
+void EnemyType::readFromTable(const sol::table& table) {
+	_id = table.get<int>("id");
+	_name = table.get<std::string>("name");
+	_sides = table.get<int>("sides");
+
+	// Temp stats to load from the config
+	Stats defStats;
+	Stats lvlDiff;
+
+	defStats.readFromTable(table["default_stats"]);
+	lvlDiff.readFromTable(table["level_diff_stats"]);
+
+	_defaultStats = defStats;
+	_levelDiff = lvlDiff;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Enemy
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
 
 Enemy::Enemy(Map* map, float x, float y, int size, EnemyType type)
 	: Unit(map, x, y, type.getDefaultStats(), size,
-			type.getSides(), sf::Color::Red), _enemyType(type) {
+			type.getSides(), sf::Color::Red),
+		_enemyType(type) {
 
 	_shape.setRadius(size);
 	_shape.setFillColor(sf::Color::Red);
