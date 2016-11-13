@@ -17,6 +17,7 @@ Stats::Stats(bool perc)
 	addStat("speed", 20.0f);
 	addStat("projSpeed", 50.0f);
 	addStat("accel", 1.1f); // % increase
+	addStat("maxHealth", 30.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +82,11 @@ void Stats::readFromTable(const sol::table& table) {
 	while (iter != table.end()) {
 		key = (*iter).first.as<std::string>();
 		value = (*iter).second.as<float>();
-		setStat(key, value);
+		if (!hasStat(key)) {
+			addStat(key, value);	
+		} else {
+			setStat(key, value);
+		}
 		CORE_DEBUG("\t%s : %g", key.c_str(), value);
 
 		++iter;

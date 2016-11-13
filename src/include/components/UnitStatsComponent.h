@@ -38,6 +38,8 @@ private:
 	GuiEntry* _unitAccel; // Stat accel of the Unit
 	GuiEntry* _unitProjSpeed; // Stat projSpeed of the Unit
 	GuiEntry* _unitName; // If the Unit is an enemy, show the name as well
+	GuiEntry* _unitHp; // Current health of unit
+	GuiEntry* _unitMaxHp; // Max health of unit
 };
 
 #endif

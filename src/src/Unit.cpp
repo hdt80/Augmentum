@@ -19,6 +19,12 @@ Unit::Unit(Map* map, float x, float y, Stats s, int size,
 		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
 			0, _maxHealth, _health),
 		_exp(0.0f),	_prevLevel(-1) {
+
+	// If the stats provided give us a max health set it
+	if (s.hasStat("maxHealth")) {
+		_maxHealth = s.getStat("maxHealth");
+		_health = _maxHealth;
+	}
 	
 	_reload.setMaxCooldown((1 / getFireRate()) * 1000000);
 
@@ -66,6 +72,10 @@ Unit::~Unit() {}
 void Unit::onLevelUp() {
 	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("level_up"),
 			getX(), getY(), 500, -1);
+
+	// Get the max health set by the Stats
+	setMaxHealth(getStat("maxHealth"));
+	setHealth(getMaxHealth());
 
 	_lua.callFunction("onLevelUp");
 	for (unsigned int i = 0; i < _perks.size(); ++i) {

@@ -21,10 +21,11 @@ public:
 	// msg - Message to display
 	// barStyle - How to style the bar
 	// value - Pointer to the value to track
-	// max - Max value that value can be
+	// min - Min value that value can be
+	// max - Pointer to the max value that value can be
 	GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 			const std::string& msg,	GuiProgressBarStyle* barStyle,
-			float* value, float min, float max);
+			float* value, float min, float* max);
 	virtual ~GuiProgressBar();
 
 	// Inherited from sf::Drawable
@@ -58,11 +59,11 @@ public:
 
 	// Get the maximum value of this bar
 	// returns: The max value _value can be before it's considered "done"
-	virtual inline float getMax() { return _max; }
+	virtual inline float getMax() { return *_max; }
 
 	// Get how much higher the max is from the min
 	// returns: How higher the max is from the min
-	virtual inline float getRelativeMax() { return _max - _min; }
+	virtual inline float getRelativeMax() { return getMax() - _min; }
 
 	// Set the max value of this bar
 	// m - New mav value to use
@@ -73,6 +74,10 @@ public:
 	void setMin(float m);
 
 protected:
+
+	// Update the progress bar based on the current values
+	void updateBar();
+
 	GuiProgressBarStyle* _barStyle;
 
 	sf::RectangleShape _bar; // Bar to draw, colored portion
@@ -85,7 +90,9 @@ protected:
 	float* _value; // Pointer to the value
 	float _prevValue; // Previous value, used to check if the bar needs updating
 	float _min; // Min value of the tracked valued
-	float _max; // Max value of this
+	float* _max; // Max value of this
+
+	float _prevMax; // Previous max, used to check if the bar needs updating
 };
 
 #endif

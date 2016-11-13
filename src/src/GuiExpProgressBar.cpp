@@ -10,6 +10,10 @@ GuiExpProgressBar::GuiExpProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		const std::string& msg, GuiProgressBarStyle* barStyle, Unit* unit)
 	: GuiProgressBar(style, origin, msg, barStyle, nullptr, 0, 0),
 		_tracked(unit) {
+
+	if (_max == nullptr) {
+		_max = new float;
+	}
 	
 	_value = &_tracked->getExp();
 	_prevLevel = 0;
@@ -26,7 +30,7 @@ GuiExpProgressBar::GuiExpProgressBar(const GuiEntryStyle* style, Vector2 origin,
 void GuiExpProgressBar::update(int diff) {
 	if (_prevValue != getCurrentValue()) {
 		_min = getMin();
-		_max = getMax();
+		setMax(getMax());
 		_zeroText.setString(convert::format("%g", getMin()));
 		_maxText.setString(convert::format("%g", getMax()));
 		setPosition(getX(), getY()); // Reposition the texts

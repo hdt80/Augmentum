@@ -125,7 +125,7 @@ GameWindow::GameWindow(Vector2 size) {
 
 	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
 			"HP", progBar, &_map.getSelected()->getHealth(), 0,
-			_map.getSelected()->getMaxHealth()));
+			&_map.getSelected()->getMaxHealth()));
 
 	hud->addEntry(new GuiExpProgressBar(hud->getEntryStyle(), hud->getPos(),
 			"EXP", expBarStyle, _map.getSelected()), 0, 48);
@@ -266,7 +266,7 @@ void GameWindow::mouseEvent(sf::Event& e) {
 	if (e.mouseButton.button == sf::Mouse::Left) {
 		_map.getSelected()->shoot(worldPos.x, worldPos.y);
 	} else if (e.mouseButton.button == sf::Mouse::Right) {
-		_map.spawnEnemy(worldPos.x, worldPos.y, 1, -1);
+		_map.spawnEnemy(worldPos.x, worldPos.y, 2, -1);
 	}
 }
 

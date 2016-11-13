@@ -31,17 +31,21 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 	_unitFireRate = new GuiEntry(style, pos, "");
 	_unitProjSpeed = new GuiEntry(style, pos, "");
 	_unitAccel = new GuiEntry(style, pos, "");
+	_unitHp = new GuiEntry(style, pos, "");
+	_unitMaxHp = new GuiEntry(style, pos, "");
 
 	addEntry(_unitPos, 0, 0);
 	addEntry(_unitVelocity, 0, 20);
 	addEntry(_unitLevel, 0, 40);
-	addEntry(_unitSpeed, 0, 60);
-	addEntry(_unitRange, 0, 80);
-	addEntry(_unitDamage, 0, 100);
-	addEntry(_unitFireRate, 0, 120);
-	addEntry(_unitProjSpeed, 0, 140);
-	addEntry(_unitAccel, 0, 160);
-	addEntry(_unitName, 0, 180);
+	addEntry(_unitHp, 0, 60);
+	addEntry(_unitMaxHp, 0, 80);
+	addEntry(_unitSpeed, 0, 100);
+	addEntry(_unitRange, 0, 120);
+	addEntry(_unitDamage, 0, 140);
+	addEntry(_unitFireRate, 0, 160);
+	addEntry(_unitProjSpeed, 0, 180);
+	addEntry(_unitAccel, 0, 200);
+	addEntry(_unitName, 0, 220);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,17 +88,23 @@ void UnitStatsComponent::update(int diff) {
 			_hovered->getAccel()));
 		_unitProjSpeed->setMessage(convert::format("ProjSpeed: %g",
 			_hovered->getProjSpeed()));
+		_unitHp->setMessage(convert::format("Health: %g",
+			_hovered->getHealth()));
+		_unitMaxHp->setMessage(convert::format("Max health: %g",
+			_hovered->getMaxHealth()));
 
 		Enemy* e = nullptr;
 
 		if ((e = Map::toEnemy(_hovered))) {
 			_unitName->setMessage(convert::format("Type: %s",
-				e->getEnemyType().getName()));
+				e->getEnemyType().getName().c_str()));
 		}
 	} else {
 		_unitPos->setMessage("");
 		_unitVelocity->setMessage("");
 		_unitLevel->setMessage("");
+		_unitHp->setMessage("");
+		_unitMaxHp->setMessage("");
 		_unitSpeed->setMessage("");
 		_unitRange->setMessage("");
 		_unitDamage->setMessage("");
@@ -118,4 +128,6 @@ void UnitStatsComponent::draw(sf::RenderTarget& target,
 	target.draw(*_unitAccel);
 	target.draw(*_unitProjSpeed);
 	target.draw(*_unitName);
+	target.draw(*_unitHp);
+	target.draw(*_unitMaxHp);
 }

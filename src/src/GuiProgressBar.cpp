@@ -9,7 +9,7 @@
 
 GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		const std::string& msg, GuiProgressBarStyle* barStyle,
-		float* value, float min, float max)
+		float* value, float min, float* max)
 	: GuiEntry(style, origin, msg),
 		_barStyle(barStyle), _value(value), _prevValue(-1),
 		_min(min), _max(max) {
@@ -49,8 +49,13 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 	_maxText.setFillColor(barStyle->maxColor);
 	_maxText.setOutlineThickness(1.0f);
 	_maxText.setOutlineColor(sf::Color::Black);
-	_maxText.setString(convert::toString(_max));
 	_maxText.setCharacterSize(_text.getCharacterSize());
+
+	if (_max == nullptr) {
+		_maxText.setString("0");
+	} else {
+		_maxText.setString(convert::toString(getMax()));
+	}
 }
 
 GuiProgressBar::~GuiProgressBar() {
@@ -75,16 +80,25 @@ void GuiProgressBar::draw(sf::RenderTarget& target,
 void GuiProgressBar::update(int diff) {
 	// Only update the progress bar if the value has changed
 	if (getCurrentValue() != _prevValue) {
-		_bar.setFillColor(convert::colorInterpolate(
-				_barStyle->minColor, _barStyle->maxColor, getRatioDone()));
-
-		_currentText.setString(convert::toString(getCurrentValue()));
-
-		_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(),
-				_style->dimensions.Y));
-
+		updateBar();
 		_prevValue = getCurrentValue();
 	}
+
+	if (_prevMax != getMax()) {
+		updateBar();
+		_prevMax = getMax();
+	}
+}
+
+void GuiProgressBar::updateBar() {
+	_bar.setFillColor(convert::colorInterpolate(
+				_barStyle->minColor, _barStyle->maxColor, getRatioDone()));
+
+	_currentText.setString(convert::toString(getCurrentValue()));
+	_maxText.setString(convert::toString(getMax()));
+
+	_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(),
+				_style->dimensions.Y));
 }
 
 void GuiProgressBar::setMin(float m) {
@@ -93,8 +107,8 @@ void GuiProgressBar::setMin(float m) {
 }
 	
 void GuiProgressBar::setMax(float m) {
-	_max = m;
-	_maxText.setString(convert::format("%g", _max));
+	*_max = m;
+	_maxText.setString(convert::format("%g", getMax()));
 }
 
 void GuiProgressBar::setPosition(float x, float y) {
