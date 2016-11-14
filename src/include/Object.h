@@ -21,7 +21,7 @@ enum ObjectType {
 	BOUNDARY	= 0x0002,
 	FRIENDLY	= 0x0004,
 	ENEMY		= 0x0008,
-	PROJECTILE  = 0x0016,
+	PROJECTILE  = 0x0020,
 
 	COUNT		= 0x0005 // How many types there are
 };
@@ -42,6 +42,8 @@ public:
 
 	// Object dtor
 	virtual ~Object();
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// If Object* o collides with us
 	bool collidesWith(Object* o) const;
@@ -147,21 +149,30 @@ public:
 	
 	// Get what type of Object this is
 	// returns: Enum of _objType
-	ObjectType getObjectType() { return _objType; }
+	inline int getObjectType() const { return _objType; }
 
 	// Set the ObjectType of this Object
 	// type - Type to set the ObjectType to
-	void setObjectType(ObjectType type);// { _objType = type; }
+	void setObjectType(int type);
+
+	// Add an object type option to the _objType flag
+	// type - Object type option to set
+	void addObjectTypeOption(int type);
+
+	// Query if this Object has a specific option set
+	// type - Type to check for
+	// returns: If _objType contains the flag
+	bool isObjectTypeOptionSet(int type);
 
 	// Other getters ///////////////////////////////////////////////////////////
 	
 	// Get the Map this Object is on
 	// returns: Pointer to the Map this Object is on
-	Map* getMap() const { return _map; }
+	inline Map* getMap() const { return _map; }
 
 	// Get the size of this Object
 	// returns: _size
-	int getSize() const { return _size; }
+	inline int getSize() const { return _size; }
 
 	// Get the perks attached to this Object
 	// returns: Reference to the vector of perks this Object has
@@ -169,19 +180,19 @@ public:
 
 	// Get where this Object is moving towards
 	// returns: Pointer to the target of this Object
-	Target* getTarget() const { return _target; }
+	inline Target* getTarget() const { return _target; }
 
 	// Get the direction this Object is heading towards
 	// returns: _direction
-	Vector2 getDirection() const { return _direction; }
+	inline const Vector2& getDirection() const { return _direction; }
 
 	// Get if this Object is to be removed in the next update of the Map
 	// return: _toRemove
-	bool isToRemove() const { return _toRemove; }
+	inline bool isToRemove() const { return _toRemove; }
 
 	// Get the SkillTree this Object uses
 	// returns: Pointer to the SkillTree this Object uses
-	SkillTree* getTree() const { return _tree; }
+	inline SkillTree* getTree() const { return _tree; }
 
 	// Utility getters /////////////////////////////////////////////////////////
 	
@@ -275,7 +286,8 @@ protected:
 	SkillTree* _tree; // Skill tree attached to this Object
 	std::vector<Perk*> _perks; // Perks of this Object
 
-	ObjectType _objType; // What type of Object this is
+	int _objType; // What type of Object this is
+
 	int _attackerCount; // Number of Objects that have targetted us
 
 	int _size; // Radius in pixels of this Object

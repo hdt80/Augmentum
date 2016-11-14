@@ -25,7 +25,7 @@ namespace BitWise {
 	// flag - Flag to query
 	// option - Option to check for
 	// returns: If the flag is the option set to on
-	bool bitSet(int flag, int option);
+	bool bitQuery(int flag, int option);
 
 };
 

@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Target.h"
 #include "Perk.h"
+#include "BitWise.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and dtor
@@ -14,8 +15,9 @@
 
 Object::Object(Map* map, float x, float y, Stats s, int size)
 	: Target(x, y),
-		_b2Box(nullptr), _map(map), _tree(nullptr),  _attackerCount(0),
-		_size(size), _baseStats(s), _target(nullptr), _toRemove(false) {
+		_b2Box(nullptr), _map(map), _tree(nullptr),  _objType(0),
+		_attackerCount(0), _size(size), _baseStats(s), _target(nullptr),
+		_toRemove(false) {
 	
 	setObjectType(ObjectType::DEFAULT);
 
@@ -244,7 +246,7 @@ Perk* Object::getPerk(std::string name) {
 // Getters and setters
 ///////////////////////////////////////////////////////////////////////////////
 
-void Object::setObjectType(ObjectType type) {
+void Object::setObjectType(int type) {
 	_objType = type;
 
 	if (!_b2Box) {
@@ -256,13 +258,20 @@ void Object::setObjectType(ObjectType type) {
 	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
 		b2Filter filt = fix->GetFilterData();
 
-		// Category bits = What I am
+		// Category bits - What I am
 		filt.categoryBits = type;
-		// Mask bits = What I collide with
+		// Mask bits - What I collide with
 		filt.maskBits = allTypes & ~type;
 
 		fix->SetFilterData(filt);
 	}
+}
+void Object::addObjectTypeOption(int type) {
+	setObjectType(BitWise::bitOn(getObjectType(), type));
+}
+
+bool Object::isObjectTypeOptionSet(int type) {
+	return BitWise::bitQuery(getObjectType(), type);
 }
 
 void Object::setTarget(Target* t) {

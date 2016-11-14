@@ -92,6 +92,7 @@ void Unit::shoot(float x, float y) {
 		Projectile* p = new Projectile(_map, 5,
 				new Target(x, y), this, Color(255, 255, 255, 255));	
 		p->setObjectType(getObjectType());
+		p->addObjectTypeOption(ObjectType::PROJECTILE);
 
 		_map->addObject(p);
 

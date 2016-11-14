@@ -58,9 +58,9 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
 	fd.isSensor = true;
 	_b2Box->CreateFixture(&fd);
 
-	BitWise::bitOn(_objType, ObjectType::PROJECTILE);
-
-	_b2Box->SetUserData(this);
+	if (_b2Box) {
+		_b2Box->SetUserData(this);
+	}
 }
 
 Projectile::~Projectile() {}

@@ -35,8 +35,8 @@ void ContactListener::BeginContact(b2Contact* contact) {
 		b = static_cast<Object*>(userDataB);
 	}
 
-	if (BitWise::bitSet(a->getObjectType(), ObjectType::PROJECTILE) ||
-			BitWise::bitSet(b->getObjectType(), ObjectType::PROJECTILE)) {
+	if (BitWise::bitQuery(a->getObjectType(), ObjectType::PROJECTILE) ||
+			BitWise::bitQuery(b->getObjectType(), ObjectType::PROJECTILE)) {
 		CORE_INFO("Collision with bullets");
 	}
 

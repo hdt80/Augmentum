@@ -14,7 +14,7 @@ namespace BitWise {
 		return flag ^= option;
 	}
 
-	bool bitSet(int flag, int option) {
+	bool bitQuery(int flag, int option) {
 		return flag & option;
 	}
 };
