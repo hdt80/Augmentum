@@ -13,6 +13,10 @@ public:
 	// perc - If the Stats signify a percentage diff
 	Stats(bool perc = false);
 
+	// Stats ctor
+	// def - Default value to set the default stats to
+	Stats(float def);
+
 	// Operator overloads //////////////////////////////////////////////////////
 
 	// Negative operator

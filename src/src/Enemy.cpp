@@ -65,7 +65,6 @@ int EnemyType::loadEnemyType(const std::string& path) {
 
 int EnemyType::addEnemyType(EnemyType& type) {
 	// If the id is already in use try to use the next one
-	CORE_INFO("idInUse(%d) : %d", type.getId(), idInUse(type.getId()));
 	if (idInUse(type.getId())) {
 		CORE_WARN("AddEnemyType: id %d is already in use!", type.getId());
 		CORE_WARN("Type to use %d to add", type.getId() + 1);
@@ -78,6 +77,7 @@ int EnemyType::addEnemyType(EnemyType& type) {
 	CORE_DEBUG("Created enemy type");
 	CORE_DEBUG("\tid: %d", type.getId());
 	CORE_DEBUG("\tname: %s", type.getName().c_str());
+	CORE_DEBUG("\tMax hp: %g", type.getDefaultStats().getStat("maxHealth"));
 	CORE_DEBUG("\tsides: %d", type.getSides());
 
 	return type.getId();
@@ -147,6 +147,10 @@ Enemy::~Enemy() {}
 ///////////////////////////////////////////////////////////////////////////////
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
+
+void Enemy::update(int diff) {
+	Unit::update(diff);
+}
 
 void Enemy::loadLua() {
 	if (_lua.isLoaded()) {

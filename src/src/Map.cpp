@@ -44,23 +44,8 @@ Map::Map()
 
 	_contactListener = new ContactListener(&_world);
 
-	Stats et1Def;
-	et1Def["speed"] = 20.0f;
-	et1Def["range"] = 1000.0f;
-	et1Def["fireRate"] = 1.0f;
-	et1Def["accel"] = 5.0f;
-	et1Def["projSpeed"] = 50.0f;
-
-	Stats et1Diff;
-	et1Diff["speed"] = 1.0f;
-	et1Diff["range"] = 50.0f;
-	et1Diff["fireRate"] = 0.08f;
-	et1Diff["accel"] = 0.2f;
-	et1Diff["projSpeed"] = 2.5f;
-
-	EnemyType::createEnemyType(1, "Default", 3, et1Def, et1Diff);
-
 	EnemyType::loadEnemyType("./lua/config.lua");
+	EnemyType::loadEnemyType("./lua/et1.lua");
 
 //	CORE_INFO("Distances: ");
 //	int level = 0;
@@ -155,9 +140,7 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 }
 
 bool Map::collisionAtPlace(Object* o, float x, float y) {
-	// TODO: Temp code to test Box2d
 	return objectAt(o, x, y) != nullptr;
-	return false;
 }
 
 void Map::addObject(Object* o) {

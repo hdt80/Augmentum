@@ -8,7 +8,7 @@
 
 Stats::Stats(bool perc)
 	: LuaConfigEntry("Stats"),
-		percent(perc)  {
+		percent(perc) {
 
 	// Add default stats
 	addStat("range", 500.0f);
@@ -18,6 +18,19 @@ Stats::Stats(bool perc)
 	addStat("projSpeed", 50.0f);
 	addStat("accel", 1.1f); // % increase
 	addStat("maxHealth", 30.0f);
+}
+
+Stats::Stats(float def)
+	: LuaConfigEntry("Stats"),
+		percent(false) {
+
+	addStat("range", def);
+	addStat("fireRate", def); // Attacks per second
+	addStat("damage", def);
+	addStat("speed", def);
+	addStat("projSpeed", def);
+	addStat("accel", def); // % increase
+	addStat("maxHealth", def);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

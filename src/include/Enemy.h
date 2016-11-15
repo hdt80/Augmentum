@@ -130,7 +130,7 @@ public:
 
 	// Update the enemy depending on its target, updating its coords
 	// diff - Milliseconds since last update call
-	//virtual void update(int diff);
+	virtual void update(int diff);
 
 	// A simple target is just an (x, y) coord point. Because an Object
 	// isn't just a coord point it isn't a simple target

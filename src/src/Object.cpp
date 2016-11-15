@@ -16,8 +16,8 @@
 Object::Object(Map* map, float x, float y, Stats s, int size)
 	: Target(x, y),
 		_b2Box(nullptr), _map(map), _tree(nullptr),  _objType(0),
-		_attackerCount(0), _size(size), _baseStats(s), _target(nullptr),
-		_toRemove(false) {
+		_attackerCount(0), _size(size), _baseStats(s), _stats(0.0f),
+		_target(nullptr), _toRemove(false) {
 	
 	setObjectType(ObjectType::DEFAULT);
 

@@ -4,3 +4,7 @@ end
 
 function onDamageTaken(dmg, who)
 end
+
+function onLevelUp()
+	print("Level up!");
+end
