@@ -15,6 +15,7 @@ Window::Window(const std::string& name, Vector2 size)
 
 Window::Window()
 	: Window("DEFAULT", Vector2(0.0f, 0.0f)) {
+
 }
 
 Window::~Window() {
@@ -140,7 +141,6 @@ void Window::keyEvent(sf::Event& e) {
 	}
 }
 
-//
 void Window::mouseEvent(sf::Event& e) {
 	GuiComponent* clicked = 
 		getComponentAt(e.mouseButton.x, e.mouseButton.y);

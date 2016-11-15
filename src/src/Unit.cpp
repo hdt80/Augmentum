@@ -8,14 +8,14 @@
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
 Unit::Unit()
-	: Unit(nullptr, 0, 0, Stats(), 0, 0, sf::Color::Black) {
+	: Unit(nullptr, 0, 0, Stats(), Stats(), 0, 0, sf::Color::Black) {
 	
 }
 
-Unit::Unit(Map* map, float x, float y, Stats s, int size,
-		int sides, sf::Color c)
+Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
+		int size, int sides, sf::Color c)
 	: Object(map, x, y, s, size),
-		_reload(1), _health(30), _maxHealth(30),
+		_reload(1), _levelDiff(lvlDiff), _health(30), _maxHealth(30),
 		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
 			0, _maxHealth, _health),
 		_exp(0.0f),	_prevLevel(-1) {
@@ -26,6 +26,7 @@ Unit::Unit(Map* map, float x, float y, Stats s, int size,
 		_health = _maxHealth;
 	}
 	
+	// Cooldowns are counted in microseconds
 	_reload.setMaxCooldown((1 / getFireRate()) * 1000000);
 
 	_shape.setRadius(size);

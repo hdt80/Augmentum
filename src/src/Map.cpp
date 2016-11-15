@@ -36,7 +36,7 @@ Map::Map()
 	Stats s;
 	s["speed"] = 20.0f;
 	s["projSpeed"] = 50.0f;
-	_selected = new Ship(this, 0.0f, 0.0f, s, 20, 4, sf::Color::Blue);
+	_selected = new Ship(this, 0.0f, 0.0f, s, Stats(), 20, 4, sf::Color::Blue);
 	_selected->setMaxHealth(30.0f);
 	_selected->setObjectType(ObjectType::FRIENDLY);
 

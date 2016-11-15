@@ -46,6 +46,10 @@ public:
 	// returns: _defaultStats
 	const Stats& getDefaultStats() const { return _defaultStats; }
 
+	// Get the level diff Stats this EnemyType will use
+	// returns: _levelDiff
+	const Stats& getLevelDiffStats() const { return _levelDiff; }
+
 	// Get the stats at a certain level
 	// returns: What the stats will be at level of this EnemyType
 	Stats getStats(int level) { return _defaultStats + (_levelDiff * level); }

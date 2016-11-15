@@ -127,11 +127,11 @@ void EnemyType::readFromTable(const sol::table& table) {
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
-// ctor and dtor
+// Enemy ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
 Enemy::Enemy(Map* map, float x, float y, int size, EnemyType type)
-	: Unit(map, x, y, type.getDefaultStats(), size,
+	: Unit(map, x, y, type.getDefaultStats(), type.getLevelDiffStats(), size,
 			type.getSides(), sf::Color::Red),
 		_enemyType(type) {
 
