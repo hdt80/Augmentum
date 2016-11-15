@@ -82,18 +82,17 @@ void Game::loop() {
 	}
 }
 
-//
 void Game::followWindow(Window* w) {
 	WindowManager.push(w);
 	CurrentWindow = w;
-	CORE_DEBUG("[Game] CurrentWindow Name: %s",  CurrentWindow->getName().c_str());
-	std::string s = CurrentWindow->getName();
-	const char* str = s.c_str();
-	sf::String sr(str);
-	_window.setTitle(sr);
+	CORE_DEBUG("[Game] CurrentWindow Name: %s",
+		CurrentWindow->getName().c_str());
+	//std::string s = CurrentWindow->getName();
+	//const char* str = s.c_str();
+	//sf::String sr(str);
+	_window.setTitle(CurrentWindow->getName());
 }
 
-//
 void Game::pause() {
 	if (CurrentWindow != &_pauseWindow) {
 		followWindow(&_pauseWindow);
@@ -102,9 +101,10 @@ void Game::pause() {
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Static vars
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 Game::GameState Game::CurrentGameState = Uninitalized;
 Window*			Game::CurrentWindow    = nullptr;
 
@@ -113,7 +113,10 @@ StateManager Game::WindowManager;
 
 FPS Game::Fps;
 
+////////////////////////////////////////////////////////////////////////////////
 // Procted vars
+////////////////////////////////////////////////////////////////////////////////
+
 sf::RenderWindow Game::_window;
 PauseWindow		 Game::_pauseWindow;
 Vector2			 Game::_size;

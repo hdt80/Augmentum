@@ -25,7 +25,6 @@ Window::~Window() {
 // State Methods
 ///////////////////////////////////////////////////////////////////////////////
 
-//
 void Window::init() {
 	if (_currState != Uninitalized) {
 		CORE_ERROR("[%s] Already initalized. Cannot init", _name.c_str());
@@ -35,7 +34,6 @@ void Window::init() {
 	CORE_INFO("[%s] Initalized", _name.c_str());
 }
 
-//
 void Window::reset() {
 	if (_currState != Running) {
 		CORE_WARNING("[%s] Not running. Resetting anyways", _name.c_str());
@@ -43,7 +41,6 @@ void Window::reset() {
 	CORE_INFO("[%s] Reset", _name.c_str());
 }
 
-//
 void Window::pause() {
 	if (_currState != Running) {
 		CORE_ERROR("[%s] Not running. Cannot pause", _name.c_str());
@@ -53,7 +50,6 @@ void Window::pause() {
 	CORE_INFO("[%s] Paused", _name.c_str());
 }
 
-//
 void Window::resume() {
 	if (_currState != Paused) {
 		CORE_ERROR("[%s] Not paused and attempted to resume", _name.c_str());
@@ -63,7 +59,6 @@ void Window::resume() {
 	CORE_INFO("[%s] Resuming", _name.c_str());
 }
 
-//
 void Window::close() {
 	if (_currState != Paused) {
 		CORE_WARNING("[%s] CLOSING WHILE NOT PAUSED.", _name.c_str());
@@ -71,19 +66,16 @@ void Window::close() {
 	CORE_INFO("[%s] Marked for removal", _name.c_str());
 }
 
-//
 void Window::setState(WindowState state) {
 	CORE_INFO("[%s] State change (%s -> %s)", _name.c_str(),
 		getStateString(_currState).c_str(), getStateString(state).c_str());
 	_currState = state;
 }
 
-// Return a String literal of our current State
 const std::string Window::getStateString() {
 	return getStateString(_currState);
 }
 
-// If a State is specified instead return the String literal of that state
 const std::string Window::getStateString(WindowState state) {
 	if (state == Running) {
 		return "Running";
@@ -112,6 +104,7 @@ GuiComponent* Window::getComponentAt(float x, float y) {
 ///////////////////////////////////////////////////////////////////////////////
 // Updating Methods
 ///////////////////////////////////////////////////////////////////////////////
+
 void Window::update(int diff) {
 	for (GuiComponent* comp : _components) {
 		if (comp->isUpdating()) {
@@ -123,6 +116,7 @@ void Window::update(int diff) {
 ///////////////////////////////////////////////////////////////////////////////
 // Event Methods
 ///////////////////////////////////////////////////////////////////////////////
+
 void Window::handleEvent(sf::Event& e) {
 	if (e.type == sf::Event::Closed) {
 		CORE_WARNING("[%s] Given sf::Event::Closed. Discarding", _name.c_str());
@@ -138,6 +132,9 @@ void Window::handleEvent(sf::Event& e) {
 }
 
 void Window::keyEvent(sf::Event& e) {
+	if (e.key.code == sf::Keyboard::Pause) {
+		Game::pause();
+	}
 	if (e.key.code == sf::Keyboard::H) {
 		_drawCompBounds = !_drawCompBounds;	
 	}

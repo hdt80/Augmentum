@@ -7,35 +7,36 @@
 
 class PauseWindow : public Window {
 public:
+	// PauseWindow ctor and dtor ///////////////////////////////////////////////
+	
+	// PauseWindow ctor
+	// size - Size of the Window in pixels
 	PauseWindow(Vector2 size = Vector2(0.0f, 0.0f));
+
+	// PauseWindow dtor
 	~PauseWindow();
 
-	// Initalize the window 
+	// Methods /////////////////////////////////////////////////////////////////
+
+	// Initalize the window
 	virtual void init();
-	// // Reinit the Window
-	// virtual void reset();
-	// // Pause the window, stop updating
+
+	// Pause the window, stop updating
 	virtual void pause();
-	// // Resume updating
-	// virtual void resume();
-	// // Mark the Window for closing
-	// virtual void close();
 
-	// Update the Window. 
-	// diff is the amount of microseconds that have passed since the last call
-	//virtual void update(int diff);
-
-	// Event methods
-	//virtual void handleEvent(sf::Event& e);
+	// Event methods ///////////////////////////////////////////////////////////
+	
+	// SFML Event handler
+	// e - Key event
 	virtual void keyEvent(sf::Event& e);
-	//virtual void mouseEvent(sf::Event& e);
-	//virtual void resizeEvent(sf::Event& e);
 
-	//virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
+	// Render to a window
+	// window - Window to draw to
 	virtual void render(sf::RenderWindow& window);
 
 protected:
-	sf::RectangleShape _box;
+
+	sf::RectangleShape _box; // Background to draw
 
 	bool _drawn; // If we've drawn ourselves yet
 };
