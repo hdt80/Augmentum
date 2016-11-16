@@ -8,6 +8,7 @@
 #include "Stats.h"
 #include "SkillTree.h"
 #include "LuaScript.h"
+#include "Eventable.h"
 
 #include <string>
 #include <vector>
@@ -26,7 +27,8 @@ enum ObjectType {
 	COUNT		= 0x0005 // How many types there are
 };
 
-class Object : public Target, public sf::Drawable, public sf::Transformable {
+class Object : public Eventable, public Target,
+	public sf::Drawable, public sf::Transformable {
 public:
 	// A default constructor must be defined for Sol for some reason
 	// This constructor should never be used and is only for Sol

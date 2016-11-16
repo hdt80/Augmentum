@@ -212,7 +212,7 @@ void Object::applyStat(Stats s) {
 }
 
 void Object::removePerk(Perk* p) {
-	applyStat(-*p->getStats());
+	applyStat(-p->getStats());
 }
 
 void Object::addPerk(Perk* p) {
@@ -224,16 +224,16 @@ void Object::addPerk(Perk* p) {
 		// Stackable and we can add a stack? Apply stat change and add 1 stack
 		if (p->isStackable() && (curP->getStacks() < curP->getMaxStacks())) {
 			// Add the stat mod to the current perk so removal is correct
-			*curP->getStats() += *p->getStats();
+			curP->getStats() += p->getStats();
 			curP->addStack();
-			applyStat(*p->getStats());
+			applyStat(p->getStats());
 		}
 		// Reset duration
 		curP->setDuration(p->getDuration());
 	} else {
 		p->setAttached(this);
 		_perks.push_back(p);
-		applyStat(*p->getStats());
+		applyStat(p->getStats());
 	}
 }
 
