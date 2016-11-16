@@ -19,7 +19,7 @@ ContactListener::~ContactListener() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 void ContactListener::BeginContact(b2Contact* contact) {
-	CORE_INFO("[ContactListener %x] BeginContact", this);
+	CORE_INFO("BeginContact", this);
 
 	void* userDataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void* userDataB = contact->GetFixtureB()->GetBody()->GetUserData();
@@ -47,7 +47,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
 }
 
 void ContactListener::EndContact(b2Contact* contact) {
-	CORE_INFO("[ContactListener %x] EndContact", this);
+	CORE_INFO("EndContact", this);
 
 	void* userDataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void* userDataB = contact->GetFixtureB()->GetBody()->GetUserData();
@@ -71,10 +71,10 @@ void ContactListener::EndContact(b2Contact* contact) {
 
 void ContactListener::PreSolve(b2Contact* contact,
 		const b2Manifold* oldManifold) {
-	CORE_INFO("[ContactListener %x] PreSolve", this);
+	CORE_INFO("PreSolve", this);
 }
 
 void ContactListener::PostSolve(b2Contact* contact,
 		const b2Manifold* newManifold) {
-	CORE_INFO("[ContactListener %x] PostSolve", this);
+	CORE_INFO("PostSolve", this);
 }

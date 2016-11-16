@@ -105,9 +105,9 @@ public:
     void setStats(Stats s, bool relative = true);
 
 	// Stats getters
-	Stats getStatMod() const { return _stats; }
-	Stats getStats() const { return _stats + _baseStats; }
-    Stats getBaseStats() const { return _baseStats; };
+	inline const Stats& getStatMod() const { return _stats; }
+	inline Stats getStats() const { return _stats + _baseStats; }
+    inline const Stats& getBaseStats() const { return _baseStats; };
 
 	// Get a stat
 	// name - Name of the stat to get

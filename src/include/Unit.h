@@ -38,6 +38,10 @@ public:
 	// Occurs when the Unit levels up
 	virtual void onLevelUp();
 
+	// Occurs when this Unit kills another Unit
+	// killed - Unit killed
+	virtual void onUnitKill(Unit* killed);
+
 	// Shooting methods ////////////////////////////////////////////////////////
 	
 	// Check if this Unit can shoot

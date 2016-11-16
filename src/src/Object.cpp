@@ -36,7 +36,9 @@ Object::~Object() {
 		_map->getWorld()->DestroyBody(_b2Box);
 	}
 
-	delete _tree;
+	if (_tree) {
+		delete _tree;
+	}
 
 	// Make sure we don't delete another Object
 	if (_target && _target->isSimpleTarget()) {
@@ -81,6 +83,7 @@ void Object::onMove(int diff) {
 }
 
 void Object::onShoot(Object* target) {
+	CORE_INFO("[Object %x] Shoot to %x", target);
 	_lua.callFunction("onShoot", target);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->onShoot(target);
@@ -88,6 +91,7 @@ void Object::onShoot(Object* target) {
 }
 
 void Object::onDamageTaken(int dmg, Object* o) {
+	CORE_INFO("[Object %x] Took %d dmg from %x", this, dmg ,o);
 	_lua.callFunction("onDamageTaken", dmg, o);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->onDamageTaken(dmg, o);
@@ -95,6 +99,7 @@ void Object::onDamageTaken(int dmg, Object* o) {
 }
 
 void Object::onDamageDealt(int dmg, Object* hit) {
+	CORE_INFO("[Object %x] Dealt %d dmg to %x", this, dmg, hit);
 	_lua.callFunction("onDamageDealt", dmg, hit);
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->onDamageDealt(dmg, hit);
@@ -118,7 +123,6 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 bool Object::collidesWith(Object* o) const {
 	return hasCollision(o);
-	return false;
 }
 
 bool Object::contains(float px, float py) const {

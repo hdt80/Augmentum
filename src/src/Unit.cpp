@@ -84,6 +84,16 @@ void Unit::onLevelUp() {
 	}
 }
 
+void Unit::onUnitKill(Unit* killed) {
+	CORE_INFO("[Unit %x] Killed %x", this, killed);
+	_lua.callFunction("onUnitKill");
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		_perks[i]->onUnitKill(killed);
+	}
+
+	addExp(killed->getLevel());
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Shooting methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -143,9 +153,12 @@ void Unit::applyDamage(float d, Unit* hitter) {
 		setHealth(getMaxHealth());
 	}
 
+	onDamageTaken(d, hitter);
+
 	// No health left? Kill this Unit off next update
 	if (getHealth() <= 0) {
 		_toRemove = true;
+		hitter->onUnitKill(this);
 	}
 }
 

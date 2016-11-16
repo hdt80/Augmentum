@@ -3,11 +3,13 @@
 #include "Logger.h"
 #include "Convert.h"
 #include "Object.h"
+#include "Unit.h"
 #include "Map.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-// Constructor
+// Perk ctor and dtor
 ///////////////////////////////////////////////////////////////////////////////
+
 Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks) :
 	_name(name), _attached(nullptr), _stats(s), _duration(dur), _maxDuration(dur),
     _stacks(1),	_maxStacks(maxStacks), _stackable(false), _toRemove(false) {
@@ -25,6 +27,10 @@ Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks) :
 Perk::~Perk() {
 	delete &_stats;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
 
 Perk* Perk::clone() {
 	Perk* clone = new Perk(_name, _stats, _maxDuration, _maxStacks);
@@ -46,8 +52,9 @@ void Perk::loadLua() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Methods
+// Updating methods
 ///////////////////////////////////////////////////////////////////////////////
+
 void Perk::update(int diff) {
 	if (_duration <= -1.0f) {
 		return;
@@ -62,6 +69,7 @@ void Perk::update(int diff) {
 ///////////////////////////////////////////////////////////////////////////////
 // Getters and Setters
 ///////////////////////////////////////////////////////////////////////////////
+
 std::string Perk::getTitle() const {
 	return (getName() + "(" + convert::toString(getStacks()) + "/" +
 		convert::toString(getMaxStacks()) + ")");
@@ -95,6 +103,7 @@ void Perk::setAttached(Object* attached) {
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 ////////////////////////////////////////////////////////////////////////////////
+
 void Perk::onApply(Object* obj) {
 	_lua.callFunction("onApply");
 }
@@ -117,6 +126,10 @@ void Perk::onDamageDealt(int dmg, Object* hit) {
 
 void Perk::onDamageTaken(int dmg, Object* attacker) {
 	_lua.callFunction("onDamageTaken", dmg, attacker);
+}
+
+void Perk::onUnitKill(Unit* killed) {
+	_lua.callFunction("onUnitKill", killed);
 }
 
 void Perk::onDeath() {

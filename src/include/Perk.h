@@ -6,6 +6,7 @@
 #include "LuaScript.h"
 
 class Object;
+class Unit;
 
 // A permentant stat change. When a Perk is added the base stats will be
 // changed, and when removed the opposite of the Perk is removed.
@@ -41,6 +42,7 @@ public:
 	void onShoot(Object* target);
 	void onDamageDealt(int dmg, Object* hit);
 	void onDamageTaken(int dmg, Object* hitter);
+	void onUnitKill(Unit* killed);
 	void onDeath();
     void onApply(Object* attached);
 
@@ -52,7 +54,7 @@ public:
 	void setAttached(Object* attached);
 	Object* getAttached() { return _attached; }
 
-	std::string getName() const { return _name; }
+	const std::string& getName() const { return _name; }
 	std::string getTitle() const;
 	Stats* getStats() { return &_stats; }
 	float getDuration() const { return _duration; }

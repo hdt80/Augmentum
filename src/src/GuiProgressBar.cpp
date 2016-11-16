@@ -97,6 +97,11 @@ void GuiProgressBar::updateBar() {
 	_currentText.setString(convert::toString(getCurrentValue()));
 	_maxText.setString(convert::toString(getMax()));
 
+	_currentText.setPosition(getX() + (_style->dimensions.X / 2.0f)
+			- _currentText.getLocalBounds().width / 2.0f, getY());
+	_maxText.setPosition(getX() + _style->dimensions.X
+			- (_maxText.getLocalBounds().width + 4.0f), getY());
+
 	_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(),
 				_style->dimensions.Y));
 }
