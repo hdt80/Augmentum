@@ -26,6 +26,10 @@ Unit* Map::toUnit(Object* o) {
 	return dynamic_cast<Unit*>(o);
 }
 
+Object* Map::toObject(void* o) {
+	return (Object*)o;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,9 +135,11 @@ std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
 
 std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	std::vector<Object*> objs;
-	for (unsigned int i = 0; i < objects.size(); ++i) {
-		if (objects[i]->distanceWith(x, y) <= r) {
-			objs.push_back(objects[i]);
+	for (Object* o : objects) {
+		if (o->distanceWith(x, y) <= r) {
+			//CORE_INFO("dist from (%g, %g) => (%g, %g) = %g :: %g",
+			//		o->getX(), o->getY(), x, y, o->distanceWith(x, y), r);	
+			objs.push_back(o);
 		}
 	}
 	return objs;
@@ -160,7 +166,7 @@ void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 	Enemy* e = nullptr;
 	if (EnemyType::idInUse(enemyId)) {
 		e = new Enemy(this, x, y, 20, *EnemyType::getById(enemyId));	
-	} else { 
+	} else {
 		e = new Enemy(this, x, y, 20, *EnemyType::getDefaultType());
 	}
 

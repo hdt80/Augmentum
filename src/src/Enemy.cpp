@@ -4,6 +4,7 @@
 #include "Common.h"
 
 #include "Logger.h"
+#include "Ship.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // EnemyType
@@ -138,6 +139,8 @@ Enemy::Enemy(Map* map, float x, float y, int size, EnemyType type)
 	_shape.setRadius(size);
 	_shape.setFillColor(sf::Color::Red);
 
+	setObjectType(ObjectType::ENEMY);
+
 	loadLua();
 	_lua.loadScript("./lua/enemy.lua");
 }
@@ -150,6 +153,16 @@ Enemy::~Enemy() {}
 
 void Enemy::update(int diff) {
 	Unit::update(diff);
+
+	if (_reload.done()) {
+		// Make sure we have a Target to shoot at
+		if (distanceWith(_map->getSelected()) <= getRange()) {
+			shoot(_map->getSelected()->getX(), _map->getSelected()->getY());
+		} else {
+			// Start the shooting regardless if there was a shot or not
+			_reload.start();
+		}
+	}
 }
 
 void Enemy::loadLua() {
@@ -159,4 +172,17 @@ void Enemy::loadLua() {
 	Object::loadLua();
 
 	_lua.lua.set("me", this);
+}
+
+void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	Unit::draw(target, states);
+
+	sf::CircleShape rng;
+	rng.setRadius(getRange());
+	rng.setPosition(getX() - (getRange()), getY() - (getRange()));
+	rng.setFillColor(sf::Color::Transparent);
+	rng.setOutlineColor(sf::Color::Red);
+	rng.setOutlineThickness(3.0f);
+
+	target.draw(rng);
 }

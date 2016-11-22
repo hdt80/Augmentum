@@ -138,7 +138,10 @@ public:
 
 	// Get the EnemyType this Enemy uses
 	// returns: _enemyType
-	const EnemyType& getEnemyType() { return _enemyType; }
+	const EnemyType& getEnemyType() const { return _enemyType; }
+
+	// Inherited from sf::Drawable
+	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 protected:
 	const EnemyType _enemyType; // Type of this Enemy

@@ -114,6 +114,11 @@ public:
 	// returns: Casted Object, or nullptr if Object is not an Unit
 	static Unit* toUnit(Object* o);
 
+	// Cast anything to an Object
+	// o - Things to cast
+	// returns: Casted Object, or nullptr if o is not an Object
+	static Object* toObject(void* o);
+
 protected:
 	Vector2 _origin; // (0, 0), used to calculate the distance from the middle
 

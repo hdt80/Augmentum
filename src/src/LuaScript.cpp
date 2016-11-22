@@ -6,6 +6,8 @@
 #include "Tower.h"
 #include "Target.h"
 #include "Enemy.h"
+#include "Perk.h"
+#include "Stats.h"
 
 LuaScript::LuaScript(bool defineClasses) {
 	_loaded = false;
@@ -121,10 +123,11 @@ void LuaScript::defineStats() {
 
 void LuaScript::definePerk() {
 	lua.new_usertype<Perk> (
-		"Perk", sol::constructors<sol::types<std::string, Stats, float, int>>(),
+		"Perk", sol::constructors<
+				sol::types<std::string, Stats, float, bool, int>>(),
 		"getName", &Perk::getName,
-		"getTitle", &Perk::getTitle,
-		"getStats", &Perk::getStats
+		"getTitle", &Perk::getTitle
+	//	"getStats", &Perk::getStats // TODO: Ambigious call?
 	);
 }
 

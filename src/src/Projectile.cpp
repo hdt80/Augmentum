@@ -79,13 +79,13 @@ void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 void Projectile::onCollision(Object* o) {
 	// Did we collide with an enemy?
-	Enemy* e = dynamic_cast<Enemy*>(o);
-	if (e == nullptr) {
+	Unit* u = Map::toUnit(o);
+	if (!u) {
 		return;
 	}
-	e->applyDamage(getDamage(), _shooter);
+	u->applyDamage(getDamage(), _shooter);
 
-	_shooter->onDamageDealt(getDamage(), e);
+	_shooter->onDamageDealt(getDamage(), u);
 
 	float angle = convert::toDeg((-_direction).angle());
 

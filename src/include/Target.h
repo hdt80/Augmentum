@@ -10,15 +10,18 @@ public:
 	// Target ctor
 	// x - X pos
 	// y - Y pos
-	Target(float x, float y) : x(x), y(y) {}
+	Target(float x, float y)
+		: x(x), y(y) {}
 
 	// Target ctor
 	// v - Vector to create Target from
-	Target(Vector2 v) : x(v.X), y(v.Y) {}
+	Target(Vector2 v)
+		: x(v.X), y(v.Y) {}
 
 	// Target ctor
 	// v - Vector to create Target from
-	Target(Vector2* v) : x(v->X), y(v->Y) {}
+	Target(Vector2* v)
+		: x(v->X), y(v->Y) {}
 
 	// Target dtor
 	virtual ~Target(){}

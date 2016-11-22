@@ -242,11 +242,11 @@ public:
 
 	// Get the world position of this Object
 	// returns: the X coord of the world position
-	virtual float getX() { return _b2Box->GetPosition().x; }
+	virtual float getX() const { return _b2Box->GetPosition().x; }
 
 	// Get the world position of this Object
 	// returns: the Y coord of the world position
-	virtual float getY() { return _b2Box->GetPosition().y; }
+	virtual float getY() const { return _b2Box->GetPosition().y; }
 
 	// Collision methods ///////////////////////////////////////////////////////
 	
