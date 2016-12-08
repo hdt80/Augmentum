@@ -15,7 +15,7 @@
 
 Object::Object(Map* map, float x, float y, Stats s, int size)
 	: Target(x, y),
-		_b2Box(nullptr), _map(map), _tree(nullptr),  _objType(0),
+		_b2Box(nullptr), _map(map), _objType(0),
 		_attackerCount(0), _size(size), _baseStats(s), _stats(0.0f),
 		_target(nullptr), _toRemove(false) {
 	
@@ -34,10 +34,6 @@ Object::Object()
 Object::~Object() {
 	if (_b2Box) {
 		_map->getWorld()->DestroyBody(_b2Box);
-	}
-
-	if (_tree) {
-		delete _tree;
 	}
 
 	// Make sure we don't delete another Object
@@ -293,7 +289,3 @@ void Object::setTarget(Target* t) {
 	_target = t;
 }
 
-void Object::setSkillTree(SkillTree* tree) {
-	_tree = tree->clone();
-	_tree->setAttached(this);
-}

@@ -18,7 +18,7 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		_reload(1), _levelDiff(lvlDiff), _health(30), _maxHealth(30),
 		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
 			0, _maxHealth, _health),
-		_exp(0.0f),	_prevLevel(-1) {
+		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
 
 	// If the stats provided give us a max health set it
 	if (s.hasStat("maxHealth")) {
@@ -60,7 +60,11 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	}
 }
 
-Unit::~Unit() {}
+Unit::~Unit() {
+	if (_tree) {
+		delete _tree;
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
@@ -204,4 +208,9 @@ int Unit::getLevel() const {
 
 void Unit::setLevel(int level) {
 	_exp = ExperienceHelper::levelToExp(level);
+}
+
+void Unit::setSkillTree(SkillTree* tree) {
+	_tree = tree->clone();
+	_tree->setAttached(this);
 }

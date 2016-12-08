@@ -131,6 +131,14 @@ public:
 	// level - Level to set the Unit to
 	void setLevel(int level);
 
+	// Set the SkillTree
+	// tree - SkillTree to copy
+	void setSkillTree(SkillTree* tree);
+
+	// Get the SkillTree this Object uses
+	// returns: Pointer to the SkillTree this Object uses
+	inline SkillTree* getTree() const { return _tree; }
+
 protected:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
@@ -144,6 +152,8 @@ protected:
 
 	float _exp; // Current experience of this Unit
 	int _prevLevel; // Used to check if the Unit has gone up a level
+
+	SkillTree* _tree; // Skill tree attached to this Object
 };
 
 #endif

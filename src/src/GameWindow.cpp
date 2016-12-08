@@ -1,4 +1,5 @@
 #include "GameWindow.h"
+
 #include "Logger.h"
 #include "Game.h"
 #include "Common.h"
@@ -17,6 +18,7 @@
 #include "ExperienceHelper.h"
 #include "components/UnitStatsComponent.h"
 #include "LuaConfig.h"
+#include "Asteroid.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static vars
@@ -251,14 +253,34 @@ void GameWindow::keyEvent(sf::Event& e) {
 					u->getLevel(), u->getExp());
 			}
 		}
+	} else if (e.key.code == sf::Keyboard::C) {
+		GuiComponent* clicked = 
+			getComponentAt(e.mouseButton.x, e.mouseButton.y);
+
+		if (!clicked) {
+			CORE_WARN("No GuiComponent is clicked");
+			return;
+		}
+
+		// Mouse relative to the window
+		sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
+
+		// Mouse relative to the clicked GuiComponent
+		sf::Vector2f worldPos = Game::getRenderWindow()
+			.mapPixelToCoords(pixelPos, clicked->getView());
+
+		Asteroid* ast = new Asteroid(&_map, worldPos.x, worldPos.y, 45);
+		_map.addObject(ast);
 	}
 }
 
 void GameWindow::mouseEvent(sf::Event& e) {
 	GuiComponent* clicked = 
 		getComponentAt(e.mouseButton.x, e.mouseButton.y);
+
 	// Mouse relative to the window
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
+
 	// Mouse relative to the clicked GuiComponent
 	sf::Vector2f worldPos = Game::getRenderWindow()
 		.mapPixelToCoords(pixelPos, clicked->getView());

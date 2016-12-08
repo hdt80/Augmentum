@@ -192,10 +192,6 @@ public:
 	// return: _toRemove
 	inline bool isToRemove() const { return _toRemove; }
 
-	// Get the SkillTree this Object uses
-	// returns: Pointer to the SkillTree this Object uses
-	inline SkillTree* getTree() const { return _tree; }
-
 	// Utility getters /////////////////////////////////////////////////////////
 	
 	// Get how many perks this Object is that are active
@@ -216,7 +212,6 @@ public:
 	
 	void setTarget(Target* t);
 	void setToRemove(bool b) { _toRemove = b; }
-	void setSkillTree(SkillTree* tree);
 
 	// Set the size of this Object
 	// size - New size to use
@@ -285,7 +280,6 @@ protected:
 
 	LuaScript _lua; // Script associated with this Object
 
-	SkillTree* _tree; // Skill tree attached to this Object
 	std::vector<Perk*> _perks; // Perks of this Object
 
 	int _objType; // What type of Object this is

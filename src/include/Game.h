@@ -24,6 +24,7 @@ public:
 	
 	// Start running the game
 	static void start();
+
 	// Main game loop
 	static void loop();
 

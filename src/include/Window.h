@@ -47,13 +47,17 @@ public:
 	const std::string getStateString();
 	const std::string getStateString(WindowState state);
 
-	void setSize(Vector2 size) { _size = size; }
-	Vector2 getSize() const { return _size; }
-	int getWidth() { return _size.X; }
-	int getHeight() { return _size.Y; }
+	inline void setSize(const Vector2& size) { _size = size; }
+
+	// Get the size of this Window
+	// returns: _size
+	const Vector2& getSize() const { return _size; }
+
+	int getWidth() const { return _size.X; }
+	int getHeight() const { return _size.Y; }
 
 	// Name getter and setter
-	const std::string& getName() { return _name; }
+	const std::string& getName() const { return _name; }
 	void setName(const std::string& name) { _name = name; }
 
 	// Update the Window
