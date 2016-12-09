@@ -254,16 +254,15 @@ void GameWindow::keyEvent(sf::Event& e) {
 			}
 		}
 	} else if (e.key.code == sf::Keyboard::C) {
-		GuiComponent* clicked = 
-			getComponentAt(e.mouseButton.x, e.mouseButton.y);
+		// Mouse relative to the window
+		sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
+
+		GuiComponent* clicked = getComponentAt(pixelPos.x, pixelPos.y);
 
 		if (!clicked) {
 			CORE_WARN("No GuiComponent is clicked");
 			return;
 		}
-
-		// Mouse relative to the window
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
 
 		// Mouse relative to the clicked GuiComponent
 		sf::Vector2f worldPos = Game::getRenderWindow()

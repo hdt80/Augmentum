@@ -8,6 +8,7 @@ class Unit;
 
 class UnitStatsComponent : public GuiComponent {
 public:
+
 	// UnitStatsComponent ctor
 	// window - Window this GuiComponent is being drawn to
 	// entryStyle - How to draw the GuiEntries in this GuiComponent
@@ -17,7 +18,10 @@ public:
 	UnitStatsComponent(Window* window, const GuiEntryStyle* style,
 			const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size);		
 
+	// Methods /////////////////////////////////////////////////////////////////
+
 	// Update this component based on how many microseconds have passed
+	// diff - Microseconds from the last update
 	virtual void update(int diff);
 
 	// Inherited from sf::Drawable

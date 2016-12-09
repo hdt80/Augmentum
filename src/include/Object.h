@@ -30,6 +30,9 @@ enum ObjectType {
 class Object : public Eventable, public Target,
 	public sf::Drawable, public sf::Transformable {
 public:
+
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+
 	// A default constructor must be defined for Sol for some reason
 	// This constructor should never be used and is only for Sol
 	Object();

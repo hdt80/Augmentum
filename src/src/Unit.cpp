@@ -29,6 +29,7 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	// Cooldowns are counted in microseconds
 	_reload.setMaxCooldown((1 / getFireRate()) * 1000000);
 
+	// Set up the shape
 	_shape.setRadius(size);
 	_shape.setPointCount(sides);
 	_shape.setFillColor(c);
@@ -41,16 +42,22 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	bdf.type = b2_dynamicBody;
 	bdf.position.Set(x, y);
 	bdf.angle = 0; // Radians
+	bdf.fixedRotation = true; // Prevent rotaton
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
-	b2CircleShape cs;
-	cs.m_p.Set(0, 0);
-	cs.m_radius = getSize();
+	b2PolygonShape ps;
+	std::vector<b2Vec2> points(sides);
+	float radDiff = M_PI / (sides / 2);
+	for (int i = 0; i < sides; ++i) {
+		points[i] = b2Vec2(size * sin(radDiff * i), size * cos(radDiff * i));
+	}
+	ps.Set(&points[0], sides);
 
 	b2FixtureDef fd;
-	fd.shape = &cs;
+	fd.shape = &ps;
 	fd.density = 1.0f;
 	fd.friction = 0.8f;
+	fd.restitution = 1.0f;
 	_b2Box->CreateFixture(&fd);
 
 	_b2Box->SetLinearDamping(0.4f);
