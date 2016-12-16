@@ -3,6 +3,7 @@
 #include "ExperienceHelper.h"
 #include "GameWindow.h"
 #include "Database.h"
+#include "util/MathUtil.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
@@ -19,6 +20,11 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
 			0, _maxHealth, _health),
 		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
+
+	if (sides < 3) {
+		CORE_WARN("Cannot have sides be less than 3. Setting to 3");
+		sides = 3;
+	}
 
 	// If the stats provided give us a max health set it
 	if (s.hasStat("maxHealth")) {
@@ -45,26 +51,20 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	bdf.fixedRotation = true; // Prevent rotaton
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
+	std::vector<b2Vec2> points = MathUtil::generatePolygon(sides, size);
 	b2PolygonShape ps;
-	std::vector<b2Vec2> points(sides);
-	float radDiff = M_PI / (sides / 2);
-	for (int i = 0; i < sides; ++i) {
-		points[i] = b2Vec2(size * sin(radDiff * i), size * cos(radDiff * i));
-	}
 	ps.Set(&points[0], sides);
 
+	// Fixture definition of this Unit
 	b2FixtureDef fd;
-	fd.shape = &ps;
+	fd.shape = &ps; // Set the shape we use
 	fd.density = 1.0f;
-	fd.friction = 0.8f;
-	fd.restitution = 1.0f;
+	fd.friction = 0.8f; // Have some accel and deccel
+	fd.restitution = 1.0f; // Bounce completely off other b2 objects
 	_b2Box->CreateFixture(&fd);
 
 	_b2Box->SetLinearDamping(0.4f);
-
-	if (_b2Box) {
-		_b2Box->SetUserData(this);
-	}
+	_b2Box->SetUserData(this);
 }
 
 Unit::~Unit() {

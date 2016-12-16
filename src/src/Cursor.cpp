@@ -1,7 +1,7 @@
 #include "Cursor.h"
 
 #include <cmath>
-#include "Convert.h"
+#include "util/MathUtil.h"
 #include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ Cursor::Cursor() {
 		if (i == 0) {
 			angle = 0;
 		} else {
-			angle = convert::toRad((360 / points) * i);	
+			angle = MathUtil::degToRad((360 / points) * i);	
 		}
 		
 		// std uses radians

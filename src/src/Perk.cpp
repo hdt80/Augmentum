@@ -1,10 +1,11 @@
 #include "Perk.h"
 
 #include "Logger.h"
-#include "Convert.h"
 #include "Object.h"
 #include "Unit.h"
 #include "Map.h"
+
+#include "util/StringUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Perk ctor and dtor
@@ -71,8 +72,8 @@ void Perk::update(int diff) {
 ///////////////////////////////////////////////////////////////////////////////
 
 std::string Perk::getTitle() const {
-	return (getName() + "(" + convert::toString(getStacks()) + "/" +
-		convert::toString(getMaxStacks()) + ")");
+	return (getName() + "(" + StringUtil::toString(getStacks()) + "/" +
+		StringUtil::toString(getMaxStacks()) + ")");
 }
 
 void Perk::setStacks(int c) {
@@ -80,6 +81,7 @@ void Perk::setStacks(int c) {
         CORE_INFO("Perk:: c: %i, _maxStacks: %i", c, _maxStacks);
         return;
     }
+	// If not stackable reset the duration, else set the stacks
     if (!_stackable) {
         _duration = _maxDuration;
     } else {
@@ -88,15 +90,18 @@ void Perk::setStacks(int c) {
 }
 
 void Perk::addStack() {
+	// If stackable add a stack
 	if (_stackable && (_stacks < _maxStacks)) {
 		++_stacks;
 	} else {
+		// If not stackable, or at max stacks reset the duration
         _duration = _maxDuration;
     }
 }
 
 void Perk::setAttached(Object* attached) {
 	_attached = attached;
+	// Make sure to update what Object we're attached to
 	_lua.lua.set("attached", _attached);
 }
 

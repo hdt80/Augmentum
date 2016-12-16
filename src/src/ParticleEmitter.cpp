@@ -3,8 +3,9 @@
 #include <random>
 
 #include "Logger.h"
-#include "Random.h"
-#include "Convert.h"
+
+#include "util/Random.h"
+#include "util/MathUtil.h"
 
 ParticleEmitter::ParticleEmitter() {
 	_vertices.setPrimitiveType(sf::Points);
@@ -40,7 +41,7 @@ void ParticleEmitter::emit(const ParticleDef* pDef,
 			dirAng = Random::randInt(0, 360);
 		}
 
-		dirAng = convert::toRad(dirAng);
+		dirAng = MathUtil::degToRad(dirAng);
 
 		_particles[i].pDef = pDef;
 		_particles[i].lifeLeft = _particles[i].pDef->lifetime;

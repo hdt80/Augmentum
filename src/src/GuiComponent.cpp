@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "GuiButton.h"
 #include "Game.h"
-#include "Convert.h"
+#include "util/StringUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor

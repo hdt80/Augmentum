@@ -8,13 +8,13 @@
 
 #include "Logger.h"
 #include "Game.h"
-#include "Convert.h"
+#include "util/StringUtil.h"
 
 #ifdef _WIN32
 #include <windows.h>
 
 // By defining the method in this macro we can ensure that it doesn't exist
-// on windows
+// outside of Windows
 void setColorOutput();
 
 // Because I'm too lazy to update my WinSDK, we manually define what 
@@ -29,15 +29,18 @@ void setColorOutput();
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 ////////////////////////////////////////////////////////////////////////////////
-int main(int argc, char* argv[]) {
+int main(int argc, char** argv) {
+
 #	ifdef _WIN32
 	setColorOutput();
 #	endif // _WIN32
 
+	// Seed the rng from the current time
 	srand(time(0));
 
-	CORE_INFO("CWD: %s", convert::getWorkingDir().c_str());
+	CORE_INFO("Running from: %s", StringUtil::getWorkingDir().c_str());
 
+	// Start the game
    	Game::start();
 
 	return 0;

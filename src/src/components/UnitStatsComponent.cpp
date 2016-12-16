@@ -2,7 +2,7 @@
 
 #include "Game.h"
 #include "GameWindow.h"
-#include "Convert.h"
+#include "util/StringUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // UnitStatsComponent ctor and dtor
@@ -70,33 +70,33 @@ void UnitStatsComponent::update(int diff) {
 				worldPos.x, worldPos.y));
 
 	if (_hovered) {
-		_unitPos->setMessage(convert::format("Pos [%g, %g]",
+		_unitPos->setMessage(StringUtil::format("Pos [%g, %g]",
 			_hovered->getX(), _hovered->getY()));
-		_unitVelocity->setMessage(convert::format("Vel [%g, %g]",
+		_unitVelocity->setMessage(StringUtil::format("Vel [%g, %g]",
 			_hovered->getVelocity().X, _hovered->getVelocity().Y));
-		_unitLevel->setMessage(convert::format("Lvl: %d, Exp: %g",
+		_unitLevel->setMessage(StringUtil::format("Lvl: %d, Exp: %g",
 			_hovered->getLevel(), _hovered->getExp()));
-		_unitSpeed->setMessage(convert::format("Speed: %g", 
+		_unitSpeed->setMessage(StringUtil::format("Speed: %g", 
 			_hovered->getSpeed()));
-		_unitRange->setMessage(convert::format("Range: %g",
+		_unitRange->setMessage(StringUtil::format("Range: %g",
 			_hovered->getRange()));
-		_unitDamage->setMessage(convert::format("Damage: %g",
+		_unitDamage->setMessage(StringUtil::format("Damage: %g",
 			_hovered->getDamage()));
-		_unitFireRate->setMessage(convert::format("FireRate: %g",
+		_unitFireRate->setMessage(StringUtil::format("FireRate: %g",
 			_hovered->getFireRate()));
-		_unitAccel->setMessage(convert::format("Accel: %g",
+		_unitAccel->setMessage(StringUtil::format("Accel: %g",
 			_hovered->getAccel()));
-		_unitProjSpeed->setMessage(convert::format("ProjSpeed: %g",
+		_unitProjSpeed->setMessage(StringUtil::format("ProjSpeed: %g",
 			_hovered->getProjSpeed()));
-		_unitHp->setMessage(convert::format("Health: %g",
+		_unitHp->setMessage(StringUtil::format("Health: %g",
 			_hovered->getHealth()));
-		_unitMaxHp->setMessage(convert::format("Max health: %g",
+		_unitMaxHp->setMessage(StringUtil::format("Max health: %g",
 			_hovered->getMaxHealth()));
 
 		Enemy* e = nullptr;
 
 		if ((e = Map::toEnemy(_hovered))) {
-			_unitName->setMessage(convert::format("Type: %s",
+			_unitName->setMessage(StringUtil::format("Type: %s",
 				e->getEnemyType().getName().c_str()));
 		}
 	} else {

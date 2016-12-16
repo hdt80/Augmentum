@@ -3,22 +3,26 @@
 #include "Logger.h"
 #include "Game.h"
 #include "Common.h"
-#include "SkillTree.h"
-#include "Convert.h"
-#include "SkillTreeWindow.h"
 #include "GuiComponent.h"
+#include "ExperienceHelper.h"
 #include "Ship.h"
+#include "LuaConfig.h"
+#include "Asteroid.h"
+
+#include "SkillTree.h"
+#include "SkillTreeWindow.h"
+
 #include "components/WorldComponent.h"
 #include "components/DebugWorldComponent.h"
+#include "components/UnitStatsComponent.h"
+
 #include "GuiToolbarComponent.h"
 #include "GuiButton.h"
 #include "GuiMenuButton.h"
 #include "GuiProgressBar.h"
 #include "GuiExpProgressBar.h"
-#include "ExperienceHelper.h"
-#include "components/UnitStatsComponent.h"
-#include "LuaConfig.h"
-#include "Asteroid.h"
+
+#include "util/StringUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static vars
@@ -208,7 +212,7 @@ void GameWindow::update(int diff) {
 	_cursor.update(diff);
 
 	if (_drawFps) {
-		_fpsText.setString(convert::format("%d", Game::Fps.getFPS()));
+		_fpsText.setString(StringUtil::format("%d", Game::Fps.getFPS()));
 	}
 }
 

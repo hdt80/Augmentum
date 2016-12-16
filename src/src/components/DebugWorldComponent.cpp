@@ -1,9 +1,9 @@
 #include "components/DebugWorldComponent.h"
 #include "GameWindow.h"
 #include "Ship.h"
-#include "Convert.h"
 #include "Game.h"
 #include "FPS.h"
+#include "util/StringUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor
@@ -40,12 +40,13 @@ DebugWorldComponent::DebugWorldComponent(Window* window,
 void DebugWorldComponent::update(int diff) {
 	GuiComponent::update(diff);
 	Ship* ship = _map->getSelected();
-	_fps->setMessage(convert::format("FPS: %u", Game::Fps.getFPS()));
-	_pos->setMessage(convert::format("Pos [%g %g]", ship->getX(), ship->getY()));
-	_speed->setMessage(convert::format("Speed [%g %g]",
-				ship->getVelocity().X, ship->getVelocity().Y));
+	_fps->setMessage(StringUtil::format("FPS: %u", Game::Fps.getFPS()));
+	_pos->setMessage(StringUtil::format("Pos [%g %g]",
+		ship->getX(), ship->getY()));
+	_speed->setMessage(StringUtil::format("Speed [%g %g]",
+		ship->getVelocity().X, ship->getVelocity().Y));
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());
-	_mousePos->setMessage(convert::format("Mouse [%d %d]",
-				mousePos.x, mousePos.y));
+	_mousePos->setMessage(StringUtil::format("Mouse [%d %d]",
+		mousePos.x, mousePos.y));
 }

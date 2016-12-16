@@ -1,12 +1,8 @@
 #include "Asteroid.h"
 
 #include "Map.h"
-#include "Random.h"
-#include "Convert.h"
-
-// Use the built-in math definitions (M_PI)
-#define _USE_MATH_DEFINES
-#include <cmath>
+#include "util/Random.h"
+#include "util/MathUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Asteroid ctor and dtor
@@ -23,7 +19,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	b2BodyDef bdf;
 	bdf.type = b2_staticBody;
 	bdf.position.Set(x, y);
-	bdf.angle = Random::randFloat(0, M_PI); // Radians
+	bdf.angle = Random::randFloat(0, MathUtil::PI); // Radians
 
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
@@ -49,7 +45,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	_conShape.setOutlineColor(sf::Color::Black);
 	_conShape.setOutlineThickness(-3.0f);
 	_conShape.setFillColor(sf::Color::Red);
-	_conShape.setRotation(convert::toDeg(bdf.angle));
+	_conShape.setRotation(MathUtil::radToDeg(bdf.angle));
 }
 
 Asteroid::~Asteroid() {
@@ -61,20 +57,7 @@ Asteroid::~Asteroid() {
 ////////////////////////////////////////////////////////////////////////////////
 
 const std::vector<b2Vec2> Asteroid::getPoints(float radius) {
-	std::vector<b2Vec2> points(8);
-	b2PolygonShape testShape; // Shape to test the points
-
-	// Use a do while so the first iteration is completed
-	do {
-		// TODO: Make this not a regular polygon
-		for (unsigned int i = 0; i < 8; ++i) {
-			points[i] = 
-				b2Vec2(radius * sin(M_PI / 4 * i), radius * cos(M_PI / 4 * i));
-		}
-		testShape.Set(&points[0], 8);
-	} while (!testShape.Validate());
-
-	return points;
+	return MathUtil::generatePolygon(8, radius);
 }
 
 void Asteroid::updatePosition(float x, float y) {
