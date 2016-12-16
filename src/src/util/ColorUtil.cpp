@@ -5,19 +5,27 @@
 namespace ColorUtil {
 
 	sf::Color colorInterpolate(sf::Color min, sf::Color max, float t) {
+		// Create HSVColors of the min and max
 		HSVColor hmin = HSVConvert::RGBToHSV(min.r, min.g, min.b);
 		HSVColor hmax = HSVConvert::RGBToHSV(max.r, max.g, max.b);
+
+		// Interpolated color
 		HSVColor done;
 
+		// Interpolate each component
 		done.h = MathUtil::linearInterpolate(hmin.h, hmax.h, t);
 		done.s = MathUtil::linearInterpolate(hmin.s, hmax.s, t);
 		done.v = MathUtil::linearInterpolate(hmin.v, hmax.v, t);
 
+		// Convert the interpolated HSVColor into a sf::Color
 		return HSVConvert::HSVToRGB(done.h, done.s, done.v);
 	}
 
 	namespace HSVConvert {
 
+		// Credit to David H on Stackoverflow for finding this, and credit
+		// to who ever originally wrote this
+		// https://stackoverflow.com/questions/3018313/
 		HSVColor RGBToHSV(double r, double g, double b) {
 			HSVColor out;
 			double min, max, delta;
@@ -65,6 +73,9 @@ namespace ColorUtil {
 			return out;
 		}
 
+		// Credit to David H on Stackoverflow for finding this, and credit
+		// to who ever originally wrote this
+		// https://stackoverflow.com/questions/3018313/
 		sf::Color HSVToRGB(double h, double s, double v) {
 			double  hh, p, q, t, ff;
 			long i;

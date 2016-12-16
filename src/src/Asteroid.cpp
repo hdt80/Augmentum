@@ -44,7 +44,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	}
 	_conShape.setOutlineColor(sf::Color::Black);
 	_conShape.setOutlineThickness(-3.0f);
-	_conShape.setFillColor(sf::Color::Red);
+	_conShape.setFillColor(sf::Color(96, 96, 96));
 	_conShape.setRotation(MathUtil::radToDeg(bdf.angle));
 }
 
@@ -57,7 +57,7 @@ Asteroid::~Asteroid() {
 ////////////////////////////////////////////////////////////////////////////////
 
 const std::vector<b2Vec2> Asteroid::getPoints(float radius) {
-	return MathUtil::generatePolygon(8, radius);
+	return MathUtil::generateConvexPolygon(8, radius);
 }
 
 void Asteroid::updatePosition(float x, float y) {

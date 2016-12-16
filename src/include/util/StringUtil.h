@@ -23,10 +23,11 @@ namespace StringUtil {
 	// returns: A formatted string like how prinf would format it
 	template<typename ... Args>
 	std::string format(const std::string& format, Args ... args) {
+		// Add one to the size for the null terminating character
 		size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1;
 		std::unique_ptr<char[]> buf(new char[size]);
 		snprintf(buf.get(), size, format.c_str(), args ...);
-		// Remove the terminating character
+		// Remove the null terminating character
 		return std::string(buf.get(), buf.get() + size - 1);
 	}
 

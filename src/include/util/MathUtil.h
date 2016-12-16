@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Box2D/Box2D.h"
+#include "Vector2.h"
 
 namespace MathUtil {
 
@@ -46,10 +47,35 @@ namespace MathUtil {
 	int linearInterpolate(float max, float cur, float dt);
 
 	// Generate a regular polygon
-	// points - How many points/sides the polygon should have
-	// size - How many units across the polygon should be
-	// returns: A vector containing the points used to represent the polygon
-	std::vector<b2Vec2> generatePolygon(int points, float size);
+	// sides - How many sides/corners the polygon should have
+	// size - How many units accross the polygon should be
+	// returns: A vector containing the points use to represent the polygon
+	std::vector<b2Vec2> generatePolygon(int sides, float size);
+
+	// Generate a non-regular convex polygon
+	// sides - How many sides/corners the polygon should have
+	// size - How many units accross the polygon should be
+	// returns: A vector containing the points use to represent the polygon
+	std::vector<b2Vec2> generateConvexPolygon(int sides, float size);
+
+	// Check if a series of points forms a convex polygon
+	// points - Points to check. This is in clockwise order
+	// returns: If the series of points forms a valid convex polygon
+	bool isValidConvexPolygon(const std::vector<b2Vec2>& points);
+
+	// Calculate the angle between 3 verticies, ordered in v1, v2, v3
+	// v1 - Vertex 1
+	// v2 - Vertex 2
+	// v3 - Vertex 3
+	// returns: The angle between the 3 verticies measured in radians
+	float getAngle(Vector2 v1, Vector2 v2, Vector2 v3);
+
+	// Wrap a value inside a range
+	// val - Value to wrap
+	// min - Min value the value can be
+	// max - Max value the value can be
+	// returns: The value wrapped between the range defined by min and max
+	int wrap(int val, int min, int max);
 
 };
 
