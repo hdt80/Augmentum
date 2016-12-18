@@ -6,11 +6,11 @@ namespace ColorUtil {
 
 	sf::Color colorInterpolate(sf::Color min, sf::Color max, float t) {
 		// Create HSVColors of the min and max
-		HSVColor hmin = HSVConvert::RGBToHSV(min.r, min.g, min.b);
-		HSVColor hmax = HSVConvert::RGBToHSV(max.r, max.g, max.b);
+		HSVConvert::HSVColor hmin = HSVConvert::RGBToHSV(min.r, min.g, min.b);
+		HSVConvert::HSVColor hmax = HSVConvert::RGBToHSV(max.r, max.g, max.b);
 
 		// Interpolated color
-		HSVColor done;
+		HSVConvert::HSVColor done;
 
 		// Interpolate each component
 		done.h = MathUtil::linearInterpolate(hmin.h, hmax.h, t);

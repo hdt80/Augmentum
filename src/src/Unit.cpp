@@ -42,6 +42,9 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	_shape.setOutlineColor(sf::Color::Black);
 	_shape.setOutlineThickness(-3.0f);
 
+	if (_b2Box) {
+		map->getWorld()->DestroyBody(_b2Box);
+	}
 	_b2Box = nullptr;
 
 	b2BodyDef bdf;
@@ -59,11 +62,11 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	b2FixtureDef fd;
 	fd.shape = &ps; // Set the shape we use
 	fd.density = 1.0f;
-	fd.friction = 0.8f; // Have some accel and deccel
+	//fd.friction = 0.1f; // Have some accel and deccel
 	fd.restitution = 1.0f; // Bounce completely off other b2 objects
 	_b2Box->CreateFixture(&fd);
 
-	_b2Box->SetLinearDamping(0.4f);
+	_b2Box->SetLinearDamping(0.1f);
 	_b2Box->SetUserData(this);
 }
 
@@ -112,7 +115,7 @@ void Unit::onUnitKill(Unit* killed) {
 void Unit::shoot(float x, float y) {
 	if (_reload.done()) {
 		Projectile* p = new Projectile(_map, 5,
-				new Target(x, y), this, Color(255, 255, 255, 255));	
+				new Target(x, y), this, sf::Color::White);	
 		p->setObjectType(getObjectType());
 		p->addObjectTypeOption(ObjectType::PROJECTILE);
 

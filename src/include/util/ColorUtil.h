@@ -11,13 +11,15 @@ namespace ColorUtil {
 	// t - Percent to interpolate as in decimal form
 	sf::Color colorInterpolate(sf::Color min, sf::Color max, float t);
 
-	struct HSVColor {
-		double h; // angle in degrees
-		double s; // percent
-		double v; // percent
-	};
 
 	namespace HSVConvert {
+
+		// Represents a HSVColor
+		struct HSVColor {
+			double h; // angle in degrees
+			double s; // percent
+			double v; // percent
+		};
 
 		// Convert an RGB color to an HSL
 		// r - R value, percent

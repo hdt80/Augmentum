@@ -32,11 +32,6 @@ public:
 
 protected:
 
-	// Get the points that will make up this Asteroid
-	// radius - Max radius of the shape
-	// returns: A vector with each point
-	const std::vector<b2Vec2> getPoints(float radius);
-
 	// Use a different shape when drawing an Asteroid, have sides and stuff
 	sf::ConvexShape _conShape;
 

@@ -1,7 +1,6 @@
 #include "Projectile.h"
 
 #include "Enemy.h"
-#include "Tower.h"
 #include "ParticleEmitter.h"
 #include "Perk.h"
 #include "Common.h"
@@ -17,13 +16,13 @@
 // Constructor
 ////////////////////////////////////////////////////////////////////////////////
 
-Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
-	: Object(map, shooter->getX(), shooter->getY(), shooter->getStats(), size),
-		_color(c), _shooter(shooter) {
+Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
+	: Object(map, shoot->getX(), shoot->getY(), shoot->getStats(), size),
+		_color(c), _shooter(shoot) {
 
 	// Speed of this Projectile is stored in Tower's projSpeed, not speed
 	// so set it to the proper value
-	setSpeed(shooter->getProjSpeed());
+	setSpeed(_shooter->getProjSpeed());
 
 	_shape.setRadius(size);
 	_shape.setFillColor(sf::Color(120, 120, 120));
@@ -31,10 +30,13 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shooter, Color c)
 	// Set the angle we move at towards the enemy
 	_direction = (Vector2(t->getX(), t->getY()) - Vector2(x, y)).normalize();
 
-	_shape.setFillColor(c.toSF());
+	_shape.setFillColor(_color);
 	_shape.setOutlineColor(sf::Color::Black);
 	_shape.setOutlineThickness(-1.0f);
 
+	if (_b2Box) {
+		map->getWorld()->DestroyBody(_b2Box);
+	}
 	_b2Box = nullptr;
 
 	b2BodyDef bdf;

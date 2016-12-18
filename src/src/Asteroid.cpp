@@ -24,7 +24,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
 	// Get the verticies that define this Asteroid
-	std::vector<b2Vec2> points = getPoints(maxRadius);
+	std::vector<b2Vec2> points = MathUtil::generateConvexPolygon(8, maxRadius);
 
 	b2PolygonShape pShape;
 	pShape.Set(&points[0], 8);
@@ -32,7 +32,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	b2FixtureDef fd; // Fixture def of the b2Body this Asteroid will use
 	fd.shape = &pShape;
 	fd.density = 1.0f;
-	fd.friction = 0.8f;
+	fd.friction = 0.4f;
 
 	_b2Box->CreateFixture(&fd);
 	_b2Box->SetLinearDamping(0.4f);
@@ -55,10 +55,6 @@ Asteroid::~Asteroid() {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
-
-const std::vector<b2Vec2> Asteroid::getPoints(float radius) {
-	return MathUtil::generateConvexPolygon(8, radius);
-}
 
 void Asteroid::updatePosition(float x, float y) {
 	_conShape.setPosition(x, y);

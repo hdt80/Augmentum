@@ -3,7 +3,6 @@
 #include "Logger.h"
 #include "Object.h"
 #include "Map.h"
-#include "Tower.h"
 #include "Target.h"
 #include "Enemy.h"
 #include "Perk.h"
@@ -17,7 +16,6 @@ LuaScript::LuaScript(bool defineClasses) {
 	if (defineClasses) {
 		defineTarget();
 		defineObject();
-		defineTower();
 		defineEnemy();
 		defineMap();
 		defineStats();
@@ -46,39 +44,9 @@ void LuaScript::printTable() {
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Object defenitions for Lua scripts
-///////////////////////////////////////////////////////////////////////////////
-void LuaScript::defineTower() {
-	lua.new_usertype<Tower> (
-		"Tower", sol::constructors<sol::types<Map*, float, float, Stats>>(),
-		"getX", &Tower::getX,
-		"getY", &Tower::getY,
-		"setPosition", &Tower::setPosition,
-		//"distanceWith", &Tower::distanceWith, // Doesn't work
-		//"distanceWithSqr", &Tower::distanceWithSqr,
-		"isSimpleTarget", &Tower::isSimpleTarget,
-		// Object methods
-		"contains", &Tower::contains,
-		"applyStat", &Tower::applyStat,
-		"setStats", &Tower::setStats,
-		"getSpeed", &Tower::getSpeed,
-		"getRange", &Tower::getRange,
-		"getFireRate", &Tower::getFireRate,
-		"getDamage", &Tower::getDamage,
-		"getAccel", &Tower::getAccel,
-		"getProjSpeed", &Tower::getProjSpeed,
-		"setRange", &Tower::setRange,
-		"setFireRate", &Tower::setFireRate,
-		"setDamage", &Tower::setDamage,
-		"setSpeed", &Tower::setSpeed,
-		"setAccel", &Tower::setAccel,
-		"setProjSpeed", &Tower::setProjSpeed,
-		// Tower methods
-		"getProjectile", &Tower::getProjectile,
-		"setProjectile", &Tower::setProjectile
-	);
-}
+////////////////////////////////////////////////////////////////////////////////
 
 void LuaScript::defineObject() {
 	lua.new_usertype<Object> (

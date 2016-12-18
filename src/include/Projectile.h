@@ -2,7 +2,6 @@
 #define _PROJECTILE_H
 
 #include "Object.h"
-#include "Color.h"
 
 class Unit;
 
@@ -17,7 +16,7 @@ public:
 	// t - Target to move towards
 	// shooter - Who shot this Projectile
 	// color - Color to draw the Projectile as
-	Projectile(Map* map, int size, Target* t, Unit* shooter, Color c);
+	Projectile(Map* map, int size, Target* t, Unit* shooter, sf::Color c);
 
 	// Projectile dtor
 	virtual ~Projectile();
@@ -40,7 +39,7 @@ protected:
 	// Inherited from sf::Drawable
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
-	Color _color; // Color to draw this Projectile as
+	sf::Color _color; // Color to draw this Projectile as
 	Unit* _shooter; // Who shot this Projectile
 };
 

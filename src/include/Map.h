@@ -3,7 +3,6 @@
 
 #include "Object.h"
 #include "Enemy.h"
-#include "Tower.h"
 #include "Projectile.h"
 #include "ContactListener.h"
 
