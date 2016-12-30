@@ -1,7 +1,7 @@
 #include "Window.h"
 
 #include "Logger.h"
-#include "GuiComponent.h"
+#include "gui/GuiComponent.h"
 #include "Game.h"
 
 ///////////////////////////////////////////////////////////////////////////////

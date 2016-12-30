@@ -29,6 +29,8 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 
 	// Set the angle we move at towards the enemy
 	_direction = (Vector2(t->getX(), t->getY()) - Vector2(x, y)).normalize();
+	_direction.X = MathUtil::toB2(_direction.X);
+	_direction.Y = MathUtil::toB2(_direction.Y);
 
 	_shape.setFillColor(_color);
 	_shape.setOutlineColor(sf::Color::Black);
@@ -41,20 +43,16 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 
 	b2BodyDef bdf;
 	bdf.type = b2_dynamicBody;
-	bdf.position.Set(x, y);
+	bdf.position.Set(MathUtil::toB2(x), MathUtil::toB2(y));
 	bdf.angle = 0; // Radians
 	_b2Box = _map->getWorld()->CreateBody(&bdf);
 
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);
-	cs.m_radius = size;
-
-	b2PolygonShape dBox;
-	dBox.SetAsBox(size, size);
+	cs.m_radius = MathUtil::toB2(size / 2);
 
 	b2FixtureDef fd;
-	//fd.shape = &cs;
-	fd.shape = &dBox;
+	fd.shape = &cs;
 	fd.density = 1.0f;
 	fd.friction = 0.4f;
 	fd.isSensor = true;
@@ -63,13 +61,16 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 	if (_b2Box) {
 		_b2Box->SetUserData(this);
 	}
+
+	float speed = MathUtil::toB2(getSpeed());
+	setVelocity(_direction.X * speed, _direction.Y * speed);
 }
 
 Projectile::~Projectile() {}
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Methods
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 void Projectile::loadLua() {
 
@@ -80,14 +81,7 @@ void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void Projectile::onCollision(Object* o) {
-	// Did we collide with an enemy?
-	Unit* u = Map::toUnit(o);
-	if (!u) {
-		return;
-	}
-	u->applyDamage(getDamage(), _shooter);
-
-	_shooter->onDamageDealt(getDamage(), u);
+	o->onProjectileHit(this);
 
 	float angle = MathUtil::radToDeg((-_direction).angle());
 
@@ -102,5 +96,5 @@ void Projectile::move(int diff) {
 }
 
 void Projectile::update(int diff) {
-	setVelocity(_direction.X * getSpeed(), _direction.Y * getSpeed());
+	// No need to convert to b2 units as its done in setVelocity
 }

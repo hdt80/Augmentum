@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 #include <SFML/Graphics.hpp>
-#include "GuiComponent.h"
-#include "GuiProgressBar.h"
+#include "gui/GuiComponent.h"
+#include "gui/GuiProgressBar.h"
 #include "ParticleEmitter.h"
 
 // Macro to define mangled class names during compilation

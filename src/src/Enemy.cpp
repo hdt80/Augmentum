@@ -43,7 +43,6 @@ int EnemyType::createEnemyType(int id, const std::string& name, int sides,
 	CORE_DEBUG("Created enemy type");
 	CORE_DEBUG("\tid: %d", id);
 	CORE_DEBUG("\tname: %s", name.c_str());
-	CORE_DEBUG("\tsides: %d", sides);
 
 	return id;
 }
@@ -78,8 +77,6 @@ int EnemyType::addEnemyType(EnemyType& type) {
 	CORE_DEBUG("Created enemy type");
 	CORE_DEBUG("\tid: %d", type.getId());
 	CORE_DEBUG("\tname: %s", type.getName().c_str());
-	CORE_DEBUG("\tMax hp: %g", type.getDefaultStats().getStat("maxHealth"));
-	CORE_DEBUG("\tsides: %d", type.getSides());
 
 	return type.getId();
 }

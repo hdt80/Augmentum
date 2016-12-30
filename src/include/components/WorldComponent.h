@@ -1,7 +1,7 @@
 #ifndef _WORLD_COMPONENT_H
 #define _WORLD_COMPONENT_H
 
-#include "GuiComponent.h"
+#include "gui/GuiComponent.h"
 
 class Map;
 

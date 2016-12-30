@@ -8,6 +8,7 @@
 #include "Target.h"
 #include "Perk.h"
 #include "BitWise.h"
+#include "util/MathUtil.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and dtor
@@ -63,6 +64,13 @@ void Object::loadLua() {
 void Object::onCollision(Object* o) {
 	//CORE_INFO("%x collided with %x", this, o);
 };
+
+void Object::onProjectileHit(Projectile* p) {
+	_lua.callFunction("onProjectileHit", p);
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		_perks[i]->onProjectileHit(p);
+	}
+}
 
 void Object::onUpdate(int diff) {
 	_lua.callFunction("onUpdate", diff);
@@ -122,6 +130,8 @@ bool Object::collidesWith(Object* o) const {
 }
 
 bool Object::contains(float px, float py) const {
+	px = MathUtil::toB2(px);
+	py = MathUtil::toB2(py);
 	b2Vec2 vec(px, py);
 	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
 		if (fix->TestPoint(vec)) {
@@ -168,11 +178,31 @@ void Object::update(int diff) {
 
 void Object::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();
-	b2Vec2 end(x * getSpeed(), y * getSpeed());
+	b2Vec2 end(MathUtil::toB2(x) * getSpeed(), MathUtil::toB2(y) * getSpeed());
 
 	b2Vec2 diff = end - vel;
-	diff *= getAccel();
+	diff *= (1 + MathUtil::toB2(getAccel()));
 	_b2Box->ApplyLinearImpulseToCenter(diff, true);
+}
+
+Vector2 Object::getVelocity() const {
+	return Vector2(MathUtil::fromB2(_b2Box->GetLinearVelocity().x),
+		MathUtil::fromB2(_b2Box->GetLinearVelocity().y));
+}
+
+void Object::setPosition(float x, float y) {
+	_b2Box->SetTransform(b2Vec2(MathUtil::toB2(x), MathUtil::toB2(y)),
+		_b2Box->GetAngle());
+
+	updatePosition(x, y);
+}
+
+float Object::getX() const {
+	return MathUtil::fromB2(_b2Box->GetPosition().x);
+}
+
+float Object::getY() const {
+	return MathUtil::fromB2(_b2Box->GetPosition().y);
 }
 
 void Object::updatePosition(float x, float y) {
@@ -233,7 +263,7 @@ void Object::addPerk(Perk* p) {
 	}
 }
 
-Perk* Object::getPerk(std::string name) {
+Perk* Object::getPerk(const std::string& name) const {
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		if (_perks[i]->getName() == name) {
 			return _perks[i];

@@ -3,11 +3,10 @@
 #include "Logger.h"
 #include "Game.h"
 #include "Common.h"
-#include "GuiComponent.h"
 #include "ExperienceHelper.h"
-#include "Ship.h"
 #include "LuaConfig.h"
-#include "Asteroid.h"
+#include "Ship.h"
+#include "environment/Asteroid.h"
 
 #include "SkillTree.h"
 #include "SkillTreeWindow.h"
@@ -16,11 +15,12 @@
 #include "components/DebugWorldComponent.h"
 #include "components/UnitStatsComponent.h"
 
-#include "GuiToolbarComponent.h"
-#include "GuiButton.h"
-#include "GuiMenuButton.h"
-#include "GuiProgressBar.h"
-#include "GuiExpProgressBar.h"
+#include "gui/GuiComponent.h"
+#include "gui/GuiToolbarComponent.h"
+#include "gui/GuiButton.h"
+#include "gui/GuiMenuButton.h"
+#include "gui/GuiProgressBar.h"
+#include "gui/GuiExpProgressBar.h"
 
 #include "util/StringUtil.h"
 

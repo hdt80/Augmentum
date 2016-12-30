@@ -35,6 +35,10 @@ public:
 
 	// Events //////////////////////////////////////////////////////////////////
 	
+	// Occurs when this Unit is hit by a Projectile
+	// p - Projectile that hit this
+	virtual void onProjectileHit(Projectile* p);
+	
 	// Occurs when the Unit levels up
 	virtual void onLevelUp();
 

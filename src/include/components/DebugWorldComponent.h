@@ -1,7 +1,7 @@
 #ifndef _DEBUG_WORLD_COMPONENT_H
 #define _DEBUG_WORLD_COMPONENT_H
 
-#include "GuiComponent.h"
+#include "gui/GuiComponent.h"
 #include "Map.h"
 
 class DebugWorldComponent : public GuiComponent {

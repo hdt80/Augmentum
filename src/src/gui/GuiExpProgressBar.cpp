@@ -1,4 +1,4 @@
-#include "GuiExpProgressBar.h"
+#include "gui/GuiExpProgressBar.h"
 
 #include "ExperienceHelper.h"
 

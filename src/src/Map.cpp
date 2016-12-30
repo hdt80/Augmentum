@@ -137,8 +137,6 @@ std::vector<Object*> Map::getObjectsInRange(float x, float y, float r) {
 	std::vector<Object*> objs;
 	for (Object* o : objects) {
 		if (o->distanceWith(x, y) <= r) {
-			//CORE_INFO("dist from (%g, %g) => (%g, %g) = %g :: %g",
-			//		o->getX(), o->getY(), x, y, o->distanceWith(x, y), r);	
 			objs.push_back(o);
 		}
 	}

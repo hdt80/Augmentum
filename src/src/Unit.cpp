@@ -49,14 +49,19 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 
 	b2BodyDef bdf;
 	bdf.type = b2_dynamicBody;
-	bdf.position.Set(x, y);
+	bdf.position.Set(MathUtil::toB2(x), MathUtil::toB2(y));
 	bdf.angle = 0; // Radians
 	bdf.fixedRotation = true; // Prevent rotaton
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
 	std::vector<b2Vec2> points = MathUtil::generatePolygon(sides, size);
+	std::vector<b2Vec2> b2Points(size);
+	for (unsigned int i = 0; i < points.size(); ++i) {
+		b2Points[i] = 
+			b2Vec2(MathUtil::toB2(points[i].x), MathUtil::toB2(points[i].y));
+	}
 	b2PolygonShape ps;
-	ps.Set(&points[0], sides);
+	ps.Set(&b2Points[0], sides);
 
 	// Fixture definition of this Unit
 	b2FixtureDef fd;
@@ -84,9 +89,13 @@ Unit::~Unit() {
 // Events
 ////////////////////////////////////////////////////////////////////////////////
 
+void Unit::onProjectileHit(Projectile* p) {
+	applyDamage(p->getDamage(), p->getShooter());
+}
+
 void Unit::onLevelUp() {
 	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("level_up"),
-			getX(), getY(), 500, -1);
+		getX(), getY(), 500, -1);
 
 	// Get the max health set by the Stats
 	setMaxHealth(getStat("maxHealth"));

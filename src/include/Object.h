@@ -62,6 +62,10 @@ public:
 	// o - Object this Object collided with
 	virtual void onCollision(Object* o);
 
+	// Occurs when this Object collides with a Projectile
+	// p - Projectile that his this Object
+	virtual void onProjectileHit(Projectile* p);
+
 	// Occurs every update
 	// diff - Microseconds that happened for the update
 	virtual void onUpdate(int diff);
@@ -127,7 +131,7 @@ public:
 	// Specific stat getters ///////////////////////////////////////////////////
 	
 	// Getters
-	float getSpeed() const { return getStat("speed"); }
+	float getSpeed() const { return getStat("speed"); } // Pixels per second
 	float getRange() const { return getStat("range"); }
 	float getFireRate() const { return getStat("fireRate"); }
 	float getDamage() const { return getStat("damage"); }
@@ -136,7 +140,7 @@ public:
 
 	// Setters
 	void setRange(int r) { setStat("range", r); }
-	void setFireRate(float r) { setStat("fireRate",  r); }
+	void setFireRate(float r) { setStat("fireRate", r); }
 	void setDamage(float d) { setStat("damage", d); }
 	void setSpeed(int s) { setStat("speed", s); }
 	void setAccel(float f) { setStat("accel", f); }
@@ -146,9 +150,18 @@ public:
 	
 	virtual void addPerk(Perk* p);
 	virtual void removePerk(Perk* p);
-	bool hasPerk(std::string name) { return getPerk(name) != nullptr; }
-	Perk* getPerk(int index) { return _perks[index]; }
-	Perk* getPerk(std::string name); // nullptr if no Perk with that name
+	bool hasPerk(const std::string& name) { return getPerk(name) != nullptr; }
+
+	// Get a Perk based on index
+	// index - Index of the Perk to get
+	// returns: The Perk in the index in _perks
+	Perk* getPerk(int index) const { return _perks[index]; }
+
+	// Get a Perk based on the name
+	// name - Name of the perk
+	// returns: The first Perk matching the name, or nullptr if no Perk matches
+	//		the name supplied
+	Perk* getPerk(const std::string& name) const;
 
 	// Object type getter and setter ///////////////////////////////////////////
 	
@@ -235,16 +248,25 @@ public:
 
 	// Get the current linear velocity
 	// returns: A Vector2 of the current linear velocity of this Object
-	Vector2 getVelocity() { return Vector2(_b2Box->GetLinearVelocity().x,
-			_b2Box->GetLinearVelocity().y); }
+	Vector2 getVelocity() const;
+
+	// Set the position of the Object
+	// pos - New position of the Object
+	inline virtual void setPosition(const Vector2& pos) {
+		setPosition(pos.X, pos.Y); }
+
+	// Set the position of the Object
+	// x - X coord of the map to set the position to
+	// y - Y coord of the map to set the position to
+	virtual void setPosition(float x, float y);
 
 	// Get the world position of this Object
 	// returns: the X coord of the world position
-	virtual float getX() const { return _b2Box->GetPosition().x; }
+	virtual float getX() const;
 
 	// Get the world position of this Object
 	// returns: the Y coord of the world position
-	virtual float getY() const { return _b2Box->GetPosition().y; }
+	virtual float getY() const;
 
 	// Collision methods ///////////////////////////////////////////////////////
 	

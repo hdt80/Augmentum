@@ -34,6 +34,12 @@ public:
 	void move(int diff);
 	void update(int diff);
 
+	// Getters and setters /////////////////////////////////////////////////////
+	
+	// Get the Unit that shot us
+	// returns: _shooter
+	inline Unit* getShooter() const { return _shooter; }
+
 protected:
 
 	// Inherited from sf::Drawable

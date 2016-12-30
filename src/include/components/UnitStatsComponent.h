@@ -1,7 +1,7 @@
 #ifndef _UNIT_STATS_COMPONENT_H
 #define _UNIT_STATS_COMPONENT_H
 
-#include "GuiComponent.h"
+#include "gui/GuiComponent.h"
 
 class Map;
 class Unit;

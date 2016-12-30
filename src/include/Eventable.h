@@ -3,6 +3,7 @@
 
 class Object;
 class Unit;
+class Projectile;
 
 class Eventable {
 public:
@@ -29,6 +30,10 @@ public:
 	//		called with eacher other as they collide with each other
 	// o - Object collided with
 	virtual void onCollision(Object* o) {}
+
+	// Occurs when a Projectile collides with this Object
+	// p - Projectile that his us
+	virtual void onProjectileHit(Projectile* p) {}
 
 	// Occurs when an Object shoots at another
 	// target - Object being shot at

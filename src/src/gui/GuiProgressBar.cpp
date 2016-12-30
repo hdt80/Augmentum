@@ -1,6 +1,6 @@
-#include "GuiProgressBar.h"
+#include "gui/GuiProgressBar.h"
 
-#include "GuiComponent.h"
+#include "gui/GuiComponent.h"
 #include "Logger.h"
 
 #include "util/StringUtil.h"

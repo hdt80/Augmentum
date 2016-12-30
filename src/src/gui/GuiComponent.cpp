@@ -1,7 +1,7 @@
-#include "GuiComponent.h"
+#include "gui/GuiComponent.h"
+#include "gui/GuiButton.h"
 #include "Logger.h"
 #include "Window.h"
-#include "GuiButton.h"
 #include "Game.h"
 #include "util/StringUtil.h"
 

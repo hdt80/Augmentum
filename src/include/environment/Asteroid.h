@@ -30,6 +30,12 @@ public:
 	// returns: _maxRadius
 	inline float getMaxRadius() const { return _maxRadius; }
 
+	// Events //////////////////////////////////////////////////////////////////
+	
+	// Occurs when a Projectile hits this Object
+	// p - Projectile that hit this Object
+	void onProjectileHit(Projectile* p);
+
 protected:
 
 	// Use a different shape when drawing an Asteroid, have sides and stuff

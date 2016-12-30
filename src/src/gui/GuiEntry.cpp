@@ -1,5 +1,5 @@
-#include "GuiEntry.h"
-#include "GuiComponent.h"
+#include "gui/GuiEntry.h"
+#include "gui/GuiComponent.h"
 #include "Logger.h"
 
 ////////////////////////////////////////////////////////////////////////////////
