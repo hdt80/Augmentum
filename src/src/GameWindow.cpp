@@ -23,6 +23,7 @@
 #include "gui/GuiExpProgressBar.h"
 
 #include "util/StringUtil.h"
+#include "util/Random.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static vars
@@ -51,6 +52,12 @@ GameWindow::GameWindow(Vector2 size) {
 	_fpsText.setOutlineThickness(1.0f);
 	_fpsText.setOutlineColor(sf::Color::Black);
 	_fpsText.setFillColor(sf::Color::White);
+
+	_particleCountText.setPosition(12, _size.Y - 80);
+	_particleCountText.setFont(*Databases::FontDatabase.getDefault());
+	_particleCountText.setOutlineThickness(1.0f);
+	_particleCountText.setOutlineColor(sf::Color::Black);
+	_particleCountText.setFillColor(sf::Color::White);
 
 	// Style used in the world
 	GuiEntryStyle* worldStyle = new GuiEntryStyle();
@@ -213,6 +220,8 @@ void GameWindow::update(int diff) {
 
 	if (_drawFps) {
 		_fpsText.setString(StringUtil::format("%d", Game::Fps.getFPS()));
+		_particleCountText.setString(StringUtil::format(
+			"%d", GameWindow::Emitter.getParticleCount()));
 	}
 }
 
@@ -272,8 +281,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 		sf::Vector2f worldPos = Game::getRenderWindow()
 			.mapPixelToCoords(pixelPos, clicked->getView());
 
-		Asteroid* ast = new Asteroid(&_map, worldPos.x, worldPos.y, 45);
-		_map.addObject(ast);
+		_map.spawnAsteroid(worldPos.x, worldPos.y, Random::randFloat(30, 60));
 	}
 }
 
@@ -303,6 +311,7 @@ void GameWindow::render(sf::RenderWindow& window) {
 
 	if (_drawFps) {
 		window.draw(_fpsText);
+		window.draw(_particleCountText);
 	}
 }
 

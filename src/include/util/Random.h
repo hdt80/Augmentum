@@ -1,6 +1,10 @@
 #ifndef _RANDOM_H_
 #define _RANDOM_H_
 
+// For some reason that goes behold my knowledge of c++, without the
+// final _ at the end, any file that includes this file cannot see any
+// of the methods inside Random
+
 namespace Random {
 	// Generate a random int between min and max, inclusively
 	// min - Min value of the number
@@ -21,4 +25,5 @@ namespace Random {
 	// returns: A randomly generated float between min and max, inclusiively
 	float randFloat(float min, float max);
 }
-#endif
+
+#endif // _RANDOM_H_

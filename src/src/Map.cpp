@@ -5,6 +5,7 @@
 
 #include "Logger.h"
 #include "Ship.h"
+#include "environment/Asteroid.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static methods
@@ -185,4 +186,9 @@ void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 			x, y, enemyId, level);
 
 	addObject(e);
+}
+
+void Map::spawnAsteroid(float x, float y, float radius) {
+	Asteroid* ast = new Asteroid(this, x, y, radius);
+	addObject(ast);
 }

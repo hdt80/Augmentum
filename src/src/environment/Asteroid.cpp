@@ -11,6 +11,7 @@
 Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	: Object(map, x, y, Stats(0.0f), maxRadius) {
 
+	// If there's a body it probably isn't a proper Asteroid one
 	if (_b2Box) {
 		map->getWorld()->DestroyBody(_b2Box);
 		_b2Box = nullptr;
@@ -25,6 +26,10 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 
 	// Get the verticies that define this Asteroid
 	std::vector<b2Vec2> points = MathUtil::generateConvexPolygon(8, maxRadius);
+
+	// Because I request an 8 sides convex polygon, but I'm not guaranteed to
+	// get one I use points.size() to determine the size of the rest of the
+	// objects used in creation
 
 	// Vector that will hold all the points used to create the Box2D shape
 	std::vector<b2Vec2> b2Points(points.size());
@@ -57,10 +62,16 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	_conShape.setRotation(MathUtil::radToDeg(bdf.angle));
 
 	setObjectType(ObjectType::BOUNDARY);
+
+	_b2Box->SetUserData(this);
 }
 
 Asteroid::~Asteroid() {
-
+	// Deleting a Box2D body by calling the dtor will break a lot of things
+	if (_b2Box) {
+		_map->getWorld()->DestroyBody(_b2Box);
+		_b2Box = nullptr;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -80,5 +91,5 @@ void Asteroid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Asteroid::onProjectileHit(Projectile* p) {
-	CORE_INFO("[Asteroid %x] Hit", this);
+
 }

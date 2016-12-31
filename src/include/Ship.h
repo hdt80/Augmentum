@@ -27,6 +27,9 @@ public:
 	Ship(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		int size, int sides, sf::Color c);
 
+	// Ship dtor
+	virtual ~Ship();
+
 	// Methods /////////////////////////////////////////////////////////////////
 
 	// Get how many sides this Ship has

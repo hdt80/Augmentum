@@ -33,8 +33,10 @@ Object::Object()
 }
 
 Object::~Object() {
+	// Deleting a Box2D body by calling the dtor will break a lot of things
 	if (_b2Box) {
 		_map->getWorld()->DestroyBody(_b2Box);
+		_b2Box = nullptr;
 	}
 
 	// Make sure we don't delete another Object
@@ -130,9 +132,8 @@ bool Object::collidesWith(Object* o) const {
 }
 
 bool Object::contains(float px, float py) const {
-	px = MathUtil::toB2(px);
-	py = MathUtil::toB2(py);
-	b2Vec2 vec(px, py);
+	// Use the correct scale
+	b2Vec2 vec(MathUtil::toB2(px), MathUtil::toB2(py));
 	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
 		if (fix->TestPoint(vec)) {
 			return true;
@@ -169,6 +170,7 @@ void Object::update(int diff) {
 	// Update each perk
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->update(diff);
+		// If the perk has timed out or removed by another perk remove it
 		if (_perks[i]->isToRemove()) {
 			removePerk(_perks[i]);
 			_perks.erase(_perks.begin() + i);
@@ -178,11 +180,21 @@ void Object::update(int diff) {
 
 void Object::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();
+
+	// The speed stat isn't scaled to Box2D because the movement is noticed
+	// in the game scale, so scaling down the speed would be very noticable
 	b2Vec2 end(MathUtil::toB2(x) * getSpeed(), MathUtil::toB2(y) * getSpeed());
 
+	// Diff the velocity needs to change to reach the wanted velocity
 	b2Vec2 diff = end - vel;
-	diff *= (1 + MathUtil::toB2(getAccel()));
-	_b2Box->ApplyLinearImpulseToCenter(diff, true);
+
+	// If there is a value in the diff, that means that a movement will occur,
+	// so only bother to apply acceleration and the force if there will be one
+	if (diff.x != 0.0f || diff.y != 0.0f) {
+		// The accel stat is a percent increase
+		diff *= (1 + MathUtil::toB2(getAccel()));
+		_b2Box->ApplyLinearImpulseToCenter(diff, true);
+	}
 }
 
 Vector2 Object::getVelocity() const {
@@ -297,6 +309,7 @@ void Object::setObjectType(int type) {
 	}
 }
 void Object::addObjectTypeOption(int type) {
+	// Take the current object type and set the type bit on
 	setObjectType(BitWise::bitOn(getObjectType(), type));
 }
 
@@ -316,6 +329,7 @@ void Object::setTarget(Target* t) {
 	if (_target && _target->isSimpleTarget()) {
 		delete _target;
 	}
+
 	_target = t;
 }
 

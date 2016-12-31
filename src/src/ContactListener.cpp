@@ -29,10 +29,14 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
 	if (userDataA) {
 		a = static_cast<Object*>(userDataA);
+	} else {
+		CORE_WARN("Fixture A has no userdata, %x", contact->GetFixtureA());
 	}
 
 	if (userDataB) {
 		b = static_cast<Object*>(userDataB);
+	} else {
+		CORE_WARN("Fixture B has no userdata, %x", contact->GetFixtureB());
 	}
 
 	if (a && b) {
@@ -52,10 +56,14 @@ void ContactListener::EndContact(b2Contact* contact) {
 
 	if (userDataA) {
 		a = static_cast<Object*>(userDataA);
+	} else {
+		CORE_WARN("Fixture A has no userdata, %x", contact->GetFixtureA());
 	}
 
 	if (userDataB) {
 		b = static_cast<Object*>(userDataB);
+	} else {
+		CORE_WARN("Fixture B has no userdata, %x", contact->GetFixtureB());
 	}
 
 	if (a && b) {

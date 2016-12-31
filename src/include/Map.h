@@ -85,6 +85,12 @@ public:
 	//		the map's origin as the level
 	void spawnEnemy(float x, float y, int enemyId, int level = -1);
 
+	// Spawn a new Asteroid at the map coords (x, y)
+	// x - X coord of the map to spawn at
+	// y - Y coord of the map to spawn at
+	// radius - Radius of the Asteroid, in map units, not Box2D units
+	void spawnAsteroid(float x, float y, float radius);
+
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;
 

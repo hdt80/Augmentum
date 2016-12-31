@@ -39,6 +39,7 @@ protected:
 
 	bool _drawFps; // Draw the FPS counter
 	sf::Text _fpsText; // FPS text to draw
+	sf::Text _particleCountText; // Text displaying how many particles there are
 };
 
 #endif
