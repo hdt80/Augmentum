@@ -1,15 +1,18 @@
-// =================================
+////////////////////////////////////////////////////////////////////////////////
 // Includes
-// =================================
-#define DO_DEBUG
+////////////////////////////////////////////////////////////////////////////////
 
 #include <stdlib.h>
 #include <random>
 
+#include "Box2D/Box2D.h"
+
 #include "Logger.h"
 #include "Game.h"
+
 #include "util/StringUtil.h"
 
+// Enabling colored output on Windows 10
 #ifdef _WIN32
 #include <windows.h>
 
@@ -37,6 +40,9 @@ int main(int argc, char** argv) {
 
 	// Seed the rng from the current time
 	srand(time(0));
+
+	CORE_INFO("Box2D version: %d.%d.%d",
+		b2_version.major, b2_version.minor, b2_version.revision);
 
 	CORE_INFO("Running from: %s", StringUtil::getWorkingDir().c_str());
 

@@ -10,6 +10,7 @@
 #include "Vector2.h"
 #include "FPS.h"
 #include "DebugDraw.h"
+#include "Console.h"
 #include "Database.h"
 
 #define REFRESH_RATE 16666 // 60 FPS - 16.666ms between each frame
@@ -31,6 +32,10 @@ public:
 	// If the Game is already paused unpause, else pause it
 	static void pause();
 
+	// Handle a key press
+	// e - Key press event
+	static void handleKeyPress(const sf::Event& e);
+
 	// Get if the game is currently shutting down
 	// returns: Tue if the CurrentGameState equals Ending
 	static bool toClose() { return CurrentGameState == Ending; }
@@ -47,6 +52,12 @@ public:
 	// returns: A reference to the SFML RenderWindow used
 	static sf::RenderWindow& getRenderWindow() { return _window; }
 
+	// Get the size of the window's in thie Game
+	// returns: _size
+	static inline const Vector2& getSize() { return _size; }
+
+	// Static vars /////////////////////////////////////////////////////////////
+
 	static GameState CurrentGameState; // Current state of the game
 	static Window* CurrentWindow; // Current Window being drawn
 	static StateManager WindowManager; // Window manager
@@ -54,6 +65,7 @@ public:
 	static FPS Fps; // FPS Counter
 
 	static DebugDrawer b2DebugDrawer; // Debug drawer
+	static Console DebugConsole; // Debug console
 
 protected:
 	static sf::RenderWindow _window; // SFML Render being rendered to

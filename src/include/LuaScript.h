@@ -9,23 +9,31 @@ class LuaScript {
 public:
 	LuaScript(bool loadedClasses = true);
 
+	// Check if a script has been loaded
+	// returns: _loaded
 	inline bool isLoaded() { return _loaded; }
+
+	// Set if this script is loaded
+	// b - Loaded or not
 	inline void setLoaded(bool b) { _loaded = b; }
 
 	// Load the file at that path. Any filetype can be used
+	// path - Path relative to the running directory of the program
 	void loadScript(const std::string& path);
 
-	// Print the table of the script loaded. 
+	// Print the table of the script loaded.
 	// Useful for debug when objects are nil
 	void printTable();
 
 	// Call a function loaded from a script
+	// name - Name of the function to call
+	// args - Varadic list of args to call when calling the function named name
 	template<typename... Args>
 	void callFunction(const char* name, Args&&... args) {
 		if (isLoaded()) {
 			try {
 				lua.get<sol::function>(name).template call<void>(args...);
-			} catch (sol::error e) {
+			} catch (const sol::error& e) {
 				CORE_ERROR("[Lua Script %x: %s] Error when calling \"%s\": %s",
 					this, _name.c_str(), name, e.what());
 			}

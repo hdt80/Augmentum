@@ -46,11 +46,19 @@ void CORE_DEBUG(const char* fmt, ...) {
 void CORE_LOG(const char* tag, trmclr::Style color,
 		const char* fmt, va_list args) {
 
-	fprintf(stdout, "[");
-	std::cout << color;
-	fprintf(stdout, tag);
-	std::cout << Colors::DEFAULT;
-	fprintf(stdout, "] ");
+
+	// By using a stringstream we can avoid using std::cout, which will catch
+	// the color formatting when redirecting it to the console, which isn't
+	// very useful to the console. It probably is a bad idea to do this, but
+	// this is a temporary thing until the console collects CORE_* output too
+	
+	std::stringstream clrss;
+	clrss << color;
+
+	std::stringstream defss;
+	defss << Colors::DEFAULT;
+
+	fprintf(stdout, "[%s%s%s] ", clrss.str().c_str(), tag, defss.str().c_str());
 	vfprintf(stdout, fmt, args);
 	fprintf(stdout, "\n");
 	va_end(args);

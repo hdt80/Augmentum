@@ -12,6 +12,7 @@ EXEDIR = bin
 INCLUDEDIR = src/include
 VERBOSE = 0
 
+# Export vars so they can be used in other Makefiles
 export SRCDIR
 export BUILDDIR
 export EXEDIR
