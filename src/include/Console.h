@@ -5,10 +5,20 @@
 #include "sol/sol.hpp"
 #include "Vector2.h"
 
-#ifdef _WIN32
-#include "windows.h"
-#include "fcntl.h"
-#endif // _WIN32
+#ifndef WIN32
+#include <unistd.h>
+#endif // WIN32
+
+#ifdef WIN32
+#define pipe(X) _pipe(X, 1024, O_BINARY)
+#define read _read
+#define dup _dup
+#define dup2 _dup2
+#define fileno _fileno
+#define close _close
+#endif // WIN32
+
+#include <fcntl.h>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
