@@ -1,5 +1,4 @@
-#include "LuaScript.h"
-
+#include "LuaScript.h" 
 #include "Logger.h"
 #include "Object.h"
 #include "Map.h"
@@ -14,12 +13,7 @@ LuaScript::LuaScript(bool defineClasses) {
 		sol::lib::package, sol::lib::math, sol::lib::debug);
 
 	if (defineClasses) {
-		defineTarget();
-		defineObject();
-		defineEnemy();
-		defineMap();
-		defineStats();
-		definePerk();
+		LuaScript::defineClasses(lua);
 	}
 }
 
@@ -45,10 +39,23 @@ void LuaScript::printTable() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Static methods
+////////////////////////////////////////////////////////////////////////////////
+
+void LuaScript::defineClasses(sol::state& lua) {
+	defineObject(lua);
+	defineEnemy(lua);
+	defineTarget(lua);
+	defineMap(lua);
+	defineStats(lua);
+	definePerk(lua);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Object defenitions for Lua scripts
 ////////////////////////////////////////////////////////////////////////////////
 
-void LuaScript::defineObject() {
+void LuaScript::defineObject(sol::state& lua) {
 	lua.new_usertype<Object> (
 		"Object", sol::constructors<
 				sol::types<Map*, float, float, Stats, int>>(),
@@ -64,7 +71,7 @@ void LuaScript::defineObject() {
 	);
 }
 
-void LuaScript::defineTarget() {
+void LuaScript::defineTarget(sol::state& lua) {
 	lua.new_usertype<Target> (
 		"Target", sol::constructors<sol::types<float, float>>(),
 		"getX", &Target::getX,
@@ -74,11 +81,11 @@ void LuaScript::defineTarget() {
 	);
 }
 
-void LuaScript::defineMap() {
+void LuaScript::defineMap(sol::state& lua) {
 
 }
 
-void LuaScript::defineStats() {
+void LuaScript::defineStats(sol::state& lua) {
 	lua.new_usertype<Stats> (
 		"Stats", sol::constructors<sol::types<bool>>(),		
 		"print", &Stats::print,
@@ -89,7 +96,7 @@ void LuaScript::defineStats() {
 	);
 }
 
-void LuaScript::definePerk() {
+void LuaScript::definePerk(sol::state& lua) {
 	lua.new_usertype<Perk> (
 		"Perk", sol::constructors<
 				sol::types<std::string, Stats, float, bool, int>>(),
@@ -99,7 +106,7 @@ void LuaScript::definePerk() {
 	);
 }
 
-void LuaScript::defineEnemy() {
+void LuaScript::defineEnemy(sol::state& lua) {
 	lua.new_usertype<Enemy> (
 		"Enemy", sol::constructors<
 				sol::types<Map*, float, float, int, EnemyType>>(),

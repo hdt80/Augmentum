@@ -2,6 +2,7 @@
 
 #include "Database.h"
 #include "Game.h"
+#include "LuaScript.h"
 
 #include <cctype>
 #include <cstdio>
@@ -16,7 +17,7 @@ Console::Console()
 
 	_lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table);
 
-	lua_State* state = _lua.lua_state();
+	LuaScript::defineClasses(_lua);
 
 	_inputText.setFont(*Databases::FontDatabase.getDefault());
 	_inputText.setCharacterSize(16);
@@ -66,6 +67,7 @@ void Console::executeCommand(const std::string& cmd) {
 
 	// If only one char was read it was the space we printed
 	if (n != 1) {
+		// Add one to the buffer to avoid the space
 		addOutput(std::string(buffer + 1));
 	}
 

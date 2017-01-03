@@ -7,7 +7,14 @@
 
 class LuaScript {
 public:
+
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+
+	// LuaScript ctor
+	// loadedClasses - Load the classes
 	LuaScript(bool loadedClasses = true);
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// Check if a script has been loaded
 	// returns: _loaded
@@ -40,19 +47,28 @@ public:
 		}
 	}
 
+	// Static methods //////////////////////////////////////////////////////////
+	
+	// Define the objects used in scripting
+	static void defineClasses(sol::state& lua);
+
 	sol::state lua;
 
 protected:
-	std::string _name; // File name that's loaded
-	bool _loaded;
 
-	void defineEnemy();
-	void defineTower();
-	void defineObject();
-	void defineTarget();
-	void defineMap();
-	void defineStats();
-	void definePerk();
+	// Vars ////////////////////////////////////////////////////////////////////
+	
+	std::string _name; // File name that's loaded
+	bool _loaded; // Has this script been loaded?
+
+	// Static methods //////////////////////////////////////////////////////////
+
+	static void defineEnemy(sol::state& lua);
+	static void defineObject(sol::state& lua);
+	static void defineTarget(sol::state& lua);
+	static void defineMap(sol::state& lua);
+	static void defineStats(sol::state& lua);
+	static void definePerk(sol::state& lua);
 };
 
 #endif
