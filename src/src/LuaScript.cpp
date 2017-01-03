@@ -58,7 +58,7 @@ void LuaScript::defineClasses(sol::state& lua) {
 void LuaScript::defineObject(sol::state& lua) {
 	lua.new_usertype<Object> (
 		"Object", sol::constructors<
-				sol::types<Map*, float, float, Stats, int>>(),
+			sol::types<Map*, float, float, Stats, int>>(),
 		"getX", &Object::getX,
 		"getY", &Object::getY,
 		// Object methods

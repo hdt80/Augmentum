@@ -17,7 +17,7 @@ Console::Console()
 
 	_lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table);
 
-	LuaScript::defineClasses(_lua);
+	//LuaScript::defineClasses(_lua);
 
 	_inputText.setFont(*Databases::FontDatabase.getDefault());
 	_inputText.setCharacterSize(16);
@@ -55,7 +55,7 @@ void Console::executeCommand(const std::string& cmd) {
 	}
 
 	// Read what was returned
-	int n = _read(fdStdoutPipe[MFD_READ], buffer, 1024);
+	int n = read(fdStdoutPipe[MFD_READ], buffer, 1024);
 	buffer[n] = '\0'; // Add the null terminating char
 
 	output = _outBuffer.str();
@@ -166,7 +166,7 @@ void Console::addHistoryLine(const std::string& line) {
 
 void Console::beginRedirect() {
 	// Create the pipe
-	if (_pipe(fdStdoutPipe, 1024, O_BINARY) != 0) {
+	if (pipe(fdStdoutPipe) != 0) {
 		CORE_ERROR("pipe returned non zero");
 	}
 
@@ -175,10 +175,10 @@ void Console::beginRedirect() {
 	_cerr = std::cerr.rdbuf(_errBuffer.rdbuf());
 
 	// Save a copy of stdout so we can restore to it later
-	fdStdout = _dup(_fileno(stdout));
+	fdStdout = dup(fileno(stdout));
 
 	// Redirect stdout to our pipe
-	_dup2(fdStdoutPipe[MFD_WRITE], _fileno(stdout));
+	dup2(fdStdoutPipe[MFD_WRITE], fileno(stdout));
 	
 	// Set up the stream for reading
 	setvbuf(stdout, NULL, _IONBF, 0);
@@ -200,8 +200,8 @@ void Console::endRedirect() {
 	fflush(stdout);
 
 	// Reset stdout back to it's original state
-	_dup2(fdStdout, _fileno(stdout));
-	_close(fdStdout); // Close the redirected stdout
+	dup2(fdStdout, fileno(stdout));
+	close(fdStdout); // Close the redirected stdout
 }
 
 void Console::setPosition(const Vector2& size) {
