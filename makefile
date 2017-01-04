@@ -40,7 +40,7 @@ ifeq ($(VERBOSE), 1)
 endif
 
 # Enable all warnings but format and unused variables
-CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -fpermissive -std=c++14
+CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -fpermissive -ftemplate-depth=4096 -std=c++14
 
 export CXX_FLAGS
 export CXX

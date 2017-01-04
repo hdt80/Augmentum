@@ -5,6 +5,7 @@
 
 #include "Logger.h"
 #include "Ship.h"
+#include "Game.h"
 #include "environment/Asteroid.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +37,7 @@ Object* Map::toObject(void* o) {
 ///////////////////////////////////////////////////////////////////////////////
 
 Map::Map()
-		: _world(b2Vec2(0.0f, 0.0f)), b2UpdateCounter(0) {
+	: _world(b2Vec2(0.0f, 0.0f)), b2UpdateCounter(0) {
 
 	Stats s;
 	s["speed"] = 20.0f;
@@ -44,6 +45,8 @@ Map::Map()
 	_selected = new Ship(this, 0.0f, 0.0f, s, Stats(), 20, 4, sf::Color::Blue);
 	_selected->setMaxHealth(30.0f);
 	_selected->setObjectType(ObjectType::FRIENDLY);
+
+	Game::DebugConsole.addNamedObject("selected", _selected);
 
 	objects.push_back(_selected);
 

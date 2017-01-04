@@ -1,12 +1,16 @@
 #include "Console.h"
 
-#include "Database.h"
-#include "Game.h"
-#include "LuaScript.h"
-
 #include <cctype>
 #include <cstdio>
 #include <iostream>
+
+#include "Database.h"
+#include "Game.h"
+
+#include "LuaScript.h"
+#include "lua/LuaDefines.h"
+
+#include "util/StringUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Console ctor and dtor
@@ -14,10 +18,6 @@
 
 Console::Console()
 	: _cursorPos(0) {
-
-	_lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table);
-
-	//LuaScript::defineClasses(_lua);
 
 	_inputText.setFont(*Databases::FontDatabase.getDefault());
 	_inputText.setCharacterSize(16);
@@ -29,6 +29,8 @@ Console::Console()
 	// Save the original streams used before the console redirects the output
 	_coutOrig = std::cout.rdbuf();
 	_cerrOrig = std::cerr.rdbuf();
+
+	loadLua();
 }
 
 Console::~Console() {
@@ -39,6 +41,16 @@ Console::~Console() {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// Lua state methods
+////////////////////////////////////////////////////////////////////////////////
+
+void Console::loadLua() {
+	_lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table);
+
+	LuaDefines::defineClasses(_lua);
+}
 
 void Console::executeCommand(const std::string& cmd) {
 	beginRedirect();
@@ -52,13 +64,16 @@ void Console::executeCommand(const std::string& cmd) {
 		_lua.script(cmd);
 	} catch (const sol::error& e) {
 		output = e.what();
+		//output = output.substring
 	}
 
 	// Read what was returned
 	int n = read(fdStdoutPipe[MFD_READ], buffer, 1024);
 	buffer[n] = '\0'; // Add the null terminating char
 
-	output = _outBuffer.str();
+	if (output.size() == 0) {
+		output = _outBuffer.str();
+	}
 
 	// Add the results to the history
 	
@@ -78,6 +93,18 @@ void Console::executeCommand(const std::string& cmd) {
 
 	endRedirect();
 }
+
+void Console::addObject(void* obj) {
+	_lua.set(StringUtil::format("0x%X", obj), obj);
+}
+
+void Console::addNamedObject(const std::string& name, void* obj) {
+	_lua.set(name, obj);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Control methods
+////////////////////////////////////////////////////////////////////////////////
 
 void Console::handleEvent(const sf::Event& e) {
 	if (e.type == sf::Event::TextEntered) {
@@ -192,7 +219,7 @@ void Console::beginRedirect() {
 }
 
 void Console::endRedirect() {
-	// Restore std::cout to normal
+	// Restore the iostreams to normal
 	std::cout.rdbuf(_coutOrig);
 	std::cerr.rdbuf(_cerrOrig);
 
@@ -212,6 +239,11 @@ void Console::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	if (isOpened()) {
 		target.draw(_inputText);
 		for (const sf::Text& text : _output) {
+			// If the text isn't on screen all the text after this won't
+			// be either, so don't bother drawing it
+			if (text.getPosition().y + text.getLocalBounds().height < 0) {
+				return;
+			}
 			target.draw(text);
 		}
 	}

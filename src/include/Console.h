@@ -36,9 +36,26 @@ public:
 
 	// Methods /////////////////////////////////////////////////////////////////
 	
+	// Lua manipulation methods ////////////////////////////////////////////////
+
+	// Load sol::state by defining all the classes and variables used
+	void loadLua();
+	
 	// Execute a command
 	// cmd - Command to run
 	void executeCommand(const std::string& cmd);
+
+	// Add a new object to the lua state. To refer to this object use the syntax
+	//		of 0xPOINTER
+	// obj - Pointer to the object to add
+	void addObject(void* obj);
+
+	// Add a new object to the lua state. To refer to this object use the name
+	// name - Name to refer to this object by
+	// obj - Pointer to the object to add
+	void addNamedObject(const std::string& name, void* obj);
+	
+	// Control methods /////////////////////////////////////////////////////////
 
 	// Handle an event
 	// e - Event to handle
@@ -53,6 +70,7 @@ public:
 	inline bool isOpened() const { return _opened; }
 
 	// Set the the position of the Console based on the size of the window
+	// size - Size of the Window this Console will be in
 	void setPosition(const Vector2& size);
 
 	// Static vars /////////////////////////////////////////////////////////////
