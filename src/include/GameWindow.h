@@ -9,8 +9,17 @@
 
 class GameWindow : public Window {
 public:
+
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+	
+	// GameWindow ctor
+	// size - Size of the render in pixels
 	GameWindow(Vector2 size = Vector2(0.0f, 0.0f));
+
+	// GameWindow dtor
 	~GameWindow();
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// Initalize the window
 	virtual void init();
@@ -23,15 +32,14 @@ public:
 	virtual void keyEvent(sf::Event& e);
 	virtual void mouseEvent(sf::Event& e);
 
-	//
+	// Inherited from Window
 	virtual void render(sf::RenderWindow& window);
+	
+	// Static vars /////////////////////////////////////////////////////////////
 
 	static ParticleEmitter Emitter;
 
-	Map* getMap() { return &_map; }
-
 protected:
-	Map _map; // Map the game is played on
 
 	ParticleDef def;
 

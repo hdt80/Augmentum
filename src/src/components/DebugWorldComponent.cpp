@@ -13,13 +13,7 @@ DebugWorldComponent::DebugWorldComponent(Window* window,
 			Vector2 pos, Vector2 size)
 		: GuiComponent(window, style, compStyle, pos, size) {
 
-	GameWindow* gameWindow = nullptr;
-	if ((gameWindow = dynamic_cast<GameWindow*>(window)) != nullptr) {
-		CORE_INFO("We were passed a GameWindow");
-
-		_window = gameWindow;
-		_map = gameWindow->getMap();
-	}
+	_map = &Game::getMap();
 
 	// Message doesn't matter now cause it's set during update
 	_fps = new GuiEntry(style, getPos(), "");

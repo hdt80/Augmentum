@@ -14,13 +14,8 @@ WorldComponent::WorldComponent(Window* window, const GuiEntryStyle* style,
 		const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size)
 	: GuiComponent(window, style, compStyle, pos, size) {
 
-	GameWindow* gameWindow = nullptr;
-	if ((gameWindow = dynamic_cast<GameWindow*>(window)) != nullptr) {
-		_window = gameWindow;
-		_map = gameWindow->getMap();
-
-		_map->getWorld()->SetDebugDraw(&Game::b2DebugDrawer);
-	}
+	_map = &Game::getMap();
+	_map->getWorld()->SetDebugDraw(&Game::b2DebugDrawer);
 
 	_drawBounds = false;
 }

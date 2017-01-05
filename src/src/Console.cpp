@@ -11,6 +11,7 @@
 #include "lua/LuaDefines.h"
 
 #include "util/StringUtil.h"
+#include "util/SFMLUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Console ctor and dtor
@@ -47,9 +48,22 @@ Console::~Console() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Console::loadLua() {
-	_lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table);
+	_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::table,
+		sol::lib::package, sol::lib::math, sol::lib::debug);
 
 	LuaDefines::defineClasses(_lua);
+
+	_lua.set_function("print_table", [this](sol::table table) {
+		auto iter = table.begin();
+		while (iter != table.end()) {
+			CORE_INFO("%s", (*iter).first.as<std::string>().c_str());
+			++iter;
+		}
+	});
+
+	_lua.set_function("getObject", [this](const std::string& ptr) {
+		return Map::toObject((void*)StringUtil::toInt(ptr));
+	});
 }
 
 void Console::executeCommand(const std::string& cmd) {
@@ -108,13 +122,22 @@ void Console::addNamedObject(const std::string& name, void* obj) {
 
 void Console::handleEvent(const sf::Event& e) {
 	if (e.type == sf::Event::TextEntered) {
-		char c = static_cast<char>(e.text.unicode);
-		// Any character that is printable as defined by the locale
-		// This is digits, letters, punctuation and space
-		if (std::isprint(c) && c != '`') {
-			_input.insert(_cursorPos++, 1, c);
-		}
+		handleTextEvent(e);
 	} else if (e.type == sf::Event::KeyPressed) {
+		handleKeyEvent(e);
+	} else if (e.type == sf::Event::MouseButtonReleased) {
+		handleMouseEvent(e);
+	}
+
+	// Add a | where the cursor is
+	sf::String dispStr(_input);
+	dispStr.insert(_cursorPos, '|');
+	dispStr.insert(0, "> ");
+	_inputText.setString(dispStr);
+}
+
+void Console::handleKeyEvent(const sf::Event& e) {
+	if (e.type == sf::Event::KeyPressed) {
 		if (e.key.code == sf::Keyboard::BackSpace) {
 			// Make sure we don't delete if there's no chars
 			if (_cursorPos > 0) {
@@ -160,15 +183,31 @@ void Console::handleEvent(const sf::Event& e) {
 				_cursorPos = 0;
 			}
 		}
-	} else {
-		CORE_INFO("Unhandled event type in Console");
 	}
+}
 
-	// Add a | where the cursor is
-	sf::String dispStr(_input);
-	dispStr.insert(_cursorPos, '|');
-	dispStr.insert(0, "> ");
-	_inputText.setString(dispStr);
+void Console::handleTextEvent(const sf::Event& e) {
+	if (e.type == sf::Event::TextEntered) {
+		char c = static_cast<char>(e.text.unicode);
+		// Any character that is printable as defined by the locale
+		// This is digits, letters, punctuation and space
+		if (std::isprint(c) && c != '`') {
+			_input.insert(_cursorPos++, 1, c);
+		}
+	}
+}
+
+void Console::handleMouseEvent(const sf::Event& e) {
+	if (e.type == sf::Event::MouseButtonReleased) {
+		CORE_INFO("(%d, %d)", e.mouseButton.x, e.mouseButton.y);
+		Vector2 relPos = SFMLUtil::getRelativeMouseClick(
+			e.mouseButton.x, e.mouseButton.y, Game::CurrentWindow);
+		Object* object = Game::getMap().objectAt(nullptr, relPos.X, relPos.Y);
+
+		CORE_INFO("Object: %x", object);
+
+		_lua.set("mouse", object);
+	}
 }
 
 void Console::addOutput(const std::string& line) {
@@ -189,6 +228,12 @@ void Console::addOutput(const std::string& line) {
 
 void Console::addHistoryLine(const std::string& line) {
 	_cmdHistory.insert(_cmdHistory.begin(), line);
+}
+
+void Console::setOpened(bool b) {
+	_opened = b;
+
+	Game::getRenderWindow().setMouseCursorVisible(_opened);
 }
 
 void Console::beginRedirect() {

@@ -60,32 +60,51 @@ void Game::loop() {
 			// to handle, only the Game can do that. If Shift is pressed at the
 			// same time don't go up a level, quit the whole game
 			// Likewise, Pause is another hardcoded key to open the PauseWindow
+
 			if (e.type == sf::Event::Closed) {
 				CurrentGameState = Ending;
-			} else if (e.type == sf::Event::KeyPressed
-				|| e.type == sf::Event::TextEntered) { // TODO: Ew
-
-				if (e.type == sf::Event::KeyPressed) {
-					if (e.key.code == sf::Keyboard::Escape
-						|| e.key.code == sf::Keyboard::Pause
-						|| e.key.code == Console::HOTKEY) {
-
-						Game::handleKeyPress(e);
-					} else {
-						if (Game::DebugConsole.isOpened()) {
-							Game::DebugConsole.handleEvent(e);
-						} else {
-							CurrentWindow->handleEvent(e);
-						}
-					}
+			} else if (DebugConsole.isOpened()) {
+				if (e.type == sf::Event::KeyPressed
+					&& isReservedKey(e.key.code)) {
+					
+					handleKeyPress(e);
 				} else {
-					if (Game::DebugConsole.isOpened()) {
-						Game::DebugConsole.handleEvent(e);
-					}
+					DebugConsole.handleEvent(e);
 				}
+			} else if (e.type == sf::Event::KeyPressed
+				&& isReservedKey(e.key.code)) {
+			
+				handleKeyPress(e);
 			} else {
 				CurrentWindow->handleEvent(e);
 			}
+
+			//if (e.type == sf::Event::Closed) {
+			//	CurrentGameState = Ending;
+			//} else if (e.type == sf::Event::KeyPressed
+			//	|| e.type == sf::Event::TextEntered) { // TODO: Ew
+
+			//	if (e.type == sf::Event::KeyPressed) {
+			//		if (e.key.code == sf::Keyboard::Escape
+			//			|| e.key.code == sf::Keyboard::Pause
+			//			|| e.key.code == Console::HOTKEY) {
+
+			//			Game::handleKeyPress(e);
+			//		} else {
+			//			if (Game::DebugConsole.isOpened()) {
+			//				Game::DebugConsole.handleEvent(e);
+			//			} else {
+			//				CurrentWindow->handleEvent(e);
+			//			}
+			//		}
+			//	} else {
+			//		if (Game::DebugConsole.isOpened()) {
+			//			Game::DebugConsole.handleEvent(e);
+			//		}
+			//	}
+			//} else {
+			//	CurrentWindow->handleEvent(e);
+			//}
 		}
 
 		// Perform all the updating
@@ -105,9 +124,7 @@ void Game::loop() {
 
 void Game::handleKeyPress(const sf::Event& e) {
 	if (e.type != sf::Event::KeyPressed
-		&& e.key.code != sf::Keyboard::Escape
-		&& e.key.code != sf::Keyboard::Pause
-		&& e.key.code != Console::HOTKEY) {
+		&& !Game::isReservedKey(e.key.code)) {
 		
 		return;
 	}
@@ -129,6 +146,12 @@ void Game::handleKeyPress(const sf::Event& e) {
 
 }
 
+bool Game::isReservedKey(const sf::Keyboard::Key& key) {
+	return (key == sf::Keyboard::Pause
+		|| key == sf::Keyboard::Escape
+		|| key == Console::HOTKEY);
+}
+
 void Game::followWindow(Window* w) {
 	WindowManager.push(w);
 	CurrentWindow = w;
@@ -143,6 +166,11 @@ void Game::pause() {
 	} else {
 		WindowManager.pop();
 	}
+}
+
+Map& Game::getMap() {
+	static Map* map = new Map;
+	return *map;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

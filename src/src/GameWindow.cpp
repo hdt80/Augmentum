@@ -23,6 +23,7 @@
 #include "gui/GuiExpProgressBar.h"
 
 #include "util/StringUtil.h"
+#include "util/SFMLUtil.h"
 #include "util/Random.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -137,11 +138,11 @@ GameWindow::GameWindow(Vector2 size) {
 			transStyle, Vector2(8, 64), Vector2(240, _size.Y - 24));
 
 	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
-			"HP", progBar, &_map.getSelected()->getHealth(), 0,
-			&_map.getSelected()->getMaxHealth()));
+			"HP", progBar, &Game::getMap().getSelected()->getHealth(), 0,
+			&Game::getMap().getSelected()->getMaxHealth()));
 
 	hud->addEntry(new GuiExpProgressBar(hud->getEntryStyle(), hud->getPos(),
-			"EXP", expBarStyle, _map.getSelected()), 0, 48);
+			"EXP", expBarStyle, Game::getMap().getSelected()), 0, 48);
 
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
 			toolbar->getPos(), "Debug", dComp));
@@ -211,9 +212,9 @@ void GameWindow::update(int diff) {
 	float ya = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) -	
 				sf::Keyboard::isKeyPressed(sf::Keyboard::W));
 
-	_map.getSelected()->setVelocity(xa, ya);
+	Game::getMap().getSelected()->setVelocity(xa, ya);
 
-	_map.update(diff);
+	Game::getMap().update(diff);
 
 	GameWindow::Emitter.update(diff);
 	_cursor.update(diff);
@@ -242,64 +243,38 @@ void GameWindow::keyEvent(sf::Event& e) {
 		Game::b2DebugDrawer.SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
 		CORE_INFO("b2DebugDraw flags: %d", Game::b2DebugDrawer.GetFlags());
 		wc->setDrawBounds(!wc->getDrawBounds());
-	} else if (e.key.code == sf::Keyboard::M) {
-		b2Body* bodies = _map.getWorld()->GetBodyList();
-		for (int i = 0; i < _map.getWorld()->GetBodyCount(); ++i) {
-			CORE_INFO("%d/%d :: (%g, %g)", i, _map.getWorld()->GetBodyCount(),
-					bodies[i].GetPosition().x, bodies[i].GetPosition().y);
-		}
 	} else if (e.key.code == sf::Keyboard::Y) {
-		_map.getSelected()->setHealth(_map.getSelected()->getHealth() - 1);
+		Game::getMap().getSelected()->setHealth(
+			Game::getMap().getSelected()->getHealth() - 1);
 	} else if (e.key.code == sf::Keyboard::U) {
-		_map.getSelected()->setHealth(_map.getSelected()->getHealth() + 1);
+		Game::getMap().getSelected()->setHealth(
+			Game::getMap().getSelected()->getHealth() + 1);
 	} else if (e.key.code == sf::Keyboard::H) {
-		_map.getSelected()->addExp(1.0f);
+		Game::getMap().getSelected()->addExp(1.0f);
 	} else if (e.key.code == sf::Keyboard::J) {
-		_map.getSelected()->addExp(-1.0f);
+		Game::getMap().getSelected()->addExp(-1.0f);
 	} else if (e.key.code == sf::Keyboard::F) {
 		_drawFps = !_drawFps;
-	} else if (e.key.code == sf::Keyboard::L) {
-		Unit* u = nullptr;
-		for (Object* o : _map.objects) {
-			if ((u = Map::toUnit(o))) { // Extra paren to stop warnings
-				CORE_INFO("%x == Lvl: %d || Exp: %g", u,
-					u->getLevel(), u->getExp());
-			}
-		}
 	} else if (e.key.code == sf::Keyboard::C) {
 		// Mouse relative to the window
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
 
-		GuiComponent* clicked = getComponentAt(pixelPos.x, pixelPos.y);
+		Vector2 worldPos = SFMLUtil::getRelativeMouseClick(
+			pixelPos.x, pixelPos.y, this);
 
-		if (!clicked) {
-			CORE_WARN("No GuiComponent is clicked");
-			return;
-		}
-
-		// Mouse relative to the clicked GuiComponent
-		sf::Vector2f worldPos = Game::getRenderWindow()
-			.mapPixelToCoords(pixelPos, clicked->getView());
-
-		_map.spawnAsteroid(worldPos.x, worldPos.y, Random::randFloat(30, 60));
+		Game::getMap().spawnAsteroid(
+			worldPos.X, worldPos.Y, Random::randFloat(30, 60));
 	}
 }
 
 void GameWindow::mouseEvent(sf::Event& e) {
-	GuiComponent* clicked = 
-		getComponentAt(e.mouseButton.x, e.mouseButton.y);
-
-	// Mouse relative to the window
-	sf::Vector2i pixelPos = sf::Mouse::getPosition(Game::getRenderWindow());
-
-	// Mouse relative to the clicked GuiComponent
-	sf::Vector2f worldPos = Game::getRenderWindow()
-		.mapPixelToCoords(pixelPos, clicked->getView());
+	Vector2 worldPos = 
+		SFMLUtil::getRelativeMouseClick(e.mouseButton.x, e.mouseButton.y, this);
 
 	if (e.mouseButton.button == sf::Mouse::Left) {
-		_map.getSelected()->shoot(worldPos.x, worldPos.y);
+		Game::getMap().getSelected()->shoot(worldPos.X, worldPos.Y);
 	} else if (e.mouseButton.button == sf::Mouse::Right) {
-		_map.spawnEnemy(worldPos.x, worldPos.y, 2, -1);
+		Game::getMap().spawnEnemy(worldPos.X, worldPos.Y, 2, -1);
 	}
 }
 
@@ -317,7 +292,7 @@ void GameWindow::render(sf::RenderWindow& window) {
 
 //void GameWindow::renderMap(sf::RenderWindow& window) {
 //	// Drawing the path enemies will take
-//	Path* path = _map.getPath();
+//	Path* path = Game::getMap().getPath();
 //
 //	// Start the path at the first point
 //	sf::Vector2f prev(path->getPoint(0)->X, path->getPoint(0)->Y);

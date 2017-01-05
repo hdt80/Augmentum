@@ -14,12 +14,7 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 	: GuiComponent(window, style, compStyle, pos, size) {
 
 	_hovered = nullptr;
-
-	GameWindow* gameWindow = nullptr;
-	if ((gameWindow = dynamic_cast<GameWindow*>(window)) != nullptr) {
-		_window = gameWindow;
-		_map = gameWindow->getMap();
-	}
+	_map = &Game::getMap();
 
 	_unitName = new GuiEntry(style, pos, "");
 	_unitPos = new GuiEntry(style, pos, "");

@@ -65,7 +65,7 @@ build: $(OBJS) $(COBJS)
 $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CXX) $(CXX_FLAGS) -o "$@" "$<"
 
-$(COBJS): $(BUILDDIRT)/%.o : $(SRCDIR)/%.c
+$(COBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CC_FLAGS) -o "$@" "$<"
 
 # Running the created exe

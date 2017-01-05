@@ -63,7 +63,7 @@ public:
 
 	// Set if the Console is opened or not
 	// b - If the Console is opened or not
-	inline void setOpened(bool b) { _opened = b; }
+	void setOpened(bool b);
 
 	// Check if the Console is opened
 	// returns: _opened
@@ -79,7 +79,20 @@ public:
 
 protected:
 
+	// Inherited from sf::Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+	// Handle any key event
+	// e - Event to handle
+	void handleKeyEvent(const sf::Event& e);
+
+	// Handle any text event
+	// e - Event to handle
+	void handleTextEvent(const sf::Event& e);
+
+	// Handle any mouse event
+	// e - Event to handle
+	void handleMouseEvent(const sf::Event& e);
 
 	// Add a line of text to the history
 	// line - Line of text to add

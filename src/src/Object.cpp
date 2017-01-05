@@ -3,11 +3,13 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+
 #include "Logger.h"
 #include "Map.h"
 #include "Target.h"
 #include "Perk.h"
 #include "BitWise.h"
+
 #include "util/MathUtil.h"
 
 ///////////////////////////////////////////////////////////////////////////////

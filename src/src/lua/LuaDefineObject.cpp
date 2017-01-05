@@ -33,7 +33,8 @@ namespace LuaDefines {
 			"getAttackerCount", &Object::getAttackerCount,
 			"setVelocity", &Object::setVelocity,
 			"getVelocity", &Object::getVelocity,
-		//	"setPosition", &Object::setPosition,
+			"setPosition", sol::overload(
+				sol::resolve<void(float, float)>(&Object::setPosition)),
 			"getX", &Object::getX,
 			"getY", &Object::getY,
 			"contains", &Object::contains

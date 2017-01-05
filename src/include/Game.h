@@ -36,6 +36,12 @@ public:
 	// e - Key press event
 	static void handleKeyPress(const sf::Event& e);
 
+	// Check if the key is a reserved key used by Game
+	// key - Key to check
+	// returns: If the key is one of the reserved key (Escape, Pause, or 
+	//		Console's HOTKEY
+	static bool isReservedKey(const sf::Keyboard::Key& key);
+
 	// Get if the game is currently shutting down
 	// returns: Tue if the CurrentGameState equals Ending
 	static bool toClose() { return CurrentGameState == Ending; }
@@ -55,6 +61,10 @@ public:
 	// Get the size of the window's in thie Game
 	// returns: _size
 	static inline const Vector2& getSize() { return _size; }
+
+	// Get the Map used by this Game
+	// returns: A static instance of the Map
+	static Map& getMap();
 
 	// Static vars /////////////////////////////////////////////////////////////
 
