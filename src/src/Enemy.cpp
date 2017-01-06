@@ -19,36 +19,38 @@ EnemyType* EnemyType::getById(int id) {
 		CORE_WARN("getById: id not in use! (%d)", id);
 		return getDefaultType();
 	}
-	return &_types.at(id);
+	return &getTypes().at(id);
 }
 
 bool EnemyType::idInUse(unsigned int id) {
-	std::map<int, EnemyType>::iterator it = _types.find(id);
-	return (it != _types.end());
+	std::map<int, EnemyType>::iterator it = getTypes().find(id);
+	return (it != getTypes().end());
 }
 
 int EnemyType::createEnemyType(int id, const std::string& name, int sides,
 	Stats defStats, Stats levelDiff) {
 
-	// If the id is already in use try to use the next one
-	if (idInUse(id)) {
-		CORE_WARN("CreateEnemyType: id %d is already in use!", id);
-		CORE_WARN("Trying to use %d to create", id + 1);
-		return createEnemyType(++id, name, sides, defStats, levelDiff);
-	}
-
-	_types.insert(std::map<int, EnemyType>
-		::value_type(id, EnemyType(id, name, sides, defStats, levelDiff)));
-
-	CORE_DEBUG("Created enemy type");
-	CORE_DEBUG("\tid: %d", id);
-	CORE_DEBUG("\tname: %s", name.c_str());
-
-	return id;
+	return addEnemyType(EnemyType(id, name, sides, defStats, levelDiff));
+//
+//	// If the id is already in use try to use the next one
+//	if (idInUse(id)) {
+//		CORE_WARN("CreateEnemyType: id %d is already in use!", id);
+//		CORE_WARN("Trying to use %d to create", id + 1);
+//		return createEnemyType(++id, name, sides, defStats, levelDiff);
+//	}
+//
+//	getTypes().insert(std::map<int, EnemyType>
+//		::value_type(id, EnemyType(id, name, sides, defStats, levelDiff)));
+//
+//	CORE_DEBUG("New enemy type: %s (%d)", name.c_str(), id);
+//
+//	return id;
 }
 
 EnemyType* EnemyType::getDefaultType() {
-	return &_defaultType;
+	static EnemyType* _defaultType
+		= new EnemyType(0, "DEFAULT", 4, Stats(), Stats());
+	return _defaultType;
 }
 
 int EnemyType::loadEnemyType(const std::string& path) {
@@ -63,7 +65,7 @@ int EnemyType::loadEnemyType(const std::string& path) {
 	return type.getId();
 }
 
-int EnemyType::addEnemyType(EnemyType& type) {
+int EnemyType::addEnemyType(EnemyType type) {
 	// If the id is already in use try to use the next one
 	if (idInUse(type.getId())) {
 		CORE_WARN("AddEnemyType: id %d is already in use!", type.getId());
@@ -72,21 +74,17 @@ int EnemyType::addEnemyType(EnemyType& type) {
 		return addEnemyType(type);
 	}
 
-	_types.insert(std::map<int, EnemyType>::value_type(type.getId(), type));
+	getTypes().insert(std::map<int, EnemyType>::value_type(type.getId(), type));
 
-	CORE_DEBUG("Created enemy type");
-	CORE_DEBUG("\tid: %d", type.getId());
-	CORE_DEBUG("\tname: %s", type.getName().c_str());
+	CORE_DEBUG("New enemy type: %s (%d)", type.getName().c_str(), type.getId());
 
 	return type.getId();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// EnemyType static vars
-////////////////////////////////////////////////////////////////////////////////
-
-std::map<int, EnemyType> EnemyType::_types;
-EnemyType EnemyType::_defaultType(0, "DEFAULT", 4, Stats(), Stats());
+std::map<int, EnemyType>& EnemyType::getTypes() {
+	static std::map<int, EnemyType>* _types = new std::map<int, EnemyType>();
+	return *_types;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // ctor and dtor

@@ -10,8 +10,10 @@ namespace LuaDefines {
 		lua.new_usertype<Object> (
 			"Object", sol::constructors<
 				sol::types<Map*, float, float, Stats, int>>(),
-		//	"distanceWith", &Target::distanceWith,
-		//	"distanceWithSqr", &Target::distanceWithSqr,
+			"distanceWith", sol::overload(sol::resolve
+				<float(float, float)>(&Object::distanceWith)),
+			"distanceWithSqr", sol::overload(sol::resolve
+				<float(float, float)>(&Object::distanceWithSqr)),
 			"collidesWith", &Object::collidesWith,
 			"isSimpleTarget", &Object::isSimpleTarget,
 			"applyStat", &Object::applyStat,
@@ -24,7 +26,8 @@ namespace LuaDefines {
 			"addPerk", &Object::addPerk,
 			"removePerk", &Object::removePerk,
 			"hasPerk", &Object::hasPerk,
-		//	"getPerk", &Object::getPerk,
+			"getPerk", sol::overload(sol::resolve
+				<Perk*(const std::string& name) const>(&Object::getPerk)),
 			"getMap", &Object::getMap,
 			"getSize", &Object::getSize,
 			"getPerks", &Object::getPerks,

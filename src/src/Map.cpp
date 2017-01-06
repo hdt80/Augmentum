@@ -47,6 +47,7 @@ Map::Map()
 	_selected->setObjectType(ObjectType::FRIENDLY);
 
 	Game::DebugConsole.addNamedObject("selected", _selected);
+	Game::DebugConsole.addNamedObject("map", this);
 
 	objects.push_back(_selected);
 

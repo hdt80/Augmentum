@@ -169,6 +169,9 @@ void Game::pause() {
 }
 
 Map& Game::getMap() {
+	// By defining the static Map in a method we avoid the
+	// "static initalization order fiasco". This means that map will never
+	// get freed, but that's ok
 	static Map* map = new Map;
 	return *map;
 }

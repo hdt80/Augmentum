@@ -11,6 +11,10 @@ namespace LuaDefines {
 			"Ship", sol::constructors<
 				sol::types<
 					Map*, float, float, Stats, Stats, int, int, sf::Color>>(),
+			"distanceWith", sol::overload(sol::resolve
+				<float(float, float)>(&Ship::distanceWith)),
+			"distanceWithSqr", sol::overload(sol::resolve
+				<float(float, float)>(&Ship::distanceWithSqr)),
 			"collidesWith", &Ship::collidesWith,
 			"isSimpleTarget", &Ship::isSimpleTarget,
 			"applyStat", &Ship::applyStat,
@@ -22,6 +26,9 @@ namespace LuaDefines {
 			"setStat", &Ship::setStat,
 			"addPerk", &Ship::addPerk,
 			"removePerk", &Ship::removePerk,
+			"hasPerk", &Ship::hasPerk,
+			"getPerk", sol::overload(sol::resolve
+				<Perk*(const std::string& name) const>(&Ship::getPerk)),
 			"getMap", &Ship::getMap,
 			"getSize", &Ship::getSize,
 			"getPerks", &Ship::getPerks,
@@ -30,10 +37,15 @@ namespace LuaDefines {
 			"getAttackerCount", &Ship::getAttackerCount,
 			"setVelocity", &Ship::setVelocity,
 			"getVelocity", &Ship::getVelocity,
+			"setPosition", sol::overload(
+				sol::resolve<void(float, float)>(&Ship::setPosition)),
 			"getX", &Ship::getX,
 			"getY", &Ship::getY,
 			"contains", &Ship::contains,
 			"canShoot", &Ship::canShoot,
+			"shoot", sol::overload(
+				sol::resolve<void(float, float)>(&Ship::shoot),
+				sol::resolve<void(Target*)>(&Ship::shoot)),
 			"applyDamage", &Ship::applyDamage,
 			"getHealth", &Ship::getHealth,
 			"getMaxHealth", &Ship::getMaxHealth,

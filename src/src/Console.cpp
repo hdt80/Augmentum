@@ -53,17 +53,7 @@ void Console::loadLua() {
 
 	LuaDefines::defineClasses(_lua);
 
-	_lua.set_function("print_table", [this](sol::table table) {
-		auto iter = table.begin();
-		while (iter != table.end()) {
-			CORE_INFO("%s", (*iter).first.as<std::string>().c_str());
-			++iter;
-		}
-	});
-
-	_lua.set_function("getObject", [this](const std::string& ptr) {
-		return Map::toObject((void*)StringUtil::toInt(ptr));
-	});
+	_lua.set("map", Game::getMap());
 }
 
 void Console::executeCommand(const std::string& cmd) {

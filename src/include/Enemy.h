@@ -74,7 +74,7 @@ public:
 	// Add a pre-existing EnemyType to the _types vector
 	// type - Type to add
 	// returns: The id used to store the added EnemyType
-	static int addEnemyType(EnemyType& type);
+	static int addEnemyType(EnemyType type);
 
 	// Load an EnemyType from a lua file at the path
 	//		The info should be subtabled in a subtable called Config{}
@@ -98,13 +98,12 @@ protected:
 	Stats _defaultStats; // Default stats at level 1 the Enemy will have
 	Stats _levelDiff; // Different in stats of each level
 
-	// Static vars /////////////////////////////////////////////////////////////
+	// Static methods //////////////////////////////////////////////////////////
 	
-	//static std::vector<EnemyType> _types; // _id to EnemyType
+	// Get the map of types
+	// returns: Reference to the types used
+	static std::map<int, EnemyType>& getTypes();
 
-	static std::map<int, EnemyType> _types;
-
-	static EnemyType _defaultType; // Default type to use
 };
 
 class Enemy : public Unit {
