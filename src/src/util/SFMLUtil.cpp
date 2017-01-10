@@ -26,4 +26,42 @@ namespace SFMLUtil {
 
 		return Vector2(worldPos.x, worldPos.y);
 	}
+
+	std::vector<sf::String> wrapText(const sf::Text& text, int length) {
+		std::vector<sf::String> toReturn;
+
+		if (text.getLocalBounds().width <= length) {
+			toReturn.push_back(sf::String(text.getString()));
+			return toReturn;
+		}
+
+		sf::Text newText = text;
+
+		while (newText.getLocalBounds().width > length) {
+			// Iterate backwards to find the first char that isn't longer
+			// than the length
+			for (int i = newText.getString().getSize(); i >= 0; --i) {
+				// If the current character's position is less than the length
+				// we need to wrap to we've found the next character to make
+				// the sf::String that we're pushing back to the std::vector
+				if (newText.getLocalBounds().width < length) {
+					toReturn.push_back(newText.getString());
+					break;
+				}
+				if (newText.findCharacterPos(i).x <= length) {
+					sf::String temp = newText.getString();
+	
+					// Copy only the characters up to the one before the rest
+					// of the text that's being wrapped
+					toReturn.push_back(temp.substring(0, i));
+
+					// Same process with the next string
+					newText.setString(temp.substring(i));
+					continue;
+				}
+			}
+		}
+
+		return toReturn;
+	}
 };

@@ -16,7 +16,7 @@ GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
 		float* value, float min, float* max)
 	: GuiEntry(style, origin, msg),
 		_barStyle(barStyle), _value(value), _prevValue(-1),
-		_min(min), _max(max) {
+		_min(min), _max(max), _prevMax(-1) {
 
 	_bar.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
 	_bar.setFillColor(barStyle->maxColor);
@@ -96,18 +96,18 @@ void GuiProgressBar::update(int diff) {
 
 void GuiProgressBar::updateBar() {
 	_bar.setFillColor(ColorUtil::colorInterpolate(
-				_barStyle->minColor, _barStyle->maxColor, getRatioDone()));
+		_barStyle->minColor, _barStyle->maxColor, getRatioDone()));
 
 	_currentText.setString(StringUtil::toString(getCurrentValue()));
 	_maxText.setString(StringUtil::toString(getMax()));
 
 	_currentText.setPosition(getX() + (_style->dimensions.X / 2.0f)
-			- _currentText.getLocalBounds().width / 2.0f, getY());
+		- _currentText.getLocalBounds().width / 2.0f, getY());
 	_maxText.setPosition(getX() + _style->dimensions.X
-			- (_maxText.getLocalBounds().width + 4.0f), getY());
+		- (_maxText.getLocalBounds().width + 4.0f), getY());
 
 	_bar.setSize(sf::Vector2f(_style->dimensions.X * getRatioDone(),
-				_style->dimensions.Y));
+		_style->dimensions.Y));
 }
 
 void GuiProgressBar::setMin(float m) {

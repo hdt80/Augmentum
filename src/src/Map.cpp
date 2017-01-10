@@ -82,6 +82,9 @@ Map::~Map() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void Map::update(int diff) {
+
+	updateBox2D(diff);
+
 	// Move first so the updates follow what the player would see
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->move(diff);
@@ -109,29 +112,17 @@ void Map::update(int diff) {
 		delete toRemove[i];
 	}
 	toRemove.clear();
+}
 
+void Map::updateBox2D(int diff) {
+	// Update Box2D first
 	b2UpdateCounter += diff;
 	if (b2UpdateCounter >= 16667) {
+		// Collision handling is done in here
 		_world.Step(b2UpdateCounter / 1000000.0f,
 				velocityIterations, positionIterations);
 		b2UpdateCounter = 0;
 	}
-
-	// Calculate the collisions after all the removal and moves so the player
-	// gets accurate feedback and isn't behind a frame
-	calcCollisions();
-}
-
-void Map::calcCollisions() {
-	//for (unsigned int i = 0; i < objects.size(); ++i) {
-	//	for (unsigned int j = 0; j < objects.size(); ++j) {
-	//		// Ensure that we aren't checking with ourself
-	//		if (objects[i] != objects[j] &&
-	//				objects[i]->collidesWith(objects[j])) {
-	//			objects[i]->onCollision(objects[j]);
-	//		}
-	//	}
-	//}
 }
 
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
@@ -170,6 +161,7 @@ void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 	if (EnemyType::idInUse(enemyId)) {
 		e = new Enemy(this, x, y, 20, *EnemyType::getById(enemyId));	
 	} else {
+		CORE_WARN("Id %d is not a valid id!", enemyId);
 		e = new Enemy(this, x, y, 20, *EnemyType::getDefaultType());
 	}
 
@@ -195,4 +187,16 @@ void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 void Map::spawnAsteroid(float x, float y, float radius) {
 	Asteroid* ast = new Asteroid(this, x, y, radius);
 	addObject(ast);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Debug methods
+////////////////////////////////////////////////////////////////////////////////
+
+void Map::dumpObjects() {
+	std::stringstream ss;
+	for (Object* object : objects) {
+		ss << object << ' ';
+	}
+	CORE_INFO("Objects: %s", ss.str().c_str());
 }

@@ -30,13 +30,10 @@ Console::Console()
 	// Save the original streams used before the console redirects the output
 	_coutOrig = std::cout.rdbuf();
 	_cerrOrig = std::cerr.rdbuf();
-
-	loadLua();
 }
 
 Console::~Console() {
-	std::cout.rdbuf(_coutOrig);
-	std::cerr.rdbuf(_cerrOrig);
+	endRedirect();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +72,8 @@ void Console::executeCommand(const std::string& cmd) {
 	int n = read(fdStdoutPipe[MFD_READ], buffer, 1024);
 	buffer[n] = '\0'; // Add the null terminating char
 
+	endRedirect();
+
 	if (output.size() == 0) {
 		output = _outBuffer.str();
 	}
@@ -94,8 +93,6 @@ void Console::executeCommand(const std::string& cmd) {
 	if (output.size() > 0) {
 		addOutput(output);
 	}
-
-	endRedirect();
 }
 
 void Console::addObject(void* obj) {
@@ -189,9 +186,9 @@ void Console::handleTextEvent(const sf::Event& e) {
 
 void Console::handleMouseEvent(const sf::Event& e) {
 	if (e.type == sf::Event::MouseButtonReleased) {
-		CORE_INFO("(%d, %d)", e.mouseButton.x, e.mouseButton.y);
 		Vector2 relPos = SFMLUtil::getRelativeMouseClick(
 			e.mouseButton.x, e.mouseButton.y, Game::CurrentWindow);
+
 		Object* object = Game::getMap().objectAt(nullptr, relPos.X, relPos.Y);
 
 		CORE_INFO("Object: %x", object);
@@ -206,7 +203,11 @@ void Console::addOutput(const std::string& line) {
 	text.setOutlineColor(sf::Color::Black);
 	text.setOutlineThickness(1.0f);
 
-	_output.insert(_output.begin(), text);
+	for (sf::String& str : SFMLUtil::wrapText(text, Game::getSize().X)) {
+		sf::Text addingText(text);
+		addingText.setString(str);
+		_output.insert(_output.begin(), addingText);
+	}
 
 	for (unsigned int i = 0; i < _output.size(); ++i) {
 		sf::Text& iter = _output[i];

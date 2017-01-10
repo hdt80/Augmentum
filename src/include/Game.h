@@ -29,6 +29,10 @@ public:
 	// Main game loop
 	static void loop();
 
+	// Perform one game update
+	// diff - Long how to simulate the game for
+	static void step(long long diff);
+
 	// If the Game is already paused unpause, else pause it
 	static void pause();
 
