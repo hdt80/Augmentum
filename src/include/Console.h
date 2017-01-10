@@ -73,6 +73,14 @@ public:
 	// size - Size of the Window this Console will be in
 	void setPosition(const Vector2& size);
 
+	// Add a line of text to the history
+	// line - Line of text to add
+	void addHistoryLine(const std::string& line);
+
+	// Add a line of text to the output
+	// line - Line of text to add
+	void addOutput(const std::string& line);
+
 	// Static vars /////////////////////////////////////////////////////////////
 	
 	static sf::Keyboard::Key HOTKEY; // Hotkey used to open the Console
@@ -93,14 +101,6 @@ protected:
 	// Handle any mouse event
 	// e - Event to handle
 	void handleMouseEvent(const sf::Event& e);
-
-	// Add a line of text to the history
-	// line - Line of text to add
-	void addHistoryLine(const std::string& line);
-
-	// Add a line of text to the output
-	// line - Line of text to add
-	void addOutput(const std::string& line);
 
 	// Begin redirecting output from the terminal to the console
 	void beginRedirect();

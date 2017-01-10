@@ -55,6 +55,8 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
 	std::vector<b2Vec2> points = MathUtil::generatePolygon(sides, size);
+
+	// Convert the points into B2's scale
 	std::vector<b2Vec2> b2Points(size);
 	for (unsigned int i = 0; i < points.size(); ++i) {
 		b2Points[i] = 

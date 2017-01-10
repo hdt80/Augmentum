@@ -31,20 +31,6 @@ int EnemyType::createEnemyType(int id, const std::string& name, int sides,
 	Stats defStats, Stats levelDiff) {
 
 	return addEnemyType(EnemyType(id, name, sides, defStats, levelDiff));
-//
-//	// If the id is already in use try to use the next one
-//	if (idInUse(id)) {
-//		CORE_WARN("CreateEnemyType: id %d is already in use!", id);
-//		CORE_WARN("Trying to use %d to create", id + 1);
-//		return createEnemyType(++id, name, sides, defStats, levelDiff);
-//	}
-//
-//	getTypes().insert(std::map<int, EnemyType>
-//		::value_type(id, EnemyType(id, name, sides, defStats, levelDiff)));
-//
-//	CORE_DEBUG("New enemy type: %s (%d)", name.c_str(), id);
-//
-//	return id;
 }
 
 EnemyType* EnemyType::getDefaultType() {
@@ -59,10 +45,7 @@ int EnemyType::loadEnemyType(const std::string& path) {
 
 	type.readFromFile(path);
 
-	addEnemyType(type);
-
-	// Because we're passing as a reference the id is correct
-	return type.getId();
+	return addEnemyType(type);
 }
 
 int EnemyType::addEnemyType(EnemyType type) {
@@ -166,7 +149,7 @@ void Enemy::loadLua() {
 	}
 	Object::loadLua();
 
-	_lua.lua.set("me", this);
+	_lua.lua.set("me", this); // Set a reference to this in the lua script
 }
 
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {

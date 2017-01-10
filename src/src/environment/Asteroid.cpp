@@ -9,7 +9,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
-	: Object(map, x, y, Stats(0.0f), maxRadius) {
+	: Object(map, x, y, Stats(0.0f), maxRadius)
+		, _maxRadius(maxRadius) {
 
 	// If there's a body it probably isn't a proper Asteroid one
 	if (_b2Box) {
@@ -33,7 +34,6 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 
 	// Vector that will hold all the points used to create the Box2D shape
 	std::vector<b2Vec2> b2Points(points.size());
-
 	for (unsigned int i = 0; i < points.size(); ++i) {
 		// Scale all the points to the scale Box2D uses
 		b2Points[i] =

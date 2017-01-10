@@ -33,8 +33,9 @@ public:
 	// diff - Microseconds to simulate the Map for
 	void update(int diff);
 
-	// Calculate all the collisions between all the Objects in this Map
-	void calcCollisions();
+	// Simulate the Box2D world
+	// diff - Microseconds to simulate Box2D for
+	void updateBox2D(int diff);
 
 	// Get the Ship the player is using
 	// returns: Pointer to the ship the player controls
@@ -90,6 +91,11 @@ public:
 	// y - Y coord of the map to spawn at
 	// radius - Radius of the Asteroid, in map units, not Box2D units
 	void spawnAsteroid(float x, float y, float radius);
+
+	// Debug methods. These are usually called thru the Console
+	
+	// Print a list of all the object points and their types
+	void dumpObjects();
 
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;

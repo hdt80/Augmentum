@@ -30,6 +30,8 @@ void Game::start() {
 
 	CurrentGameState = Playing;
 
+	DebugConsole.loadLua();
+
 	loop();
 }
 
@@ -45,81 +47,61 @@ void Game::loop() {
 	followWindow(&w);
 
 	// Main loop
-	sf::Event e;
 	while (!toClose()) {
 		tEnd = tStart;
 		tStart = std::chrono::high_resolution_clock::now();
 		tDiff = std::chrono::duration_cast
 			<std::chrono::microseconds>(tStart - tEnd).count();
+		
+		step(tDiff);
+	}
+}
 
-		// Poll all sf::Events and send them to the Window
-		while (_window.pollEvent(e)) {
-			// If we're closing (e.g. hit close button) don't let the window
-			// handle it, we've got it
-			// Likewise, Escape is a hardcoded key that Window's aren't allowed
-			// to handle, only the Game can do that. If Shift is pressed at the
-			// same time don't go up a level, quit the whole game
-			// Likewise, Pause is another hardcoded key to open the PauseWindow
+void Game::step(long long diff) {
 
-			if (e.type == sf::Event::Closed) {
-				CurrentGameState = Ending;
-			} else if (DebugConsole.isOpened()) {
-				if (e.type == sf::Event::KeyPressed
+	// Event all queued events will get polled into
+	sf::Event e;
+
+	// Poll all sf::Events and send them to the Window
+	while (_window.pollEvent(e)) {
+		// If we're closing (e.g. hit close button) don't let the window
+		// handle it, we've got it
+		// Likewise, Escape is a hardcoded key that Window's aren't allowed
+		// to handle, only the Game can do that. If Shift is pressed at the
+		// same time don't go up a level, quit the whole game
+		// Likewise, Pause is another hardcoded key to open the PauseWindow
+
+		if (e.type == sf::Event::Closed) {
+			CurrentGameState = Ending;
+		} else if (DebugConsole.isOpened()) {
+			if (e.type == sf::Event::KeyPressed
 					&& isReservedKey(e.key.code)) {
-					
-					handleKeyPress(e);
-				} else {
-					DebugConsole.handleEvent(e);
-				}
-			} else if (e.type == sf::Event::KeyPressed
-				&& isReservedKey(e.key.code)) {
-			
+
 				handleKeyPress(e);
 			} else {
-				CurrentWindow->handleEvent(e);
+				DebugConsole.handleEvent(e);
 			}
+		} else if (e.type == sf::Event::KeyPressed
+				&& isReservedKey(e.key.code)) {
 
-			//if (e.type == sf::Event::Closed) {
-			//	CurrentGameState = Ending;
-			//} else if (e.type == sf::Event::KeyPressed
-			//	|| e.type == sf::Event::TextEntered) { // TODO: Ew
-
-			//	if (e.type == sf::Event::KeyPressed) {
-			//		if (e.key.code == sf::Keyboard::Escape
-			//			|| e.key.code == sf::Keyboard::Pause
-			//			|| e.key.code == Console::HOTKEY) {
-
-			//			Game::handleKeyPress(e);
-			//		} else {
-			//			if (Game::DebugConsole.isOpened()) {
-			//				Game::DebugConsole.handleEvent(e);
-			//			} else {
-			//				CurrentWindow->handleEvent(e);
-			//			}
-			//		}
-			//	} else {
-			//		if (Game::DebugConsole.isOpened()) {
-			//			Game::DebugConsole.handleEvent(e);
-			//		}
-			//	}
-			//} else {
-			//	CurrentWindow->handleEvent(e);
-			//}
+			handleKeyPress(e);
+		} else {
+			CurrentWindow->handleEvent(e);
 		}
-
-		// Perform all the updating
-
-		// If the console is opened don't update the game
-		if (!Game::DebugConsole.isOpened()) {
-			CurrentWindow->update(tDiff);
-		}
-		CurrentWindow->render(_window);
-		if (Game::DebugConsole.isOpened()) {
-			_window.draw(Game::DebugConsole);
-		}
-		Fps.update();
-		_window.display();
 	}
+
+	// Perform all the updating
+
+	// If the console is opened don't update the game
+//	if (!Game::DebugConsole.isOpened()) {
+		CurrentWindow->update(diff);
+//	}
+	CurrentWindow->render(_window);
+	if (Game::DebugConsole.isOpened()) {
+		_window.draw(Game::DebugConsole);
+	}
+	Fps.update();
+	_window.display();
 }
 
 void Game::handleKeyPress(const sf::Event& e) {
