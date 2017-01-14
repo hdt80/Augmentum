@@ -97,6 +97,8 @@ public:
 	// Print a list of all the object points and their types
 	void dumpObjects();
 
+	// Vars ////////////////////////////////////////////////////////////////////
+
 	// All the Objects that exist in the world
 	std::vector<Object*> objects;
 

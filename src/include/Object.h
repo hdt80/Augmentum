@@ -48,6 +48,12 @@ public:
 	// Object dtor
 	virtual ~Object();
 
+	// Operator overloads //////////////////////////////////////////////////////
+	
+	// Operator overload for string cast
+	// returns: This Object represented as a std::string
+	virtual operator std::string() const;
+
 	// Methods /////////////////////////////////////////////////////////////////
 
 	// If Object* o collides with us

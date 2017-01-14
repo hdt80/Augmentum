@@ -6,6 +6,7 @@
 
 #include "Database.h"
 #include "Game.h"
+#include "Ship.h"
 
 #include "LuaScript.h"
 #include "lua/LuaDefines.h"
@@ -50,7 +51,9 @@ void Console::loadLua() {
 
 	LuaDefines::defineClasses(_lua);
 
-	_lua.set("map", Game::getMap());
+	// All objects to be reference in the Console must be defined in here
+	_lua.set("map", &Game::getMap()); // Have to pass the pointer
+	_lua.set("ship", Game::getMap().getSelected());
 }
 
 void Console::executeCommand(const std::string& cmd) {
@@ -65,7 +68,6 @@ void Console::executeCommand(const std::string& cmd) {
 		_lua.script(cmd);
 	} catch (const sol::error& e) {
 		output = e.what();
-		//output = output.substring
 	}
 
 	// Read what was returned

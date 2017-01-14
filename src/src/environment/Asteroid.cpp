@@ -12,6 +12,10 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	: Object(map, x, y, Stats(0.0f), maxRadius)
 		, _maxRadius(maxRadius) {
 
+	if (maxRadius < 0) {
+		CORE_WARN("Cannot have a maxRadius of < 0 (%g)", _maxRadius);
+	}
+
 	// If there's a body it probably isn't a proper Asteroid one
 	if (_b2Box) {
 		map->getWorld()->DestroyBody(_b2Box);

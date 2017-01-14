@@ -19,7 +19,8 @@ namespace LuaDefines {
 			"objectAt", &Map::objectAt,
 			"spawnEnemy", &Map::spawnEnemy,
 			"spawnAsteroid", &Map::spawnAsteroid,
-			"dumpObjects", &Map::dumpObjects
+			"dumpObjects", &Map::dumpObjects,
+			"toObject", &Map::toObject
 		);
 	}
 };

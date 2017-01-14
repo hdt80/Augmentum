@@ -46,9 +46,6 @@ Map::Map()
 	_selected->setMaxHealth(30.0f);
 	_selected->setObjectType(ObjectType::FRIENDLY);
 
-	Game::DebugConsole.addNamedObject("selected", _selected);
-	Game::DebugConsole.addNamedObject("map", this);
-
 	objects.push_back(_selected);
 
 	_contactListener = new ContactListener(&_world);
@@ -120,7 +117,7 @@ void Map::updateBox2D(int diff) {
 	if (b2UpdateCounter >= 16667) {
 		// Collision handling is done in here
 		_world.Step(b2UpdateCounter / 1000000.0f,
-				velocityIterations, positionIterations);
+			velocityIterations, positionIterations);
 		b2UpdateCounter = 0;
 	}
 }
