@@ -27,14 +27,10 @@ Console::Console()
 	_inputText.setOutlineColor(sf::Color::Black);
 	_inputText.setOutlineThickness(1.0f);
 	_inputText.setPosition(4, Game::getSize().Y - 32);
-	
-	// Save the original streams used before the console redirects the output
-	_coutOrig = std::cout.rdbuf();
-	_cerrOrig = std::cerr.rdbuf();
 }
 
 Console::~Console() {
-	endRedirect();
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,43 +53,29 @@ void Console::loadLua() {
 }
 
 void Console::executeCommand(const std::string& cmd) {
-	beginRedirect();
+	addHistoryLine(cmd);
+	addOutput("> " + cmd);
 
-	// What the redirected output will be put into
-	char buffer[1024];
-	std::string output;
+	_redirect.startRedirect();
 
 	// Run the command
 	try {
 		_lua.script(cmd);
 	} catch (const sol::error& e) {
-		output = e.what();
+		addOutput(e.what());
 	}
 
-	// Read what was returned
-	int n = read(fdStdoutPipe[MFD_READ], buffer, 1024);
-	buffer[n] = '\0'; // Add the null terminating char
+	_redirect.endRedirect();
 
-	endRedirect();
+	std::string scout = _redirect.getCout();
+	std::string stdcout = _redirect.getStdout();
 
-	if (output.size() == 0) {
-		output = _outBuffer.str();
+	if (scout.size() > 0) {
+		addOutput(scout);
 	}
 
-	// Add the results to the history
-	
-	addHistoryLine(cmd);
-	addOutput("> " + cmd);
-
-	// If only one char was read it was the space we printed
-	if (n != 1) {
-		// Add one to the buffer to avoid the space
-		addOutput(std::string(buffer + 1));
-	}
-
-	// If there was any output use that
-	if (output.size() > 0) {
-		addOutput(output);
+	if (stdcout.size() > 0) {
+		addOutput(stdcout);
 	}
 }
 
@@ -205,7 +187,7 @@ void Console::addOutput(const std::string& line) {
 	text.setOutlineColor(sf::Color::Black);
 	text.setOutlineThickness(1.0f);
 
-	for (sf::String& str : SFMLUtil::wrapText(text, Game::getSize().X)) {
+	for (const sf::String& str : SFMLUtil::wrapText(text, Game::getSize().X)) {
 		sf::Text addingText(text);
 		addingText.setString(str);
 		_output.insert(_output.begin(), addingText);
@@ -227,46 +209,6 @@ void Console::setOpened(bool b) {
 	_opened = b;
 
 	Game::getRenderWindow().setMouseCursorVisible(_opened);
-}
-
-void Console::beginRedirect() {
-	// Create the pipe
-	if (pipe(fdStdoutPipe) != 0) {
-		CORE_ERROR("pipe returned non zero");
-	}
-
-	// Redirect all output back to the console
-	_cout = std::cout.rdbuf(_outBuffer.rdbuf());
-	_cerr = std::cerr.rdbuf(_errBuffer.rdbuf());
-
-	// Save a copy of stdout so we can restore to it later
-	fdStdout = dup(fileno(stdout));
-
-	// Redirect stdout to our pipe
-	dup2(fdStdoutPipe[MFD_WRITE], fileno(stdout));
-	
-	// Set up the stream for reading
-	setvbuf(stdout, NULL, _IONBF, 0);
-
-	// This print right here is very important. Without this, nothing is put
-	// into stdout's buffer, causing the _read to hang, because there is
-	// nothing to read. Because of this, any reads with a single space mean
-	// that the script didn't print anything, so don't bother forwarding
-	// the single space to the console
-	printf(" ");
-}
-
-void Console::endRedirect() {
-	// Restore the iostreams to normal
-	std::cout.rdbuf(_coutOrig);
-	std::cerr.rdbuf(_cerrOrig);
-
-	// Reset stdout
-	fflush(stdout);
-
-	// Reset stdout back to it's original state
-	dup2(fdStdout, fileno(stdout));
-	close(fdStdout); // Close the redirected stdout
 }
 
 void Console::setPosition(const Vector2& size) {

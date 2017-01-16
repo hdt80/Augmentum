@@ -10,10 +10,6 @@ sf::Color DebugDrawer::getSfColor(const b2Color& color) {
 			color.r * 255, color.g * 255, color.b * 255, color.a * 255); 
 }
 
-// Draw a hollow polygon
-// verts - Array of points that represent the polygon
-// vertCount - Number of points that this polygon has
-// color - Color to draw the polygon
 void DebugDrawer::DrawPolygon(const b2Vec2* verts,
 		int vertCount, const b2Color& color) {
 
@@ -31,10 +27,6 @@ void DebugDrawer::DrawPolygon(const b2Vec2* verts,
 	
 }
 
-// Draw a solid polygon
-// verts - Array of points that represent the polygon
-// vertCount - Number of points that this polygon has
-// color - Color to draw the polygon
 void DebugDrawer::DrawSolidPolygon(const b2Vec2* verts,
 		int vertCount, const b2Color& color) {
 
@@ -51,10 +43,6 @@ void DebugDrawer::DrawSolidPolygon(const b2Vec2* verts,
 	_window->draw(shape);
 }
 
-// Draw a hollow circle
-// center - Center point of circle
-// radius - Radius of the circle. This is provded in box2d's units, meters
-// color - Color to draw the circle
 void DebugDrawer::DrawCircle(const b2Vec2& center,
 		float radius, const b2Color& color) {
 

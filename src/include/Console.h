@@ -1,34 +1,18 @@
 #ifndef _CONSOLE_H
 #define _CONSOLE_H
 
-#include "Logger.h"
 #include "sol/sol.hpp"
+#include "Logger.h"
 #include "Vector2.h"
-
-#ifndef _WIN32
-#include <unistd.h>
-#endif // _WIN32
-
-#ifdef _WIN32
-#define pipe(X) _pipe(X, 1024, O_BINARY)
-#define read _read
-#define dup _dup
-#define dup2 _dup2
-#define fileno _fileno
-#endif // _WIN32
-
-#include <fcntl.h>
+#include "OutputRedirect.h"
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
 #include <string>
-#include <sstream>
-#include <streambuf>
 
 class Console : public sf::Drawable {
 public:
-
 	// Console ctor and dtor ///////////////////////////////////////////////////
 
 	Console();
@@ -90,6 +74,8 @@ protected:
 	// Inherited from sf::Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	// Event handlers //////////////////////////////////////////////////////////
+
 	// Handle any key event
 	// e - Event to handle
 	void handleKeyEvent(const sf::Event& e);
@@ -102,39 +88,12 @@ protected:
 	// e - Event to handle
 	void handleMouseEvent(const sf::Event& e);
 
-	// Begin redirecting output from the terminal to the console
-	void beginRedirect();
-
-	// Stop redirecting output from the terminal to the console
-	void endRedirect();
+	// Vars ////////////////////////////////////////////////////////////////////
+	
+	// Object used to redirect the output from std::cout and stdout
+	OutputRedirect _redirect;
 
 	sol::state _lua; // Lua object to call the commands on
-
-	// file pipes
-	int fdStdoutPipe[2];
-	int fdStdout;
-
-	// file destcriptor states
-	const int MFD_READ = 0;
-	const int MFD_WRITE = 1;
-
-	// The output of cout is redirected into the console when the console is
-	// opened. This is the stream used to redirect
-	// The output of the two streams is redirected into the console when the
-	// console is active. These two are the streams that we will redirect
-	// into from std::cout and std::cerr
-	std::streambuf* _cout;
-	std::streambuf* _cerr;
-
-	// Original streams used when the program first started. These are used
-	// to redirect the output back to the terminal after the console is closed
-	std::streambuf* _coutOrig;
-	std::streambuf* _cerrOrig;
-
-	// The stringstreams that std::cout and std::cerr will be redirected into
-	// while the console is active
-	std::stringstream _outBuffer;
-	std::stringstream _errBuffer;
 
 	// If the hotkey has been hit and the console is accepted input
 	bool _opened;
@@ -153,7 +112,6 @@ protected:
 	std::string _input; // Current text being input
 
 	sf::Text _inputText; // Text being drawn to SFML
-
 };
 
 #endif

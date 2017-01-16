@@ -25,6 +25,8 @@ Object::Object(Map* map, float x, float y, Stats s, int size)
 	
 	setObjectType(ObjectType::DEFAULT);
 
+	updatePosition(x, y);
+
 	if (_b2Box) {
 		_b2Box->SetUserData(this);
 	}
@@ -62,8 +64,8 @@ Object::~Object() {
 
 Object::operator std::string() const {
 	Vector2 vel = getVelocity();
-	return StringUtil::format("Object %x [Pos (%g, %g), Velocity (%g, %g) \
-		ObjType (%d), Size (%g)]", this, getX(), getY(), vel.X, vel.Y,
+	return StringUtil::format("Object %x [Pos (%g, %g), Velocity (%g, %g)"
+		" ObjType (%d), Size (%g)]", this, getX(), getY(), vel.X, vel.Y,
 		_objType, _size);
 }
 
@@ -217,6 +219,9 @@ Vector2 Object::getVelocity() const {
 }
 
 void Object::setPosition(float x, float y) {
+	if (!_b2Box) {
+		return;
+	}
 	_b2Box->SetTransform(b2Vec2(MathUtil::toB2(x), MathUtil::toB2(y)),
 		_b2Box->GetAngle());
 
@@ -232,6 +237,9 @@ float Object::getY() const {
 }
 
 void Object::updatePosition(float x, float y) {
+	if (!_b2Box) {
+		return;
+	}
 	_shape.setPosition(getX() - getSize(), getY() - getSize());
 }
 

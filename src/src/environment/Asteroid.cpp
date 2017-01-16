@@ -68,6 +68,8 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	setObjectType(ObjectType::BOUNDARY);
 
 	_b2Box->SetUserData(this);
+
+	updatePosition(getX(), getY());
 }
 
 Asteroid::~Asteroid() {

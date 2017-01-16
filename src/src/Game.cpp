@@ -93,9 +93,9 @@ void Game::step(long long diff) {
 	// Perform all the updating
 
 	// If the console is opened don't update the game
-//	if (!Game::DebugConsole.isOpened()) {
+	if (!Game::DebugConsole.isOpened()) {
 		CurrentWindow->update(diff);
-//	}
+	}
 	CurrentWindow->render(_window);
 	if (Game::DebugConsole.isOpened()) {
 		_window.draw(Game::DebugConsole);
@@ -125,7 +125,6 @@ void Game::handleKeyPress(const sf::Event& e) {
 	} else {
 		CORE_WARN("Invalid key press handled by Game: %d", e.key.code);
 	}
-
 }
 
 bool Game::isReservedKey(const sf::Keyboard::Key& key) {
