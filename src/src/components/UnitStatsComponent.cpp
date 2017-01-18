@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "GameWindow.h"
 #include "util/StringUtil.h"
+#include "util/ObjectUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // UnitStatsComponent ctor and dtor
@@ -62,7 +63,7 @@ void UnitStatsComponent::update(int diff) {
 		.mapPixelToCoords(pixelPos, clicked->getView());
 
 	_hovered = dynamic_cast<Unit*>(_map->objectAt(nullptr,
-				worldPos.x, worldPos.y));
+		worldPos.x, worldPos.y));
 
 	if (_hovered) {
 		_unitPos->setMessage(StringUtil::format("Pos [%g, %g]",
@@ -90,7 +91,7 @@ void UnitStatsComponent::update(int diff) {
 
 		Enemy* e = nullptr;
 
-		if ((e = Map::toEnemy(_hovered))) {
+		if ((e = ObjectUtil::toType<Enemy>(_hovered))) {
 			_unitName->setMessage(StringUtil::format("Type: %s",
 				e->getEnemyType().getName().c_str()));
 		}

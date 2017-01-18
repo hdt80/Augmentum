@@ -7,12 +7,15 @@
 #include "Database.h"
 #include "Game.h"
 #include "Ship.h"
+#include "environment/Asteroid.h"
+#include "Projectile.h"
 
 #include "LuaScript.h"
 #include "lua/LuaDefines.h"
 
 #include "util/StringUtil.h"
 #include "util/SFMLUtil.h"
+#include "util/ObjectUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Console ctor and dtor
@@ -175,9 +178,23 @@ void Console::handleMouseEvent(const sf::Event& e) {
 
 		Object* object = Game::getMap().objectAt(nullptr, relPos.X, relPos.Y);
 
-		CORE_INFO("Object: %x", object);
-
-		_lua.set("mouse", object);
+		// Try to upcast the clicked object as much as possible so sol
+		// can use the proper userdata supplied from LuaDefine*
+		if (ObjectUtil::isType<Unit>(object)) {
+			if (ObjectUtil::isType<Enemy>(object)) {
+				_lua.set("mouse", ObjectUtil::toType<Enemy>(object));
+			} else if (ObjectUtil::isType<Ship>(object)) {
+				_lua.set("mouse", ObjectUtil::toType<Ship>(object));
+			} else if (ObjectUtil::isType<Asteroid>(object)) {
+				_lua.set("mouse", ObjectUtil::toType<Asteroid>(object));
+			} else {
+				_lua.set("mouse", ObjectUtil::toType<Unit>(object));
+			}
+		} else if (ObjectUtil::isType<Projectile>(object)) {
+			_lua.set("mouse", ObjectUtil::toType<Projectile>(object));
+		} else {
+			_lua.set("mouse", object);
+		}
 	}
 }
 

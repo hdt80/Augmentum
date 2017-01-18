@@ -8,17 +8,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////
-Unit::Unit()
-	: Unit(nullptr, 0, 0, Stats(), Stats(), 0, 0, sf::Color::Black) {
-	
-}
-
+//
 Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		int size, int sides, sf::Color c)
-	: Object(map, x, y, s, size),
-		_reload(1), _levelDiff(lvlDiff), _health(30), _maxHealth(30),
-		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
-			0, _maxHealth, _health),
+	: Entity(map, x, y, size),
+		_reload(1), _levelDiff(lvlDiff),
 		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
 
 	if (sides < 3) {
@@ -87,6 +81,12 @@ Unit::~Unit() {
 		_map->getWorld()->DestroyBody(_b2Box);
 		_b2Box = nullptr;
 	}
+
+	// Remove all the Perks
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		delete _perks[i];
+	}
+	_perks.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +116,6 @@ void Unit::onLevelUp() {
 }
 
 void Unit::onUnitKill(Unit* killed) {
-	CORE_INFO("[Unit %x] Killed %x", this, killed);
 	_lua.callFunction("onUnitKill");
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		_perks[i]->onUnitKill(killed);
@@ -144,10 +143,6 @@ void Unit::shoot(float x, float y) {
 	}
 }
 
-void Unit::shoot(Target* target) {
-	shoot(target->getX(), target->getY());
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Updating methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -155,16 +150,46 @@ void Unit::shoot(Target* target) {
 void Unit::updatePosition(float x, float y) {
 	Object::updatePosition(x, y);	
 
-	_hpBar.setPosition(x - getSize(), y - getSize());
+}
+
+void Unit::setVelocity(float x, float y) {
+	b2Vec2 vel = _b2Box->GetLinearVelocity();
+
+	// The speed stat isn't scaled to Box2D because the movement is noticed
+	// in the game scale, so scaling down the speed would be very noticable
+	b2Vec2 end(MathUtil::toB2(x) * getSpeed(), MathUtil::toB2(y) * getSpeed());
+
+	// Diff the velocity needs to change to reach the wanted velocity
+	b2Vec2 diff = end - vel;
+
+	// If there is a value in the diff, that means that a movement will occur,
+	// so only bother to apply acceleration and the force if there will be one
+	if (diff.x != 0.0f || diff.y != 0.0f) {
+		// The accel stat is a percent increase
+		diff *= (1 + MathUtil::toB2(getAccel()));
+		_b2Box->ApplyLinearImpulseToCenter(diff, true);
+	}
 }
 
 void Unit::update(int diff) {
+	Object::update(diff);
+
 	_reload.update(diff);
+
 	if (getLevel() != _prevLevel) {
 		onLevelUp();
 		_prevLevel = getLevel();
 	}
-	Object::update(diff);
+	
+	// Update each perk
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		_perks[i]->update(diff);
+		// If the perk has timed out or removed by another perk remove it
+		if (_perks[i]->isToRemove()) {
+			removePerk(_perks[i]);
+			_perks.erase(_perks.begin() + i);
+		}
+	}
 }
 
 void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
@@ -177,6 +202,8 @@ void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Unit::applyDamage(float d, Unit* hitter) {
+	Entity::onDamageTaken(d, hitter);
+
 	setHealth(getHealth() - d);
 
 	// If d is negative (a heal) and we go above max health clamp it back
@@ -184,12 +211,11 @@ void Unit::applyDamage(float d, Unit* hitter) {
 		setHealth(getMaxHealth());
 	}
 
-	onDamageTaken(d, hitter);
-
 	// No health left? Kill this Unit off next update
 	if (getHealth() <= 0) {
 		_toRemove = true;
 		hitter->onUnitKill(this);
+		onDeath();
 	}
 }
 
@@ -200,6 +226,69 @@ void Unit::applyDamage(float d, Unit* hitter) {
 float Unit::getStat(const std::string& name) const {
 	// Add the stats gained from the levels
 	return _baseStats[name] + (_levelDiff[name] * getLevel()) + _stats[name];
+}
+
+void Unit::setStats(Stats s, bool relative) {
+	if (relative) {
+		_baseStats += s;
+	} else {
+		_baseStats = s;
+	}
+}
+
+float Unit::getStat(const std::string& name) const {
+	return _baseStats[name] + _stats[name];
+}
+
+void Unit::setStat(const std::string& name, float value) {
+	_stats[name] = value;
+}
+
+void Unit::applyStat(Stats s) {
+    if (!s.percent) {
+        CORE_WARNING("Object::applyStat> Stats isn't percent");
+    }
+    _stats["range"]     += _baseStats["range"]     * s["range"];
+    _stats["fireRate"]  += _baseStats["fireRate"]  * s["fireRate"];
+    _stats["damage"]    += _baseStats["damage"]    * s["damage"];
+    _stats["projSpeed"] += _baseStats["projSpeed"] * s["projSpeed"];
+    _stats["speed"]     += _baseStats["speed"]     * s["speed"];
+    _stats["accel"]     += _baseStats["accel"]     * s["accel"];
+}
+
+void Unit::removePerk(Perk* p) {
+	applyStat(-p->getStats());
+}
+
+void Unit::addPerk(Perk* p) {
+	// If we already have the buff
+	if (getPerk(p->getName()) != nullptr) {
+		Perk* curP = getPerk(p->getName());
+		curP->setAttached(this);
+
+		// Stackable and we can add a stack? Apply stat change and add 1 stack
+		if (p->isStackable() && (curP->getStacks() < curP->getMaxStacks())) {
+			// Add the stat mod to the current perk so removal is correct
+			curP->getStats() += p->getStats();
+			curP->addStack();
+			applyStat(p->getStats());
+		}
+		// Reset duration
+		curP->setDuration(p->getDuration());
+	} else {
+		p->setAttached(this);
+		_perks.push_back(p);
+		applyStat(p->getStats());
+	}
+}
+
+Perk* Unit::getPerk(const std::string& name) const {
+	for (unsigned int i = 0; i < _perks.size(); ++i) {
+		if (_perks[i]->getName() == name) {
+			return _perks[i];
+		}
+	}
+	return nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +311,7 @@ void Unit::setMaxHealth(float f) {
 
 float Unit::getExpForCurrentLevel() const {
 	return getExp() - ExperienceHelper::levelToExp(
-			ExperienceHelper::expToLevel(getExp()));
+		ExperienceHelper::expToLevel(getExp()));
 }
 
 float Unit::getExpToNextLevel() const {

@@ -5,12 +5,14 @@
 #include "Cooldown.h"
 #include "FloatingProgressBar.h"
 
-class Unit : public Object {
+// A Unit has all the properties of an Entity, but also has stats and perks 
+// that change how the Unit functions. A Unit takes and deals damage, typically
+// by shooting Projectiles. Units can shoot Projectiles, and have a reload
+// cooldown between each shot.
+// Examples: Ships
+class Unit : public Entity {
 public:
 	// ctor and dtor ///////////////////////////////////////////////////////////
-	
-	// nullary ctor
-	Unit();
 
 	// Unit ctor
 	// map - Map this Unit is a part of
@@ -33,40 +35,20 @@ public:
 	// diff - Microseconds to simulate the Unit for
 	void update(int diff);
 
-	// Events //////////////////////////////////////////////////////////////////
-	
-	// Occurs when this Unit is hit by a Projectile
-	// p - Projectile that hit this
-	virtual void onProjectileHit(Projectile* p);
-	
-	// Occurs when the Unit levels up
-	virtual void onLevelUp();
-
-	// Occurs when this Unit kills another Unit
-	// killed - Unit killed
-	virtual void onUnitKill(Unit* killed);
-
 	// Shooting methods ////////////////////////////////////////////////////////
 	
 	// Check if this Unit can shoot
 	// returns: If the _reload Cooldown is completed
-	inline bool canShoot() { return _reload.done(); }
+	inline bool canShoot() const { return _reload.done(); }
 
 	// Shoot towards a point
 	// x - X coord of the Map to shoot at
 	// y - Y coord of the Map to shoot at
-	void shoot(float x, float y);
+	virtual void shoot(float x, float y);
 
-	// Shoot towards a Target
+	// Shoot at a Target
 	// target - Target to shoot towards
-	void shoot(Target* target);
-
-	// Stats ///////////////////////////////////////////////////////////////////
-	
-	// Get a stat of this Unit
-	// name - Name of the stat to get
-	// returns: The value of the stat with the matching name
-	virtual float getStat(const std::string& name) const;
+	inline void shoot(Target* target) { shoot(target->getX(), target->getY()); }
 
 	// Position methods ////////////////////////////////////////////////////////
 	
@@ -75,31 +57,11 @@ public:
 	// y - Y pos to update to
 	virtual void updatePosition(float x, float y);
 
-	// Health getters and setters //////////////////////////////////////////////
-	
-	// Apply damage to a unit
-	// d - Damage applied. Negative damage will heal the Unit
-	// hitter - What Unit shot this Unit
-	void applyDamage(float d, Unit* hitter);
-
-	// Get the current health of this Unit
-	// returns: Current health of this Unit
-	inline float& getHealth() { return _health; }
-
-	// Get the max health this Unit can have
-	// returns: Max health of this Unit
-	inline float& getMaxHealth() { return _maxHealth; }
-	
-	// Get how much health is missing
-	inline float getHealthGone() { return _maxHealth - _health; }
-
-	// Set the current health of this Unit
-	// h - New health of this Unit
-	virtual void setHealth(float h);
-	
-	// Set the max health a Unit can have
-	// h - Max health of this unit
-	virtual void setMaxHealth(float h);
+	// Set the velocity of the Unit. The velocity will slowly approach the
+	//		values of (x, y) over time.
+	// x - X component of the velocity in Map units
+	// y - Y component of the velocity in Map units
+	virtual void setVelocity(float x, float y);
 
 	// Exp helper methods //////////////////////////////////////////////////////
 
@@ -135,6 +97,8 @@ public:
 	// level - Level to set the Unit to
 	void setLevel(int level);
 
+	// Skill tree methods //////////////////////////////////////////////////////
+
 	// Set the SkillTree
 	// tree - SkillTree to copy
 	void setSkillTree(SkillTree* tree);
@@ -143,21 +107,103 @@ public:
 	// returns: Pointer to the SkillTree this Object uses
 	inline SkillTree* getTree() const { return _tree; }
 
+	// Stat methods ////////////////////////////////////////////////////////////
+	
+	// Apply new stats to the object
+	// If it's relative change stats relative to current stats
+	void applyStat(Stats s);
+    void setStats(Stats s, bool relative = true);
+
+	// Stats getters
+	inline const Stats& getStatMod() const { return _stats; }
+	inline Stats getStats() const { return _stats + _baseStats; }
+    inline const Stats& getBaseStats() const { return _baseStats; };
+
+	// Get the value of a specific stat
+	// name - Name of the stat to get
+	// returns: The value of the stat with the matching name, or 0 if that name
+	//		couldn't be found.
+	virtual float getStat(const std::string& name) const;
+
+	// Set the value of a stat. If the stat does not exist it will be created
+	// name - Name of the stat to set
+	// value - Value to set the stat to
+	void setStat(const std::string& name, float value);
+
+	// Specific stat getters ///////////////////////////////////////////////////
+	
+	// Getters
+	inline float getSpeed() const { return getStat("speed"); }
+	inline float getRange() const { return getStat("range"); }
+	inline float getFireRate() const { return getStat("fireRate"); }
+	inline float getDamage() const { return getStat("damage"); }
+	inline float getAccel() const { return getStat("accel"); }
+	inline float getProjSpeed() const { return getStat("projSpeed"); }
+
+	// Setters
+	inline void setRange(int r) { setStat("range", r); }
+	inline void setFireRate(float r) { setStat("fireRate", r); }
+	inline void setDamage(float d) { setStat("damage", d); }
+	inline void setSpeed(int s) { setStat("speed", s); }
+	inline void setAccel(float f) { setStat("accel", f); }
+	inline void setProjSpeed(float f) { setStat("projSpeed", f); }
+
+	// Perk methods ////////////////////////////////////////////////////////////
+
+	// Get the Perks currently acting on this Unit
+	// returns: _perks
+	inline const std::vector<Perk*>& getPerks() const { return _perks; }
+
+	// Get how many Perks are currently acting on this Unit
+	// returns: _perks.size()
+	unsigned int perkCount() const { return _perks.size(); }
+
+	// Add a new Perk acting on this Unit
+	// p - Perk to begin acting on this Unit
+	virtual void addPerk(Perk* p);
+
+	// Remove a Perk from acting on this Unit
+	// p - Perk to remove
+	virtual void removePerk(Perk* p);
+
+	// Check if the Unit has a Perk with a certain name
+	// name - Name of the Perk to check for
+	// returns: If _perks contains a Perk with a name of name
+	bool hasPerk(const std::string& name) { return getPerk(name) != nullptr; }
+
+	// Get a Perk based on the name
+	// name - Name of the perk
+	// returns: The first Perk matching the name, or nullptr if no Perk matches
+	//		the name supplied
+	Perk* getPerk(const std::string& name) const;
+
 protected:
+	// Inherited from sf::Drawable
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
-	Cooldown _reload; // Time till you can shoot again
+	// Cooldown to track when a Unit can fire another Projectile. When reload
+	// is at 0 then the Unit can fire again. Trying to shoot while reloading
+	// will not reset the reload cooldown.
+	Cooldown _reload;
 
-	Stats _levelDiff; // How much the stats will grow each level
+	// How much the stats will grow each level. These Stats are provided
+	// in absolute values. To get the stats provided by the level diff
+	// multiply a Unit's level by _levelDiff
+	Stats _levelDiff;
+	// Base stats that this Unit starts out with. All percent increases of
+	// stats are calculated from the base + the level diff
+	Stats _baseStats;
+	// Stats that are provided from Perks or other sources that temporarily
+	// change a Unit's stats
+	Stats _statMods;
 
-	float _health; // Current health of this Unit
-	float _maxHealth; // Max health this Unit can have
-	FloatingProgressBar _hpBar; // Health bar
+	// Perks currently attached to this Unit
+	std::vector<Perk*> _perks;
 
 	float _exp; // Current experience of this Unit
 	int _prevLevel; // Used to check if the Unit has gone up a level
 
-	SkillTree* _tree; // Skill tree attached to this Object
+	SkillTree* _tree; // Skill tree attached to this Unit
 };
 
 #endif

@@ -24,7 +24,7 @@ public:
 	// 1: Cooldown just started, at max value
 	// Can go higher if addTime adds more that _defaultCooldown
 	// returns: _defaultCooldown / _timeLeft
-	inline float getRatioDone() { return _maxCooldown / _timeLeft; }
+	inline float getRatioDone() const { return _maxCooldown / _timeLeft; }
 
 	// Add microseconds to the Cooldown
 	// microseconds - Microseconds to add. The cooldown does not have to be done
@@ -32,15 +32,15 @@ public:
 
 	// Get how many microseconds left till the Cooldown is done
 	// returns: _timeLeft
-	inline float getTimeLeft() { return _timeLeft; }
+	inline float getTimeLeft() const { return _timeLeft; }
 
 	// Check if the Cooldown has completed
 	// returns: If _timeLeft <= 0
-	inline bool done() { return _timeLeft <= 0; }
+	inline bool done() const { return _timeLeft <= 0; }
 
 	// Get the default cooldown
 	// returns: _defaultCooldown
-	inline int getMaxCooldown() { return _maxCooldown; }
+	inline int getMaxCooldown() const { return _maxCooldown; }
 
 	// Set the default cooldown
 	// def - What to set _defaultCooldown to

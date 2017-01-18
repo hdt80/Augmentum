@@ -1,6 +1,6 @@
 #include "QueryCallback.h"
 
-#include "Map.h"
+#include "util/ObjectUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -34,8 +34,10 @@ std::vector<Object*> QueryCallback::getObjects(b2World* world,
 
 	Object* iter = nullptr;
 	for (unsigned int i = 0; i < qback.bodiesIn.size(); ++i) {
-		if ((iter = Map::toObject(qback.bodiesIn[i]->GetUserData()))) {
+		if ((iter = ObjectUtil::toObject(qback.bodiesIn[i]->GetUserData()))) {
 			objs[i] = iter;
+		} else {
+			CORE_WARN("Failed to cast %x to an Object*", iter);
 		}
 	}
 

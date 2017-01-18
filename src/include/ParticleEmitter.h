@@ -52,6 +52,7 @@ public:
 	void update(int diff);
 
 	// Get how many particles are currently being rendered
+	// returns: The amount of particles stored in _particles
 	int getParticleCount() const;
 
 protected:
@@ -61,7 +62,6 @@ protected:
 
 	// Particles being drawn
 	std::vector<ParticleGroup> _particles;
-
 };
 
 // A ParticleGroup is a group of particles that were emitted at the same time
@@ -82,6 +82,7 @@ public:
 	//		for each particle
 	ParticleGroup(const ParticleDef* def, float x, float y, int amt, float ang);
 
+	// ParticleGroup dtor
 	~ParticleGroup();
 
 	// Operator overloads //////////////////////////////////////////////////////
@@ -103,7 +104,7 @@ public:
 
 	// Get how many particles are used in this group
 	// returns: _amount
-	int getAmount() const { return _amount; }
+	inline int getAmount() const { return _amount; }
 
 protected:
 

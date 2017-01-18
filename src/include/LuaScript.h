@@ -11,14 +11,14 @@ public:
 	// Ctor and dtor ///////////////////////////////////////////////////////////
 
 	// LuaScript ctor
-	// loadedClasses - Load the classes
-	LuaScript(bool loadedClasses = true);
+	// loadClasses - Should the LuaScript load the classes used?
+	LuaScript(bool loadClasses = true);
 
 	// Methods /////////////////////////////////////////////////////////////////
 
 	// Check if a script has been loaded
 	// returns: _loaded
-	inline bool isLoaded() { return _loaded; }
+	inline bool isLoaded() const { return _loaded; }
 
 	// Set if this script is loaded
 	// b - Loaded or not

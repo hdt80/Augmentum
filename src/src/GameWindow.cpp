@@ -174,6 +174,12 @@ GameWindow::GameWindow(Vector2 size) {
 	levelPDef.slowDown = false;
 	Databases::ParticleDefDatabase.store("level_up", levelPDef);
 
+	ParticleDef asteroid_death;
+	asteroid_death = levelPDef;
+	asteroid_death.initColor = sf::Color(80, 80, 80);
+	asteroid_death.endColor = asteroid_death.initColor;
+	Databases::ParticleDefDatabase.store("asteroid_death", asteroid_death);
+
 	ParticleDef hitDef;
 	hitDef.lifetime = 2.0f;
 	hitDef.coneOfDispersion = 45.0f;

@@ -3,14 +3,20 @@
 #include "Map.h"
 #include "util/Random.h"
 #include "util/MathUtil.h"
+#include "GameWindow.h"
+#include "Database.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Asteroid ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
 Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
-	: Object(map, x, y, Stats(0.0f), maxRadius)
-		, _maxRadius(maxRadius) {
+	: Unit(map, x, y, Stats(0.0f), Stats(0.0f),
+			maxRadius, 8, sf::Color(96, 96, 96)),
+		_maxRadius(maxRadius) {
+
+	setMaxHealth(200);
+	setHealth(getMaxHealth());
 
 	if (maxRadius < 0) {
 		CORE_WARN("Cannot have a maxRadius of < 0 (%g)", _maxRadius);
@@ -23,7 +29,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	}
 
 	b2BodyDef bdf;
-	bdf.type = b2_staticBody;
+	bdf.type = b2_dynamicBody;
 	bdf.position.Set(MathUtil::toB2(x), MathUtil::toB2(y));
 	bdf.angle = Random::randFloat(0, MathUtil::PI); // Radians
 
@@ -49,11 +55,10 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 
 	b2FixtureDef fd; // Fixture def of the b2Body this Asteroid will use
 	fd.shape = &pShape;
-	fd.density = 1.0f;
-	fd.friction = 0.4f;
+	fd.density = 10.0f; // Make this really heavy
+	fd.restitution = 1.0f;
 
 	_b2Box->CreateFixture(&fd);
-	_b2Box->SetLinearDamping(0.4f);
 
 	// Set up the sf::Shape
 	_conShape.setPointCount(points.size());
@@ -84,18 +89,58 @@ Asteroid::~Asteroid() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
+void Asteroid::update(int diff) {
+	Object::update(diff);
+}
+
 void Asteroid::updatePosition(float x, float y) {
 	_conShape.setPosition(x, y);
+}
+
+void Asteroid::setVelocity(float x, float y) {
+	// Don't bother accelerating to the velocity
+	_b2Box->SetLinearVelocity(b2Vec2(MathUtil::toB2(x), MathUtil::toB2(y)));
+}
+
+void Asteroid::setDrift(const Vector2& drift) {
+	_drift = drift;
+	setVelocity(drift.X, drift.Y);
 }
 
 void Asteroid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(_conShape);
 }
 
+void Asteroid::setObjectType(int type) {
+	_objType = type;
+
+	if (!_b2Box) {
+		return;
+	}
+
+	int allTypes = std::pow((double) 2, ObjectType::COUNT) - 1;
+
+	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
+		b2Filter filt = fix->GetFilterData();
+
+		// Category bits - What I am
+		filt.categoryBits = type;
+		// Mask bits - What the Object collides with. Asteroid collide with
+		// everything, including other asteroids
+		filt.maskBits = allTypes;
+
+		fix->SetFilterData(filt);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 ////////////////////////////////////////////////////////////////////////////////
 
-void Asteroid::onProjectileHit(Projectile* p) {
+void Asteroid::onDeath() {
+	Object::onDeath();
 
+	GameWindow::Emitter.emit(
+		Databases::ParticleDefDatabase.get("asteroid_death"),
+		getX(), getY(), 100, -1);
 }

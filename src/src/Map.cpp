@@ -8,30 +8,6 @@
 #include "Game.h"
 #include "environment/Asteroid.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// Static methods
-////////////////////////////////////////////////////////////////////////////////
-
-Enemy* Map::toEnemy(Object* o) {
-	return dynamic_cast<Enemy*>(o);
-}
-
-Ship* Map::toShip(Object* o) {
-	return dynamic_cast<Ship*>(o);
-}
-
-Projectile* Map::toProjectile(Object* o) {
-	return dynamic_cast<Projectile*>(o);
-}
-
-Unit* Map::toUnit(Object* o) {
-	return dynamic_cast<Unit*>(o);
-}
-
-Object* Map::toObject(void* o) {
-	return (Object*)o;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
 ///////////////////////////////////////////////////////////////////////////////

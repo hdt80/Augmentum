@@ -22,7 +22,7 @@ void LuaScript::loadScript(const std::string& path) {
 	try {
 		_name = path;
 		lua.script_file(path);
-		_loaded = true;
+		setLoaded(true);
 	} catch (sol::error e) {
 		setLoaded(false);
 		CORE_ERROR("[Lua Script %x] Error when loading from \"%s\": %s",

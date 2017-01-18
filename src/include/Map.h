@@ -11,10 +11,6 @@
 
 #include "Box2D/Box2D.h"
 
-extern bool isEnemy(Object* o);
-extern bool isTower(Object* o);
-extern bool isProjectile(Object* o);
-
 class Ship;
 
 class Map {
@@ -104,33 +100,6 @@ public:
 
 	// Object marked for removal
 	std::vector<Object*> toRemove;
-
-	// Static methods //////////////////////////////////////////////////////////
-	
-	// Cast an Object to an Enemy
-	// o - Objecto cast
-	// returns: Casted Object, or nullptr if Object is not an Enemy
-	static Enemy* toEnemy(Object* o);
-
-	// Cast an Object to an Ship
-	// o - Objecto cast
-	// returns: Casted Object, or nullptr if Object is not an Ship
-	static Ship* toShip(Object* o);
-
-	// Cast an Object to an Projectile
-	// o - Objecto cast
-	// returns: Casted Object, or nullptr if Object is not an Projectile
-	static Projectile* toProjectile(Object* o);
-
-	// Cast an Object to an Unit
-	// o - Object to cast
-	// returns: Casted Object, or nullptr if Object is not an Unit
-	static Unit* toUnit(Object* o);
-
-	// Cast anything to an Object
-	// o - Things to cast
-	// returns: Casted Object, or nullptr if o is not an Object
-	static Object* toObject(void* o);
 
 protected:
 	Vector2 _origin; // (0, 0), used to calculate the distance from the middle
