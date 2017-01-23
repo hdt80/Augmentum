@@ -1,9 +1,13 @@
 #include "Unit.h"
+
 #include "Map.h"
+#include "Projectile.h"
 #include "ExperienceHelper.h"
 #include "GameWindow.h"
 #include "Database.h"
+
 #include "util/MathUtil.h"
+#include "util/ObjectUtil.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
@@ -11,7 +15,7 @@
 //
 Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		int size, int sides, sf::Color c)
-	: Entity(map, x, y, size),
+	: Entity(map, x, y, size, 1),
 		_reload(1), _levelDiff(lvlDiff),
 		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
 
@@ -98,7 +102,7 @@ Unit::~Unit() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Unit::onProjectileHit(Projectile* p) {
-	applyDamage(p->getDamage(), p->getShooter());
+	dealDamage(p->getDamage(), p->getShooter());
 }
 
 void Unit::onLevelUp() {
@@ -111,17 +115,20 @@ void Unit::onLevelUp() {
 
 	_lua.callFunction("onLevelUp");
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
-		_perks[i]->onLevelUp();
+		_perks[i]->onLevelUp(getLevel());
 	}
 }
 
-void Unit::onUnitKill(Unit* killed) {
+void Unit::onEntityKilled(Entity* killed) {
 	_lua.callFunction("onUnitKill");
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
-		_perks[i]->onUnitKill(killed);
+		_perks[i]->onEntityKilled(killed);
 	}
 
-	addExp(killed->getLevel());
+	Unit* unit = nullptr;
+	if ((unit = ObjectUtil::toType<Unit>(unit))) {
+			addExp(unit->getLevel());
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +179,7 @@ void Unit::setVelocity(float x, float y) {
 }
 
 void Unit::update(int diff) {
-	Object::update(diff);
+	Entity::update(diff);
 
 	_reload.update(diff);
 
@@ -198,34 +205,12 @@ void Unit::draw(sf::RenderTarget& target, sf::RenderStates stats) const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Health methods
-////////////////////////////////////////////////////////////////////////////////
-
-void Unit::applyDamage(float d, Unit* hitter) {
-	Entity::onDamageTaken(d, hitter);
-
-	setHealth(getHealth() - d);
-
-	// If d is negative (a heal) and we go above max health clamp it back
-	if (getHealth() > getMaxHealth()) {
-		setHealth(getMaxHealth());
-	}
-
-	// No health left? Kill this Unit off next update
-	if (getHealth() <= 0) {
-		_toRemove = true;
-		hitter->onUnitKill(this);
-		onDeath();
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // Stat methods
 ////////////////////////////////////////////////////////////////////////////////
 
 float Unit::getStat(const std::string& name) const {
 	// Add the stats gained from the levels
-	return _baseStats[name] + (_levelDiff[name] * getLevel()) + _stats[name];
+	return _baseStats[name] + (_levelDiff[name] * getLevel()) + _statMods[name];
 }
 
 void Unit::setStats(Stats s, bool relative) {
@@ -236,24 +221,20 @@ void Unit::setStats(Stats s, bool relative) {
 	}
 }
 
-float Unit::getStat(const std::string& name) const {
-	return _baseStats[name] + _stats[name];
-}
-
 void Unit::setStat(const std::string& name, float value) {
-	_stats[name] = value;
+	_statMods[name] = value;
 }
 
 void Unit::applyStat(Stats s) {
     if (!s.percent) {
         CORE_WARNING("Object::applyStat> Stats isn't percent");
     }
-    _stats["range"]     += _baseStats["range"]     * s["range"];
-    _stats["fireRate"]  += _baseStats["fireRate"]  * s["fireRate"];
-    _stats["damage"]    += _baseStats["damage"]    * s["damage"];
-    _stats["projSpeed"] += _baseStats["projSpeed"] * s["projSpeed"];
-    _stats["speed"]     += _baseStats["speed"]     * s["speed"];
-    _stats["accel"]     += _baseStats["accel"]     * s["accel"];
+    _statMods["range"]     += _baseStats["range"]     * s["range"];
+    _statMods["fireRate"]  += _baseStats["fireRate"]  * s["fireRate"];
+    _statMods["damage"]    += _baseStats["damage"]    * s["damage"];
+    _statMods["projSpeed"] += _baseStats["projSpeed"] * s["projSpeed"];
+    _statMods["speed"]     += _baseStats["speed"]     * s["speed"];
+    _statMods["accel"]     += _baseStats["accel"]     * s["accel"];
 }
 
 void Unit::removePerk(Perk* p) {
@@ -289,20 +270,6 @@ Perk* Unit::getPerk(const std::string& name) const {
 		}
 	}
 	return nullptr;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Health methods
-////////////////////////////////////////////////////////////////////////////////
-
-void Unit::setHealth(float f) {
-	_health = f;
-	_hpBar.setCurrentValue(getHealth());
-}
-
-void Unit::setMaxHealth(float f) {
-	_maxHealth = f;
-	_hpBar.setMaxValue(getMaxHealth());
 }
 
 ////////////////////////////////////////////////////////////////////////////////

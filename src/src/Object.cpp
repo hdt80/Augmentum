@@ -1,5 +1,4 @@
-#include "Object.h"
-
+#include "Object.h" 
 #include <string>
 #include <algorithm>
 #include <cmath>
@@ -19,8 +18,7 @@
 
 Object::Object(Map* map, float x, float y, int size)
 	: Target(x, y),
-		_b2Box(nullptr), _map(map), _objType(0),
-		_size(size), _toRemove(false) {
+		_b2Box(nullptr), _size(size), _map(map), _objType(0), _toRemove(false) {
 	
 	setObjectType(ObjectType::DEFAULT);
 

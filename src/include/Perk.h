@@ -4,14 +4,14 @@
 #include <string>
 #include "Stats.h"
 #include "LuaScript.h"
-#include "Eventable.h"
+#include "Scriptable.h"
 
 class Object;
 class Unit;
 
 // A permentant stat change. When a Perk is added the base stats will be
 // changed, and when removed the opposite of the Perk is removed.
-class Perk : public Eventable {
+class Perk : public Scriptable {
 public:
 	// Ctor for Perk
 	// name - Display name to use
@@ -31,24 +31,9 @@ public:
 	// returns: A copy of the cloned Perk
 	Perk* clone();
 
-	// SImulate the Perk for an amount of time
+	// Simulate the Perk for an amount of time
 	// diff - Microseconds to simulate the Perk for
 	void update(int diff);
-
-	// Events //////////////////////////////////////////////////////////////////
-
-	// Object events
-	void onUpdate(int diff);
-	void onMove(int diff);
-	void onShoot(Object* target);
-	void onDamageDealt(int dmg, Object* hit);
-	void onDamageTaken(int dmg, Object* hitter);
-	void onUnitKill(Unit* killed);
-	void onDeath();
-    void onApply(Object* attached);
-
-	// Unit events
-	void onLevelUp();
 
 	// Getters and setters /////////////////////////////////////////////////////
 	
@@ -56,11 +41,11 @@ public:
 
 	// Set the Object this Perk is attached to
 	// attached - Object this Perk is attached to
-	void setAttached(Object* attached);
+	void setAttached(Unit* attached);
 
 	// Get the Object this Perk is attached to
 	// returns: _attached
-	Object* getAttached() { return _attached; }
+	Unit* getAttached() { return _attached; }
 
 	// Duration getters and setters
 
@@ -142,7 +127,7 @@ protected:
 	// _name is the path of the script under ./lua/$(_name).lua
 	LuaScript _lua;
 
-	Object* _attached; // Object we're attached to
+	Unit* _attached; // Object we're attached to
 
 	Stats _stats; // Stats applied to the Object
 	float _duration; // -1 duration means infinite

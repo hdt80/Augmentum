@@ -1,9 +1,8 @@
 #ifndef _UNIT_H
 #define _UNIT_H
 
-#include "Object.h"
+#include "Entity.h"
 #include "Cooldown.h"
-#include "FloatingProgressBar.h"
 
 // A Unit has all the properties of an Entity, but also has stats and perks 
 // that change how the Unit functions. A Unit takes and deals damage, typically
@@ -34,6 +33,20 @@ public:
 	// Simulate the update for an amount of time
 	// diff - Microseconds to simulate the Unit for
 	void update(int diff);
+
+	// Events //////////////////////////////////////////////////////////////////
+	
+	// Occurs when a Projectile collides with this Object
+	// p - Projectile that his us
+	void onProjectileHit(Projectile* p);
+
+	// Occurs when a Unit kills an Entity
+	// killed - Entity killed by the Unit
+	void onEntityKilled(Entity* killed);
+
+	// Occurs when a Unit's level changes
+	// newLevel - New level of the Unit
+	void onLevelUp();
 
 	// Shooting methods ////////////////////////////////////////////////////////
 	
@@ -115,8 +128,8 @@ public:
     void setStats(Stats s, bool relative = true);
 
 	// Stats getters
-	inline const Stats& getStatMod() const { return _stats; }
-	inline Stats getStats() const { return _stats + _baseStats; }
+	inline const Stats& getStatMod() const { return _statMods; }
+	inline Stats getStats() const { return _statMods + _baseStats; }
     inline const Stats& getBaseStats() const { return _baseStats; };
 
 	// Get the value of a specific stat

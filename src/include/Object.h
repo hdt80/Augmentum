@@ -7,7 +7,7 @@
 
 #include "SkillTree.h"
 #include "LuaScript.h"
-#include "Eventable.h"
+#include "Scriptable.h"
 
 #include <string>
 #include <vector>
@@ -29,7 +29,7 @@ enum ObjectType {
 // An Object is anything that exists in the Map. Objects are typically not
 // interacted with, but can stil interact with other things on the Map
 // Examples: Projectiles
-class Object : public Eventable, public Target,
+class Object : public Scriptable, public Target,
 	public sf::Drawable, public sf::Transformable {
 public:
 	// Ctor and dtor ///////////////////////////////////////////////////////////

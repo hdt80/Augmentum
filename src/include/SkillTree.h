@@ -8,8 +8,8 @@
 #include "Perk.h"
 #include "Vector2.h"
 
-class Object;
 class SkillTree;
+class Unit;
 
 // Each Node has 2 child Nodes, each child Node requiring the parent node
 // to be unlocked.
@@ -42,7 +42,7 @@ public:
     void decPoints() { setPoints(points - 1); }
 
     SkillTree* tree;
-	Object* attached; // What object this Node is attached to
+	Unit* attached; // What object this Node is attached to
 
 	Vector2 pos; // Position of the Node when drawing. From the center
 	sf::RectangleShape box;
@@ -83,7 +83,7 @@ public:
 	void setComp(bool b) { _comp = b; }
 	void setHead(SkillNode* h) { _head = h; }
 
-	void setAttached(Object* o);// { _attached = o; }
+	void setAttached(Unit* o);// { _attached = o; }
 	void setData(std::vector<SkillNode*>* v) { _data = *v; }
 
 	// We've finished creating this Tree, create the drawable arrays
@@ -105,7 +105,7 @@ public:
 
 	sf::VertexArray _lines;
 	sf::VertexArray _nodes;
-	Object* _attached; // Object we're attached to
+	Unit* _attached; // Object we're attached to
 
     int nodeWidth;
     int nodeHeight;

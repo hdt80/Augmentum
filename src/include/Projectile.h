@@ -1,13 +1,10 @@
 #ifndef _PROJECTILE_H
 #define _PROJECTILE_H
 
-#include "Object.h"
+#include "Unit.h"
 
-class Unit;
-
-class Projectile : public Object {
+class Projectile : public Unit {
 public:
-
 	// Projectile ctor and dtor ////////////////////////////////////////////////
 
 	// Projectile Ctor
@@ -47,6 +44,8 @@ protected:
 
 	sf::Color _color; // Color to draw this Projectile as
 	Unit* _shooter; // Who shot this Projectile
+
+	Vector2 _direction; // Direction the Projectile travels
 };
 
 #endif

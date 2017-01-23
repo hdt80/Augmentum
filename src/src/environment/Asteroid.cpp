@@ -11,8 +11,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
-	: Unit(map, x, y, Stats(0.0f), Stats(0.0f),
-			maxRadius, 8, sf::Color(96, 96, 96)),
+	: Entity(map, x, y, maxRadius, 200),
 		_maxRadius(maxRadius) {
 
 	setMaxHealth(200);
@@ -88,10 +87,6 @@ Asteroid::~Asteroid() {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
-
-void Asteroid::update(int diff) {
-	Object::update(diff);
-}
 
 void Asteroid::updatePosition(float x, float y) {
 	_conShape.setPosition(x, y);

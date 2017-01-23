@@ -17,7 +17,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
-	: Object(map, shoot->getX(), shoot->getY(), shoot->getStats(), size),
+	: Unit(map, shoot->getX(), shoot->getY(), shoot->getStats(), Stats(0.0f),
+			size, 20, sf::Color(96, 96, 96)),
 		_color(c), _shooter(shoot) {
 
 	// Speed of this Projectile is stored in Tower's projSpeed, not speed

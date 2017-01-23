@@ -11,9 +11,10 @@
 // Perk ctor and dtor
 ///////////////////////////////////////////////////////////////////////////////
 
-Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks) :
-	_name(name), _attached(nullptr), _stats(s), _duration(dur), _maxDuration(dur),
-    _stacks(1),	_maxStacks(maxStacks), _stackable(false), _toRemove(false) {
+Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks)
+	: _name(name), _attached(nullptr), _stats(s), _duration(dur),
+		_maxDuration(dur), _stacks(1), _maxStacks(maxStacks), _stackable(false),
+		_toRemove(false) {
 
 	if (maxStacks > 0) {
 		_stackable = true;
@@ -26,7 +27,6 @@ Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks) :
 }
 
 Perk::~Perk() {
-	delete &_stats;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -99,48 +99,8 @@ void Perk::addStack() {
     }
 }
 
-void Perk::setAttached(Object* attached) {
+void Perk::setAttached(Unit* attached) {
 	_attached = attached;
 	// Make sure to update what Object we're attached to
 	_lua.lua.set("attached", _attached);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Events
-////////////////////////////////////////////////////////////////////////////////
-
-void Perk::onApply(Object* obj) {
-	_lua.callFunction("onApply");
-}
-
-void Perk::onUpdate(int diff) {
-	_lua.callFunction("onUpdate", diff);
-}
-
-void Perk::onMove(int diff) {
-	_lua.callFunction("onMove", diff);
-}
-
-void Perk::onShoot(Object* target) {
-	_lua.callFunction("onShoot", target);
-}
-
-void Perk::onDamageDealt(int dmg, Object* hit) {
-	_lua.callFunction("onDamageDealt", dmg, hit);
-}
-
-void Perk::onDamageTaken(int dmg, Object* attacker) {
-	_lua.callFunction("onDamageTaken", dmg, attacker);
-}
-
-void Perk::onUnitKill(Unit* killed) {
-	_lua.callFunction("onUnitKill", killed);
-}
-
-void Perk::onDeath() {
-	_lua.callFunction("onDeath");
-}
-
-void Perk::onLevelUp() {
-	_lua.callFunction("onLevelUp");
 }

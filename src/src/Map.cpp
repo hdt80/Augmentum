@@ -68,14 +68,8 @@ void Map::update(int diff) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects[i]->update(diff);
 		if (objects[i]->isToRemove()) {
-			// If this Object is being attacked, and stored as a pointer to
-			// the Object attacking the Object being removed. In order to
-			// avoid a dangling pointer, we mark the Object for removal instead
-			// of deleting it right away
-			if (objects[i]->getAttackerCount() == 0) {
-				toRemove.push_back(objects[i]);
-				objects.erase(objects.begin() + i);
-			}
+			toRemove.push_back(objects[i]);
+			objects.erase(objects.begin() + i);
 		}
 	}
 

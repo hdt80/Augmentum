@@ -7,6 +7,7 @@ namespace LuaDefines {
 		defineObject(lua);
 		defineCooldown(lua);
 		defineEnemy(lua);
+		defineEntity(lua);
 		defineGame(lua);
 		defineAsteroid(lua);
 		defineMap(lua);

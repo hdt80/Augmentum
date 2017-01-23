@@ -443,7 +443,7 @@ Vector2 SkillTree::pos(SkillNode* node) {
 	return pos;
 }
 
-void SkillTree::setAttached(Object* o) {
+void SkillTree::setAttached(Unit* o) {
 	_attached = o;
 	for (unsigned int i = 0; i <_data.size(); ++i) {
 		_data[i]->attached = o;

@@ -1,5 +1,8 @@
 #include "Entity.h"
 
+#include "Unit.h"
+#include "Projectile.h"
+
 ////////////////////////////////////////////////////////////////////////////////
 // Entity ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,10 +25,19 @@ Entity::~Entity() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Entity::dealDamage(float amount, Unit* source) {
+	Entity::onDamageTaken(amount, source);
+
 	setHealth(getHealth() - amount);
 
+	// If d is negative (a heal) and we go above max health clamp it back
+	if (getHealth() > getMaxHealth()) {
+		setHealth(getMaxHealth());
+	}
+
+	// No health left? Kill this Unit off next update
 	if (getHealth() <= 0) {
-		setToRemove(true);
+		_toRemove = true;
+		source->onEntityKilled(this);
 		onDeath();
 	}
 }
@@ -60,6 +72,7 @@ void Entity::setHealth(float health) {
 	if (_health > _maxHealth) {
 		_health = getMaxHealth();
 	}
+	_hpBar.setCurrentValue(getHealth());
 }
 
 void Entity::setMaxHealth(float health) {
@@ -67,4 +80,5 @@ void Entity::setMaxHealth(float health) {
 	if (_health > _maxHealth) {
 		_health = getMaxHealth();
 	}
+	_hpBar.setMaxValue(getMaxHealth());
 }

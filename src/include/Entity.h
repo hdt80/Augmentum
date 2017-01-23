@@ -2,6 +2,7 @@
 #define _ENTITY_H
 
 #include "Object.h"
+#include "FloatingProgressBar.h"
 
 class Unit;
 class Projectile;
@@ -71,6 +72,12 @@ public:
 	// returns: _health
 	inline float getHealth() const { return _health; }
 
+	// Get a reference to the float used to represent the current health. This
+	//		is used for GuiProgessBars as they take a pointer to the value
+	//		they track
+	// returns: _health
+	inline float& getHealth() { return _health; }
+
 	// Set the max health that this Entity has. If the new max health is less
 	//		than the current health the current health will be updated to
 	//		reflect the new max health, but if the new max health is greater
@@ -81,6 +88,12 @@ public:
 	// Get the max health this Entity can have
 	// returns: _maxHealth
 	inline float getMaxHealth() const { return _maxHealth; }
+
+	// Get a reference to the float used to represent the max health. This is 
+	//		used for GuiProgressBars as they take a pointer to the value
+	//		they track
+	// returns: _maxHealth
+	inline float& getMaxHealth() { return _maxHealth; }
 
 	// Get if the Entity is currently invulerable
 	// returns: _invulerable
