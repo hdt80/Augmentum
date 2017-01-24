@@ -15,32 +15,70 @@ class Unit;
 // to be unlocked.
 class SkillNode {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+
+	// Nullary ctor
 	SkillNode();
+
 	SkillNode(SkillNode* parent, Perk* perk);
+
+	// SkillNode dtor
 	~SkillNode();
 
 	// When cloning a Node, it must also be put into a vector for the new tree
+	// vec - std::vector to clone into
+	// returns: A copy of the SkillNode
 	SkillNode* clone(std::vector<SkillNode*>* vec);
 
 	// Add a new child Node in the order of left then right
+	// node - Node to add as our child
+	// returns: If the Node was added
 	bool add(SkillNode* node);
 
+	// Print out the values of the SkillNode
 	void print();
 
 	// Unlocked if no parent, if parent is unlocked, and we dont have max points
-	bool unlocked();
-	std::string name() { return perk->getName(); }
+	// returns: If this SkillNode is unlocked
+	bool unlocked() const;
 
+	// Get the name of the SkillNode's perk
+	// returns: perk->getName
+	const std::string& name() const { return perk->getName(); }
+
+	// Set the position of this SkillNode
+	// newPos - Position to set 
 	void setPos(Vector2 newPos) { pos = newPos; }
-	float getX() { return pos.X; }
-	float getY() { return pos.Y; }
+
+	// Get the x coord of this SkillNode
+	// returns: pos.X
+	inline float getX() const { return pos.X; }
+
+	// Get the y coord of this SKillNode
+	// returns: pos.Y
+	inline float getY() const { return pos.Y; }
+
+	// Check if a point is within the bounds of the SkillNode
+	// x - X coord to check
+	// y - Y coord to check
+	// returns: If the point (x, y) is within the bounds of the SkillNode
 	bool contains(float x, float y);
 
+	// Set how many points the SkillNode has. This will also update the color
+	//		to draw the node as. Red means its locked and no points can be put
+	//		into it. White means its unlocked and points can be put into it,
+	//		but none have. Gray means its unlocked and some points are in it,
+	//		while green means the SkillNode has max points
+	// p - Points to set to
     void setPoints(int p);
 
-    void incPoints() { setPoints(points + 1); }
-    void decPoints() { setPoints(points - 1); }
+	// Increase the amount of points that the SkillNode has by 1
+    inline void incPoints() { setPoints(points + 1); }
 
+	// Decrease the amount of points that the SkillNode has by 1
+    inline void decPoints() { setPoints(points - 1); }
+
+	// Tree this SkillNode is a part of
     SkillTree* tree;
 	Unit* attached; // What object this Node is attached to
 
@@ -62,46 +100,99 @@ public:
 
 class SkillTree : public sf::Drawable {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+	
+	// SkillTree ctor
+	// size - Size to draw the SkillTree as
 	SkillTree(Vector2 size = Vector2(0.0f, 0.0f));
+
+	// SkillTree dtor
 	~SkillTree();
 
+	// Methods /////////////////////////////////////////////////////////////////
+
+	// Print out all the SkillNodes that make up the SkillTree
+	// node - Node to print
+	// pos - Should printing also print out the position of each SKillNode?
 	void print(SkillNode* node, bool pos = false);
+
+	// Create a copy of the SkillTree
+	// returns: A copy of the SkillTree
 	SkillTree* clone();
 
 	// Max depth of the tree
-	const int maxDepth(const SkillNode* node);
+	// node - Node to iterator from
+	// returns: The max depth of a single Node
+	int maxDepth(const SkillNode* node) const;
+
 	// Depth of the specific node
-	const int depth(const SkillNode* node);
+	int depth(const SkillNode* node) const;
+
 	// Number of Nodes with that depth
-	const int nodesOnDepth(const SkillNode* node, int d);
+	int nodesOnDepth(const SkillNode* node, int d) const;
+
 	// Number of children (Including children of children)
-	const int childCount(const SkillNode* node);
+	int childCount(const SkillNode* node) const;
 
 	// Add a new Perk with a preq. Node
+	// parent - Parent SkillNode
+	// perk - Perk to create a SkillNode for
+	// returns: Created SkillNode
 	SkillNode* addPerk(SkillNode* parent, Perk* perk);
 
-	void setComp(bool b) { _comp = b; }
-	void setHead(SkillNode* h) { _head = h; }
+	// Set if the SkillTree is completed
+	// b - Completed or not
+	inline void setComp(bool b) { _comp = b; }
 
+	// Set the head SKillNode
+	// h - SkillNode to make the head
+	inline void setHead(SkillNode* h) { _head = h; }
+
+	// Set the Unit the SkillTree is attached to
+	// o - Unit the SkillTree is attached to
 	void setAttached(Unit* o);// { _attached = o; }
-	void setData(std::vector<SkillNode*>* v) { _data = *v; }
+
+	// Set the data of the SkillTree
+	// v - Vector of data to set
+	inline void setData(std::vector<SkillNode*>* v) { _data = *v; }
 
 	// We've finished creating this Tree, create the drawable arrays
 	void end();
+
 	// Methods for creating the Arrays
 	void genLines();
 	void genNodes();
 
-	void setSize(float w, float h) { _size.X = w; _size.Y = h; }
-	float getWidth() { return _size.X; }
-	float getHeight() { return _size.Y; }
+	// Set the size of the SkillTree
+	// w - Width of the SkillTree
+	// h - Height of the SkillNode
+	inline void setSize(float w, float h) { _size.X = w; _size.Y = h; }
+
+	// Get the width of the SkillTree
+	// returns: _size.X
+	inline float getWidth() const { return _size.X; }
+
+	// Get the height of the SkillTree
+	// returns: _size.Y
+	inline float getHeight() const { return _size.Y; }
 
 	// Get the Node that is at the (x, y)
+	// x - X coord of the point to check
+	// y - Y coord of the point to check
+	// returns: The SkillNode at that point, or nullptr if no Node was found
 	SkillNode* getNode(float x, float y);
 
-	const int getCount() { return _count; }
-	SkillNode* getHead() { return _head; }
-	std::vector<SkillNode*> data() { return _data; }
+	// Get the number of SkillNodes in the SkillTree
+	// returns: _count
+	inline int getCount() const { return _count; }
+
+	// Get the head SkillNode
+	// returns: _head
+	SkillNode* getHead() const { return _head; }
+
+	// Get the data of the SkillTree
+	// returns: _data
+	inline const std::vector<SkillNode*>& data() const { return _data; }
 
 	sf::VertexArray _lines;
 	sf::VertexArray _nodes;
@@ -115,7 +206,6 @@ protected:
 
 	// Return the drawing position of a Node
 	Vector2 pos(SkillNode* node);
-
 
 	SkillNode* _head;
 	std::vector<SkillNode*> _data;

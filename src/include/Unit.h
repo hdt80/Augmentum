@@ -64,11 +64,6 @@ public:
 	inline void shoot(Target* target) { shoot(target->getX(), target->getY()); }
 
 	// Position methods ////////////////////////////////////////////////////////
-	
-	// Update the position of this Unit
-	// x - X pos to update to
-	// y - Y pos to update to
-	virtual void updatePosition(float x, float y);
 
 	// Set the velocity of the Unit. The velocity will slowly approach the
 	//		values of (x, y) over time.

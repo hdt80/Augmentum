@@ -39,7 +39,7 @@ public:
 	// Update the position of this Object all all vars
 	// x - X coord of the map to update to
 	// y - Y coord of the map to update to
-	virtual void updatePositon(float x, float y);
+	virtual void updatePosition(float x, float y);
 
 	// Events //////////////////////////////////////////////////////////////////
 	

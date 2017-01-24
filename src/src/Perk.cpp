@@ -11,7 +11,7 @@
 // Perk ctor and dtor
 ///////////////////////////////////////////////////////////////////////////////
 
-Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks)
+Perk::Perk(const std::string& name, Stats s, float dur, bool lua, int maxStacks)
 	: _name(name), _attached(nullptr), _stats(s), _duration(dur),
 		_maxDuration(dur), _stacks(1), _maxStacks(maxStacks), _stackable(false),
 		_toRemove(false) {
@@ -26,25 +26,27 @@ Perk::Perk(std::string name, Stats s, float dur, bool lua, int maxStacks)
 	}
 }
 
-Perk::~Perk() {
+Perk::Perk(const Perk& perk)
+	: _name(perk._name), _attached(perk._attached), _stats(perk._stats),
+		_duration(perk._duration), _maxDuration(perk._maxDuration), 
+		_stacks(perk._stacks), _maxStacks(perk._maxStacks),
+		_stackable(perk._stackable), _toRemove(perk._toRemove) {
+	
 }
+
+Perk::~Perk() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
-
-Perk* Perk::clone() {
-	Perk* clone = new Perk(_name, _stats, _maxDuration, _maxStacks);
-	clone->setStackable(_stackable);
-	return clone;
-}
 
 void Perk::loadLua() {
 	if (_lua.isLoaded()) {
 		CORE_WARNING("[Perk %x] Loading a loaded script [%x]", this, &_lua);
 	}
 
-	_lua.lua.set_function("getObjectsInRange", [this](float x, float y, float r) {
+	_lua.lua.set_function("getObjectsInRange",
+			[this](float x, float y, float r) {
 		return _attached->getMap()->getObjectsInRange(x, y, r);	
 	});
 

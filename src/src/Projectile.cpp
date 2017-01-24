@@ -37,6 +37,7 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 	_shape.setOutlineColor(sf::Color::Black);
 	_shape.setOutlineThickness(-1.0f);
 
+	// If there is already a body destroy it to create the new one
 	if (_b2Box) {
 		map->getWorld()->DestroyBody(_b2Box);
 	}

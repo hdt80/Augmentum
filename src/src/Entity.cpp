@@ -10,7 +10,7 @@
 Entity::Entity(Map* map, float x, float y, int size, int maxHealth)
 	: Object(map, x, y, size),
 		_hpBar(Vector2(50.0f, 8.0f), sf::Color::Red, sf::Color::Green,
-			0, _maxHealth, _health),
+			0, maxHealth, maxHealth),
 		_health(maxHealth), _maxHealth(maxHealth), _invulerable(false) {
 
 	
@@ -42,7 +42,7 @@ void Entity::dealDamage(float amount, Unit* source) {
 	}
 }
 
-void Entity::updatePositon(float x, float y) {
+void Entity::updatePosition(float x, float y) {
 	Object::updatePosition(x, y);
 	_hpBar.setPosition(x - getSize(), y - getSize());
 }

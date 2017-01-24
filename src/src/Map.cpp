@@ -82,8 +82,8 @@ void Map::update(int diff) {
 }
 
 void Map::updateBox2D(int diff) {
-	// Update Box2D first
 	b2UpdateCounter += diff;
+	// Only update Box2D at 60 times per second
 	if (b2UpdateCounter >= 16667) {
 		// Collision handling is done in here
 		_world.Step(b2UpdateCounter / 1000000.0f,

@@ -36,11 +36,11 @@ public:
 	
 	// Get the x position of this bar
 	// returns: The x pos of _valueBar
-	float getX() { return _valueBar.getPosition().y; }
+	float getX() const { return _valueBar.getPosition().y; }
 
 	// Get the y position of this bar
 	// returns: The y pos of _valueBar
-	float getY() { return _valueBar.getPosition().x; }
+	float getY() const { return _valueBar.getPosition().x; }
 
 	// Set the position of this bar
 	// x - X coord to set

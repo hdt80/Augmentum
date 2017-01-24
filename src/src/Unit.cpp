@@ -19,9 +19,13 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		_reload(1), _levelDiff(lvlDiff),
 		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
 
-	if (sides < 3) {
-		CORE_WARN("Cannot have sides be less than 3. Setting to 3");
-		sides = 3;
+	if (sides < 3 || sides > 8) {
+		CORE_WARN("Cannot have %d sides. Wrapping to valid values", sides);
+		if (sides < 3) {
+			sides = 3;
+		} else {
+			sides = 8;
+		}
 	}
 
 	// If the stats provided give us a max health set it
@@ -55,13 +59,13 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	std::vector<b2Vec2> points = MathUtil::generatePolygon(sides, size);
 
 	// Convert the points into B2's scale
-	std::vector<b2Vec2> b2Points(size);
+	std::vector<b2Vec2> b2Points(points.size());
 	for (unsigned int i = 0; i < points.size(); ++i) {
-		b2Points[i] = 
+		b2Points[i] =
 			b2Vec2(MathUtil::toB2(points[i].x), MathUtil::toB2(points[i].y));
 	}
 	b2PolygonShape ps;
-	ps.Set(&b2Points[0], sides);
+	ps.Set(&b2Points[0], points.size());
 
 	// Fixture definition of this Unit
 	b2FixtureDef fd;
@@ -153,11 +157,6 @@ void Unit::shoot(float x, float y) {
 ////////////////////////////////////////////////////////////////////////////////
 // Updating methods
 ////////////////////////////////////////////////////////////////////////////////
-
-void Unit::updatePosition(float x, float y) {
-	Object::updatePosition(x, y);	
-
-}
 
 void Unit::setVelocity(float x, float y) {
 	b2Vec2 vel = _b2Box->GetLinearVelocity();

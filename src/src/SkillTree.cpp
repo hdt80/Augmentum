@@ -12,8 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // SkillNode
 ///////////////////////////////////////////////////////////////////////////////
-SkillNode::SkillNode(SkillNode* parent, Perk* perk) : 
-	nodePrereq(parent), perk(perk) {
+SkillNode::SkillNode(SkillNode* parent, Perk* perk)
+	: nodePrereq(parent), perk(perk) {
 
     left  = nullptr;
 	right = nullptr;
@@ -63,9 +63,6 @@ SkillNode::~SkillNode() {
 	}
 }
 
-// Add a newly created Node as one of our children
-// node - Node to add as our child
-// Returns true if the node was added, or false if an error occured
 bool SkillNode::add(SkillNode* node) {
 	node->nodePrereq = this;
 	node->depth = depth + 1;
@@ -87,7 +84,6 @@ bool SkillNode::add(SkillNode* node) {
 	return true;
 }
 
-// Is that point within our bounding box?
 bool SkillNode::contains(float px, float py) {
 	return (px >= getX() - SKILL_TREE_NODE_WIDTH &&
 			px <= getX() + SKILL_TREE_NODE_WIDTH &&
@@ -95,15 +91,13 @@ bool SkillNode::contains(float px, float py) {
 			py <= getY() + SKILL_TREE_NODE_HEIGHT);
 }
 
-// Clone a Node into a new Node. This is a deep copy, meaning all pointers
-// are also cloned as new objects
 SkillNode* SkillNode::clone(std::vector<SkillNode*>* vec) {
     // Create the new node with the same values for each variable
 	SkillNode* node = new SkillNode();
 	node->isLeft = isLeft;
 	node->depth = depth;
 	if (perk) {
-		node->perk = perk->clone();
+		node->perk = new Perk(*perk);
 	} else {
 		node->perk = nullptr;
 	}
@@ -129,7 +123,6 @@ SkillNode* SkillNode::clone(std::vector<SkillNode*>* vec) {
 	return node;
 }
 
-// Print out this Node
 void SkillNode::print() {
 	char rel = 'L';
 	if (nodePrereq != nullptr) {
@@ -148,9 +141,7 @@ void SkillNode::print() {
 	}
 }
 
-// No parent? We're head so we're unlocked
-// If nodePrereq is unlocked we're unlocked
-bool SkillNode::unlocked() {
+bool SkillNode::unlocked() const {
     if (!nodePrereq) {
         return true;
     }
@@ -160,10 +151,6 @@ bool SkillNode::unlocked() {
     return false;
 }
 
-// Locked? Red
-// Unlocked but no points? White
-// Unlocked and some points? Gray
-// Max points? Green
 void SkillNode::setPoints(int p) {
     if (p > maxPoints || p < 0) {
         CORE_WARNING("SkillNode:: p: %i, maxPoints: %i", p, maxPoints);
@@ -202,6 +189,11 @@ void SkillNode::setPoints(int p) {
 ///////////////////////////////////////////////////////////////////////////////
 // SkillTree
 ///////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
+
 SkillTree::SkillTree(Vector2 size) {
 	_size = size;
 	_attached = nullptr;
@@ -229,6 +221,7 @@ SkillTree::~SkillTree() {
 ///////////////////////////////////////////////////////////////////////////////
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
+
 void SkillTree::print(SkillNode* node, bool pos) {
 	if (node != nullptr) {
 		if (node->left) {
@@ -274,21 +267,22 @@ SkillTree* SkillTree::clone() {
 ///////////////////////////////////////////////////////////////////////////////
 // Tree helper methods
 ///////////////////////////////////////////////////////////////////////////////
-const int SkillTree::maxDepth(const SkillNode* node) {
+
+int SkillTree::maxDepth(const SkillNode* node) const {
 	if (node == nullptr) {
 		return 0;
 	}
 	return std::max(depth(node->left), depth(node->right)) + 1;
 }
 
-const int SkillTree::depth(const SkillNode* node) {
+int SkillTree::depth(const SkillNode* node) const {
 	if (node == nullptr) {
 		return 0;
 	}
 	return depth(node->nodePrereq) + 1;
 }
 
-const int SkillTree::nodesOnDepth(const SkillNode* node, int depth) {
+int SkillTree::nodesOnDepth(const SkillNode* node, int depth) const {
 	if (node == nullptr) {
 		return 0;
 	}
@@ -299,7 +293,7 @@ const int SkillTree::nodesOnDepth(const SkillNode* node, int depth) {
 	return count + nodesOnDepth(node->right, depth);
 }
 
-const int SkillTree::childCount(const SkillNode* node) {
+int SkillTree::childCount(const SkillNode* node) const {
 	if (node == nullptr || (node->left == nullptr && node->right == nullptr)) {
 		return 0;
 	}
@@ -325,6 +319,7 @@ SkillNode* SkillTree::getNode(float x, float y) {
 ///////////////////////////////////////////////////////////////////////////////
 // Tree creation methods
 ///////////////////////////////////////////////////////////////////////////////
+
 SkillNode* SkillTree::addPerk(SkillNode* parent, Perk* perk) {
 	SkillNode* node = new SkillNode(parent, perk);
 	++_count;
@@ -355,7 +350,6 @@ SkillNode* SkillTree::addPerk(SkillNode* parent, Perk* perk) {
 	return node;
 }
 
-// We've finished adding Node to this tree, create the VertexArrays
 void SkillTree::end() {
 	if (_comp) {
 		CORE_ERROR("Tried to complete an already completed tree");
@@ -383,7 +377,7 @@ void SkillTree::end() {
 Vector2 SkillTree::pos(SkillNode* node) {
 	if (node == _head) {
         node->box.setPosition(sf::Vector2f(getWidth() / 2.0f - nodeWidth,
-                                          getHeight() / 2.0f - nodeHeight));
+			getHeight() / 2.0f - nodeHeight));
 		return Vector2(getWidth() / 2.0f, getHeight() / 2.0f);
 	}
 
@@ -455,6 +449,7 @@ void SkillTree::setAttached(Unit* o) {
 ///////////////////////////////////////////////////////////////////////////////
 // Drawing
 ///////////////////////////////////////////////////////////////////////////////
+
 void SkillTree::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	if (!_comp) {
 		CORE_ERROR("Tried to draw an incomplete tree!");

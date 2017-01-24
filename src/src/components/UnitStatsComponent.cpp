@@ -2,6 +2,8 @@
 
 #include "Game.h"
 #include "GameWindow.h"
+#include "Entity.h"
+
 #include "util/StringUtil.h"
 #include "util/ObjectUtil.h"
 
@@ -32,9 +34,9 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 
 	addEntry(_unitPos, 0, 0);
 	addEntry(_unitVelocity, 0, 20);
-	addEntry(_unitLevel, 0, 40);
-	addEntry(_unitHp, 0, 60);
-	addEntry(_unitMaxHp, 0, 80);
+	addEntry(_unitHp, 0, 40);
+	addEntry(_unitMaxHp, 0, 60);
+	addEntry(_unitLevel, 0, 80);
 	addEntry(_unitSpeed, 0, 100);
 	addEntry(_unitRange, 0, 120);
 	addEntry(_unitDamage, 0, 140);
@@ -62,7 +64,7 @@ void UnitStatsComponent::update(int diff) {
 	sf::Vector2f worldPos = Game::getRenderWindow()
 		.mapPixelToCoords(pixelPos, clicked->getView());
 
-	_hovered = dynamic_cast<Unit*>(_map->objectAt(nullptr,
+	_hovered = dynamic_cast<Entity*>(_map->objectAt(nullptr,
 		worldPos.x, worldPos.y));
 
 	if (_hovered) {
@@ -70,30 +72,33 @@ void UnitStatsComponent::update(int diff) {
 			_hovered->getX(), _hovered->getY()));
 		_unitVelocity->setMessage(StringUtil::format("Vel [%g, %g]",
 			_hovered->getVelocity().X, _hovered->getVelocity().Y));
-		_unitLevel->setMessage(StringUtil::format("Lvl: %d, Exp: %g",
-			_hovered->getLevel(), _hovered->getExp()));
-		_unitSpeed->setMessage(StringUtil::format("Speed: %g", 
-			_hovered->getSpeed()));
-		_unitRange->setMessage(StringUtil::format("Range: %g",
-			_hovered->getRange()));
-		_unitDamage->setMessage(StringUtil::format("Damage: %g",
-			_hovered->getDamage()));
-		_unitFireRate->setMessage(StringUtil::format("FireRate: %g",
-			_hovered->getFireRate()));
-		_unitAccel->setMessage(StringUtil::format("Accel: %g",
-			_hovered->getAccel()));
-		_unitProjSpeed->setMessage(StringUtil::format("ProjSpeed: %g",
-			_hovered->getProjSpeed()));
 		_unitHp->setMessage(StringUtil::format("Health: %g",
 			_hovered->getHealth()));
 		_unitMaxHp->setMessage(StringUtil::format("Max health: %g",
 			_hovered->getMaxHealth()));
 
-		Enemy* e = nullptr;
+		Unit* u = nullptr;
+		if ((u = ObjectUtil::toType<Unit>(_hovered))) {
+			_unitLevel->setMessage(StringUtil::format("Lvl: %d, Exp: %g",
+				u->getLevel(), u->getExp()));
+			_unitSpeed->setMessage(StringUtil::format("Speed: %g", 
+				u->getSpeed()));
+			_unitRange->setMessage(StringUtil::format("Range: %g",
+				u->getRange()));
+			_unitDamage->setMessage(StringUtil::format("Damage: %g",
+				u->getDamage()));
+			_unitFireRate->setMessage(StringUtil::format("FireRate: %g",
+				u->getFireRate()));
+			_unitAccel->setMessage(StringUtil::format("Accel: %g",
+				u->getAccel()));
+			_unitProjSpeed->setMessage(StringUtil::format("ProjSpeed: %g",
+				u->getProjSpeed()));
 
-		if ((e = ObjectUtil::toType<Enemy>(_hovered))) {
-			_unitName->setMessage(StringUtil::format("Type: %s",
-				e->getEnemyType().getName().c_str()));
+			Enemy* e = nullptr;
+			if ((e = ObjectUtil::toType<Enemy>(_hovered))) {
+				_unitName->setMessage(StringUtil::format("Type: %s",
+					e->getEnemyType().getName().c_str()));
+			}
 		}
 	} else {
 		_unitPos->setMessage("");
