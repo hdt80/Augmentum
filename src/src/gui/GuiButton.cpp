@@ -4,9 +4,8 @@
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiButton::GuiButton(const GuiEntryStyle* style,
-		Vector2 orig, const std::string& msg)
-	: GuiEntry(style, orig, msg) {
+GuiButton::GuiButton(GuiComponent* guiComp, const std::string& msg)
+	: GuiEntry(guiComp, msg) {
 
 }
 

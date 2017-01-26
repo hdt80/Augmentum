@@ -14,7 +14,7 @@ public:
 	// origin - Where to draw the GuiWindowButton from
 	// msg - Message to display on the button
 	// window - Window to follow when the GuiWindowButton is pressed
-	GuiWindowButton(const GuiEntryStyle* style, Vector2 origin,
+	GuiWindowButton(GuiComponent* guiComp,
 		const std::string& msg, Window* window);
 
 	// Dtor for GuiWindowButton

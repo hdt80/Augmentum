@@ -16,10 +16,10 @@ DebugWorldComponent::DebugWorldComponent(Window* window,
 	_map = &Game::getMap();
 
 	// Message doesn't matter now cause it's set during update
-	_fps = new GuiEntry(style, getPos(), "");
-	_pos = new GuiEntry(style, getPos(), "");
-	_speed = new GuiEntry(style, getPos(), "");
-	_mousePos = new GuiEntry(style, getPos(), "");
+	_fps = new GuiEntry(this, "");
+	_pos = new GuiEntry(this, "");
+	_speed = new GuiEntry(this, "");
+	_mousePos = new GuiEntry(this, "");
 
 	addEntry(_fps, 0, 0);
 	addEntry(_pos, 0, 24);

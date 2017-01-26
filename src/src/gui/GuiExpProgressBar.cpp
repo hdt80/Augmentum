@@ -7,9 +7,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
-GuiExpProgressBar::GuiExpProgressBar(const GuiEntryStyle* style, Vector2 origin,
+GuiExpProgressBar::GuiExpProgressBar(GuiComponent* guiComp,
 		const std::string& msg, GuiProgressBarStyle* barStyle, Unit* unit)
-	: GuiProgressBar(style, origin, msg, barStyle, nullptr, 0, 0),
+	: GuiProgressBar(guiComp, msg, barStyle, nullptr, 0, 0),
 		_tracked(unit) {
 
 	if (_max == nullptr) {
@@ -43,10 +43,10 @@ float GuiExpProgressBar::getCurrentValue() {
 	return _tracked->getExp();
 }
 
-float GuiExpProgressBar::getMin() {
+float GuiExpProgressBar::getMin() const {
 	return ExperienceHelper::levelToExp(_tracked->getLevel());
 }
 
-float GuiExpProgressBar::getMax() {
+float GuiExpProgressBar::getMax() const {
 	return ExperienceHelper::levelToExp(_tracked->getLevel() + 1);
 }

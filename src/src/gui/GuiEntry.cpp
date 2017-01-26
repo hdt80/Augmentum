@@ -1,37 +1,41 @@
 #include "gui/GuiEntry.h"
-#include "gui/GuiComponent.h"
+
 #include "Logger.h"
+
+#include "gui/GuiComponent.h"
+#include "gui/GuiComponent.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiEntry::GuiEntry(const GuiEntryStyle* style,
-		Vector2 orig, const std::string& msg) {
+GuiEntry::GuiEntry(GuiComponent* guiComp, const std::string& msg) {
+	_comp = guiComp;
+	_style = guiComp->getEntryStyle();
+	_origin = guiComp->getPos();
 
-	_style = style;
-	_origin = orig;
-	_shape.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
-	_shape.setFillColor(style->bodyColor);
-	_shape.setOutlineColor(style->borderColor);
+	// Set up the background shape
+	_shape.setSize(sf::Vector2f(_style->dimensions.X, _style->dimensions.Y));	
+	_shape.setFillColor(_style->bodyColor);
+	_shape.setOutlineColor(_style->borderColor);
 	// Negative so the border goes in
-	_shape.setOutlineThickness(-style->borderSize);
+	_shape.setOutlineThickness(-_style->borderSize);
 
-	_text.setFont(*style->font);
+	_text.setFont(*_style->font);
 	_text.setString(msg);
-	_text.setFillColor(style->textColor);
+	_text.setFillColor(_style->textColor);
 	_text.setOutlineColor(sf::Color::Black);
 	_text.setOutlineThickness(1.0f);
 	setMessage(msg);
 	
 	// Find the font size programmically?
-	if (style->textSize < 0) {
+	if (_style->textSize < 0) {
 		// Determine how big each character should be
-		_text.setCharacterSize(style->dimensions.Y
-				- style->borderSize - style->padding);
+		_text.setCharacterSize(_style->dimensions.Y
+				- _style->borderSize - _style->padding);
 	} else {
 		// TODO: Factor in padding
-		_text.setCharacterSize(style->textSize);
+		_text.setCharacterSize(_style->textSize);
 	}
 
 	_highlighted = false;
@@ -71,8 +75,7 @@ void GuiEntry::setHighlighted(bool b) {
 	}
 }
 
-bool GuiEntry::contains(float x, float y) {
-	//CORE_INFO("Checking (%g, %g) againist (%g, %g)", x, y, getX(), getY());
+bool GuiEntry::contains(float x, float y) const {
 	return (x >= getX() && x <= _style->dimensions.X + getX() &&
-			y >= getY() && y <= _style->dimensions.Y + getY());
+		y >= getY() && y <= _style->dimensions.Y + getY());
 }

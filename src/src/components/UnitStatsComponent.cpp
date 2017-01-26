@@ -19,18 +19,18 @@ UnitStatsComponent::UnitStatsComponent(Window* window,
 	_hovered = nullptr;
 	_map = &Game::getMap();
 
-	_unitName = new GuiEntry(style, pos, "");
-	_unitPos = new GuiEntry(style, pos, "");
-	_unitVelocity = new GuiEntry(style, pos, "");
-	_unitLevel = new GuiEntry(style, pos, "");
-	_unitSpeed = new GuiEntry(style, pos, "");
-	_unitRange = new GuiEntry(style, pos, "");
-	_unitDamage = new GuiEntry(style, pos, "");
-	_unitFireRate = new GuiEntry(style, pos, "");
-	_unitProjSpeed = new GuiEntry(style, pos, "");
-	_unitAccel = new GuiEntry(style, pos, "");
-	_unitHp = new GuiEntry(style, pos, "");
-	_unitMaxHp = new GuiEntry(style, pos, "");
+	_unitName = new GuiEntry(this, "");
+	_unitPos = new GuiEntry(this, "");
+	_unitVelocity = new GuiEntry(this, "");
+	_unitLevel = new GuiEntry(this, "");
+	_unitSpeed = new GuiEntry(this, "");
+	_unitRange = new GuiEntry(this, "");
+	_unitDamage = new GuiEntry(this, "");
+	_unitFireRate = new GuiEntry(this, "");
+	_unitProjSpeed = new GuiEntry(this, "");
+	_unitAccel = new GuiEntry(this, "");
+	_unitHp = new GuiEntry(this, "");
+	_unitMaxHp = new GuiEntry(this, "");
 
 	addEntry(_unitPos, 0, 0);
 	addEntry(_unitVelocity, 0, 20);

@@ -15,6 +15,8 @@ struct GuiProgressBarStyle {
 
 class GuiProgressBar : public GuiEntry {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+	
 	// GuiProgressBar ctor
 	// style - Style to draw this GuiEntry
 	// origin - Origin of the GuiComponent this GuiEntry is in
@@ -23,10 +25,13 @@ public:
 	// value - Pointer to the value to track
 	// min - Min value that value can be
 	// max - Pointer to the max value that value can be
-	GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
-			const std::string& msg,	GuiProgressBarStyle* barStyle,
-			float* value, float min, float* max);
+	GuiProgressBar(GuiComponent* guiComp, const std::string& msg,
+			GuiProgressBarStyle* barStyle, float* value, float min, float* max);
+
+	// GuiProgressBar dtor
 	virtual ~GuiProgressBar();
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// Inherited from sf::Drawable
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
@@ -42,28 +47,29 @@ public:
 
 	// Get the current value used by this bar
 	// returns: What the current value is
-	virtual inline float getCurrentValue() { return *_value; }
+	virtual inline float getCurrentValue() const { return *_value; }
 
 	// Get how much higher the value is from the min value
 	// returns: Remainder of value till max is hit
-	virtual inline float getRelativeValue() { return getCurrentValue() - _min; }
+	virtual inline float getRelativeValue() const {
+		return getCurrentValue() - _min; }
 
 	// Get how close the value is to the max
 	// returns: A ratio of how "done" the value is (0: 0%, 1: 100%)
-	inline float getRatioDone() { return getRelativeValue()
-			/ getRelativeMax(); }
+	inline float getRatioDone() const {
+		return getRelativeValue() / getRelativeMax(); }
 
 	// Get the ratio of how far from the value is to the max
 	// returns: A ration of how much of the value is needed to hit the max
-	inline float getRatioLeft() { return 1.0f - getRatioDone(); }
+	inline float getRatioLeft() const { return 1.0f - getRatioDone(); }
 
 	// Get the maximum value of this bar
 	// returns: The max value _value can be before it's considered "done"
-	virtual inline float getMax() { return *_max; }
+	virtual inline float getMax() const { return *_max; }
 
 	// Get how much higher the max is from the min
 	// returns: How higher the max is from the min
-	virtual inline float getRelativeMax() { return getMax() - _min; }
+	virtual inline float getRelativeMax() const { return getMax() - _min; }
 
 	// Set the max value of this bar
 	// m - New mav value to use

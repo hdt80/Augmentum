@@ -137,15 +137,14 @@ GameWindow::GameWindow(Vector2 size) {
 	UnitStatsComponent* usComp = new UnitStatsComponent(this, debugStyle,
 		transStyle, Vector2(8, 64), Vector2(240, _size.Y - 24));
 
-	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
-		"HP", progBar, &Game::getMap().getSelected()->getHealth(), 0,
+	hud->addEntry(new GuiProgressBar(hud, "HP", progBar,
+		&Game::getMap().getSelected()->getHealth(), 0,
 		&Game::getMap().getSelected()->getMaxHealth()));
 
-	hud->addEntry(new GuiExpProgressBar(hud->getEntryStyle(), hud->getPos(),
+	hud->addEntry(new GuiExpProgressBar(hud,
 		"EXP", expBarStyle, Game::getMap().getSelected()), 0, 48);
 
-	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
-		toolbar->getPos(), "Debug", dComp));
+	toolbar->addEntry(new GuiMenuButton(toolbar, "Debug", dComp));
 
 	//addComponent(toolbar);
 	//addComponent(dComp);

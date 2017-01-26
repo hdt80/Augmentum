@@ -11,14 +11,14 @@
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GuiProgressBar::GuiProgressBar(const GuiEntryStyle* style, Vector2 origin,
+GuiProgressBar::GuiProgressBar(GuiComponent* guiComp,
 		const std::string& msg, GuiProgressBarStyle* barStyle,
 		float* value, float min, float* max)
-	: GuiEntry(style, origin, msg),
+	: GuiEntry(guiComp, msg),
 		_barStyle(barStyle), _value(value), _prevValue(-1),
 		_min(min), _max(max), _prevMax(-1) {
 
-	_bar.setSize(sf::Vector2f(style->dimensions.X, style->dimensions.Y));	
+	_bar.setSize(sf::Vector2f(_style->dimensions.X, _style->dimensions.Y));	
 	_bar.setFillColor(barStyle->maxColor);
 
 	_barOutline.setFillColor(sf::Color::Transparent);

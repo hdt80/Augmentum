@@ -6,15 +6,20 @@
 
 class GuiExpProgressBar : public GuiProgressBar {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+	
 	// Unique GuiProgressBar for an exp bar
-	// style - Style draw this GuiExpProgressBar
-	// origin - Origin of the GuiComponent this GuiExpProgressBar is in
+	// guiComp - GuiComponent the GuiExpProgressBar is in
 	// msg - Message to display
 	// barStyle - Style to draw this GuiProgressBar
 	// unit - Unit to track to exp of
-	GuiExpProgressBar(const GuiEntryStyle* style, Vector2 origin,
-			const std::string& msg,	GuiProgressBarStyle* barStyle, Unit* unit);
+	GuiExpProgressBar(GuiComponent* guiComp, const std::string& msg,
+		GuiProgressBarStyle* barStyle, Unit* unit);
+
+	// GuiExpProgressBar progress bar
 	virtual ~GuiExpProgressBar() {}
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// Update this GuiEntry
 	// diff - Microseconds to update
@@ -26,11 +31,11 @@ public:
 
 	// Get the max (Exp needed to reach the next level)
 	// returns: The exp required to hit the next level
-	virtual float getMax();
+	virtual float getMax() const;
 
 	// Get the min exp needed to reach the current level
 	// returns: exp needed to reach the unit's current level
-	virtual float getMin();
+	virtual float getMin() const;
 
 protected:
 	Unit* _tracked; // Selected ship
