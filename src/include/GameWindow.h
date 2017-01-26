@@ -24,6 +24,14 @@ public:
 	// Initalize the window
 	virtual void init();
 
+	// Reinit the Window
+	// Reinitalize the Window and reset it to default values
+	virtual void reset();
+
+	// Close the Window, it is no longer being used
+	// Clean up everything and deallocate all associated objects
+	virtual void close();
+
 	// Update the Window
 	// diff is the amount of microseconds that have passed since the last call
 	virtual void update(int diff);

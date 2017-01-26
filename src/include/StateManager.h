@@ -16,8 +16,8 @@ public:
 	void registerGame(Game* game);
 
 	// Is the State stack empty?
-	bool empty();
-	void print();
+	bool empty() const;
+	void print() const;
 
 	// Reset the current State by calling restart()
 	void resetCurrentState();

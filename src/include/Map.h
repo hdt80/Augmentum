@@ -33,6 +33,9 @@ public:
 	// diff - Microseconds to simulate Box2D for
 	void updateBox2D(int diff);
 
+	// Reset the map to the default state
+	void reset();
+
 	// Get the Ship the player is using
 	// returns: Pointer to the ship the player controls
 	Ship* getSelected() { return _selected; }

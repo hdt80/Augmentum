@@ -1,7 +1,10 @@
 #include "Game.h"
 #include "Logger.h"
-#include "GameWindow.h"
+
 #include "ExperienceHelper.h"
+
+#include "GameWindow.h"
+#include "MainMenuWindow.h"
 
 void Game::start() {
 	if (CurrentGameState != Uninitalized) {
@@ -44,7 +47,9 @@ void Game::loop() {
 	// Create the first window
 	GameWindow w(_size);
 
-	followWindow(&w);
+	MainMenuWindow mainMenu(&w, _size);
+
+	followWindow(&mainMenu);
 
 	// Main loop
 	while (!toClose()) {

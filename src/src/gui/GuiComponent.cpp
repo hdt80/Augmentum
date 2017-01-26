@@ -109,7 +109,7 @@ void GuiComponent::draw(sf::RenderTarget& target,
 
 bool GuiComponent::contains(float x, float y) {
 	return (x >= _pos.X && x <= _size.X + _pos.X &&
-			y >= _pos.Y && y <= _size.Y + _pos.Y);
+		y >= _pos.Y && y <= _size.Y + _pos.Y);
 }
 
 bool GuiComponent::hasClicked(float x, float y) {

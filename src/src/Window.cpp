@@ -90,6 +90,7 @@ const std::string Window::getStateString(WindowState state) {
 }
 
 void Window::addComponent(GuiComponent* comp, int depth) {
+	// TODO: Depth
 	_components.push_back(comp);
 }
 

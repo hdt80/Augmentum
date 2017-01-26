@@ -122,30 +122,30 @@ GameWindow::GameWindow(Vector2 size) {
 	toolbarStyle->dimensions = Vector2(64, 24);
 
 	GuiToolbarComponent* hud = new GuiToolbarComponent(this, hudStyle, transStyle,
-			Vector2(0, 0), Vector2(_size.X, 60), true);
+		Vector2(0, 0), Vector2(_size.X, 60), true);
 
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
-			Databases::GuiComponentStyleDatabase.get("style"),
-			Vector2(8, 8), Vector2(_size.X - 48, 96), true);
+		Databases::GuiComponentStyleDatabase.get("style"),
+		Vector2(8, 8), Vector2(_size.X - 48, 96), true);
 
 	WorldComponent* worldComp = new WorldComponent(this, worldStyle, transStyle,
-			Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
+		Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
 	
 	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
-			compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
+		compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
 	UnitStatsComponent* usComp = new UnitStatsComponent(this, debugStyle,
-			transStyle, Vector2(8, 64), Vector2(240, _size.Y - 24));
+		transStyle, Vector2(8, 64), Vector2(240, _size.Y - 24));
 
 	hud->addEntry(new GuiProgressBar(hud->getEntryStyle(), hud->getPos(),
-			"HP", progBar, &Game::getMap().getSelected()->getHealth(), 0,
-			&Game::getMap().getSelected()->getMaxHealth()));
+		"HP", progBar, &Game::getMap().getSelected()->getHealth(), 0,
+		&Game::getMap().getSelected()->getMaxHealth()));
 
 	hud->addEntry(new GuiExpProgressBar(hud->getEntryStyle(), hud->getPos(),
-			"EXP", expBarStyle, Game::getMap().getSelected()), 0, 48);
+		"EXP", expBarStyle, Game::getMap().getSelected()), 0, 48);
 
 	toolbar->addEntry(new GuiMenuButton(toolbar->getEntryStyle(),
-			toolbar->getPos(), "Debug", dComp));
+		toolbar->getPos(), "Debug", dComp));
 
 	//addComponent(toolbar);
 	//addComponent(dComp);
@@ -203,6 +203,16 @@ GameWindow::~GameWindow() {
 void GameWindow::init() {
 	Window::init();
 	SkillTrees::createTrees(_size);
+}
+
+void GameWindow::reset() {
+	Window::reset();
+	Game::getMap().reset();
+}
+
+void GameWindow::close() {
+	Window::close();
+	Game::getMap().reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

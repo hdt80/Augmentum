@@ -1,0 +1,43 @@
+#include "MainMenuWindow.h"
+
+#include "Database.h"
+#include "GameWindow.h"
+
+#include "gui/GuiComponent.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
+
+MainMenuWindow::MainMenuWindow(GameWindow* playWindow, Vector2 size)
+	: Window("Main Menu", size) {
+
+	_toolbar = new GuiComponent(this,
+		Databases::GuiEntryStyleDatabase.get("world_style"),
+		Databases::GuiComponentStyleDatabase.get("style"), Vector2(0, 0), size);
+	
+	_toolbar->addEntry(new GuiWindowButton(_toolbar->getEntryStyle(),
+		Vector2(0.0f, 0.0f), "Play", playWindow),
+		(size.X / 2) - _toolbar->getEntryStyle()->dimensions.X / 2.0f,
+		(size.Y / 2) - _toolbar->getEntryStyle()->dimensions.Y / 2.0f);
+
+	addComponent(_toolbar);
+}
+
+MainMenuWindow::~MainMenuWindow() {
+	delete _toolbar;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
+
+void MainMenuWindow::update(int diff) {
+	Window::update(diff);
+	_cursor.update(diff);
+}
+
+void MainMenuWindow::render(sf::RenderWindow& window) {
+	Window::render(window);
+	window.draw(_cursor);
+}

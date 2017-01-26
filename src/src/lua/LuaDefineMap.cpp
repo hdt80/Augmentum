@@ -10,6 +10,7 @@ namespace LuaDefines {
 			"Map", sol::constructors<>(),
 			"update", &Map::update,
 			"updateBox2D", &Map::updateBox2D,
+			"reset", &Map::reset,
 			"getSelected", &Map::getSelected,
 			"getWorld", &Map::getWorld,
 			"getObjectsInRange", sol::overload(sol::resolve

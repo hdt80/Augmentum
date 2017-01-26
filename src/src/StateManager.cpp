@@ -27,11 +27,11 @@ void StateManager::registerGame(Game* game) {
 	_game = game;
 }
 
-bool StateManager::empty() {
+bool StateManager::empty() const {
 	return (_stack.size() == 0);
 }
 
-void StateManager::print() {
+void StateManager::print() const {
 	CORE_INFO("/ States");
 	for (unsigned int i = 0; i < _stack.size(); ++i) {
 		CORE_INFO("|%i: %s (%s, %i) @%x", i, _stack[i]->getName().c_str(),

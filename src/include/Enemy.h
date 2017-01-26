@@ -103,7 +103,6 @@ protected:
 	// Get the map of types
 	// returns: Reference to the types used
 	static std::map<int, EnemyType>& getTypes();
-
 };
 
 class Enemy : public Unit {

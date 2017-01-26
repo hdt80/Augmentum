@@ -15,14 +15,7 @@
 Map::Map()
 	: _world(b2Vec2(0.0f, 0.0f)), b2UpdateCounter(0) {
 
-	Stats s;
-	s["speed"] = 20.0f;
-	s["projSpeed"] = 50.0f;
-	_selected = new Ship(this, 0.0f, 0.0f, s, Stats(), 20, 4, sf::Color::Blue);
-	_selected->setMaxHealth(30.0f);
-	_selected->setObjectType(ObjectType::FRIENDLY);
-
-	objects.push_back(_selected);
+	reset();
 
 	_contactListener = new ContactListener(&_world);
 
@@ -73,6 +66,10 @@ void Map::update(int diff) {
 		}
 	}
 
+	if (_selected->isToRemove()) {
+		
+	}
+
 	// Now that all the updating is done we can safely remove all objects
 	// that are marked for removal
 	for (unsigned int i = 0; i < toRemove.size(); ++i) {
@@ -90,6 +87,23 @@ void Map::updateBox2D(int diff) {
 			velocityIterations, positionIterations);
 		b2UpdateCounter = 0;
 	}
+}
+
+void Map::reset() {
+	for (Object* obj : objects) {
+		delete obj;
+	}
+	objects.clear();
+	_selected = nullptr;
+
+	Stats s;
+	s["speed"] = 20.0f;
+	s["projSpeed"] = 50.0f;
+	_selected = new Ship(this, 0.0f, 0.0f, s, Stats(), 20, 4, sf::Color::Blue);
+	_selected->setMaxHealth(30.0f);
+	_selected->setObjectType(ObjectType::FRIENDLY);
+
+	addObject(_selected);
 }
 
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {
