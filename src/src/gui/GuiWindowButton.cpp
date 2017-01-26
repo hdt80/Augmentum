@@ -22,6 +22,5 @@ GuiWindowButton::~GuiWindowButton() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void GuiWindowButton::onClick() {
-	CORE_INFO("aeadsa");
 	Game::followWindow(_window);
 }

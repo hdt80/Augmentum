@@ -36,13 +36,21 @@ public:
 	// Reset the map to the default state
 	void reset();
 
+	// Check if the player has been killed
+	// returns: _gameOver
+	inline bool isGameOver() const { return _gameOver; }
+
+	// Set if the game is over and we should go back to the main menu
+	// b - Game over or not
+	inline void setGameOver(bool b) { _gameOver = b; }
+
 	// Get the Ship the player is using
 	// returns: Pointer to the ship the player controls
-	Ship* getSelected() { return _selected; }
+	inline Ship* getSelected() { return _selected; }
 
 	// Get the Box2D world used by this Map
 	// returns: Point to the b2World used for the physics simulations
-	b2World* getWorld() { return &_world; }
+	inline b2World* getWorld() { return &_world; }
 
 	// Get all Objects within a radius of a point //////////////////////////////
 	
@@ -117,6 +125,8 @@ protected:
 	int positionIterations = 2;
 
 	float b2UpdateCounter; // Ensure that the b2 world is only updated 60/sec
+
+	bool _gameOver; // If the game is over and the player has been killed
 };
 
 #endif

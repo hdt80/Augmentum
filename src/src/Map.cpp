@@ -13,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 Map::Map()
-	: _world(b2Vec2(0.0f, 0.0f)), b2UpdateCounter(0) {
+	: _world(b2Vec2(0.0f, 0.0f)), b2UpdateCounter(0), _gameOver(false) {
 
 	reset();
 
@@ -67,7 +67,7 @@ void Map::update(int diff) {
 	}
 
 	if (_selected->isToRemove()) {
-		
+		setGameOver(true);
 	}
 
 	// Now that all the updating is done we can safely remove all objects
@@ -104,6 +104,8 @@ void Map::reset() {
 	_selected->setObjectType(ObjectType::FRIENDLY);
 
 	addObject(_selected);
+
+	setGameOver(false);
 }
 
 std::vector<Object*> Map::getObjectsInRange(Target* t, float r) {

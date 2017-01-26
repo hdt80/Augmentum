@@ -220,6 +220,10 @@ void GameWindow::close() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void GameWindow::update(int diff) {
+	if (Game::getMap().isGameOver()) {
+		Game::WindowManager.pop();
+	}
+
 	Window::update(diff);
 	
 	float xa = (sf::Keyboard::isKeyPressed(sf::Keyboard::D) -
