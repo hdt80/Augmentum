@@ -87,7 +87,7 @@ void Projectile::onCollision(Object* o) {
 
 	float angle = MathUtil::radToDeg((-_direction).angle());
 
-	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("hit"),
+	GameWindow::Emitter.emit(&Databases::ParticleDefDatabase.get("hit"),
 		getX(), getY(), 50, angle);
 
 	_toRemove = true;

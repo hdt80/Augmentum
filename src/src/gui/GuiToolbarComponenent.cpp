@@ -27,9 +27,9 @@ void GuiToolbarComponent::addEntry(GuiEntry* entry, float x, float y) {
 	float py = 0.0f;
 	if (_vertical) {
 		px = getX();
-		py = _guiEntryStyle->dimensions.Y * _entries.size();
+		py = _guiEntryStyle->getDimensions().Y * _entries.size();
 	} else {
-		px = _guiEntryStyle->dimensions.X * _entries.size();
+		px = _guiEntryStyle->getDimensions().X * _entries.size();
 		py = getY();
 	}
 	entry->setPosition(px, py);

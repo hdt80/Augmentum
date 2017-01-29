@@ -26,6 +26,7 @@ namespace SFMLUtil {
 	//		used by text and not any other sf::Text, not even if the string
 	//		in the text is the same.
 	std::vector<sf::String> wrapText(const sf::Text& text, int length);
-};
+
+}
 
 #endif

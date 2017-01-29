@@ -1,7 +1,7 @@
 #ifndef _GUI_BUTTON_H
 #define _GUI_BUTTON_H
 
-#include "GuiEntry.h"
+#include "gui/GuiEntry.h"
 
 class GuiButton : public GuiEntry {
 public:

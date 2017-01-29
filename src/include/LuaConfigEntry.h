@@ -34,9 +34,11 @@ public:
 	
 	// Get the name of the sub table all the values are located at
 	// returns: A const reference to _name
-	inline const std::string& getName() { return _name; }
+	inline const std::string& getName() const { return _name; }
 
 protected:
+	// Vars ////////////////////////////////////////////////////////////////////
+	
 	std::string _name; // Name of the sub table all the info is located at
 };
 

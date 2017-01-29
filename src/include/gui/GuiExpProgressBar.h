@@ -1,7 +1,7 @@
-#ifndef _GUI_EXP_PROGRESS_BAR_H_
-#define _GUI_EXP_PROGRESS_BAR_H_
+#ifndef _GUI_EXP_PROGRESS_BAR_H
+#define _GUI_EXP_PROGRESS_BAR_H
 
-#include "GuiProgressBar.h"
+#include "gui/GuiProgressBar.h"
 #include "Unit.h"
 
 class GuiExpProgressBar : public GuiProgressBar {

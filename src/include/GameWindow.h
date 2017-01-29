@@ -9,7 +9,6 @@
 
 class GameWindow : public Window {
 public:
-
 	// Ctor and dtor ///////////////////////////////////////////////////////////
 	
 	// GameWindow ctor
@@ -48,7 +47,8 @@ public:
 	static ParticleEmitter Emitter;
 
 protected:
-
+	// Vars ////////////////////////////////////////////////////////////////////
+	
 	ParticleDef def;
 
 	Cursor _cursor;

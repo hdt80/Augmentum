@@ -136,6 +136,6 @@ void Asteroid::onDeath() {
 	Object::onDeath();
 
 	GameWindow::Emitter.emit(
-		Databases::ParticleDefDatabase.get("asteroid_death"),
+		&Databases::ParticleDefDatabase.get("asteroid_death"),
 		getX(), getY(), 100, -1);
 }

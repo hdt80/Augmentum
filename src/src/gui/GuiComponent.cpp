@@ -23,9 +23,9 @@ GuiComponent::GuiComponent(Window* window, const GuiEntryStyle* style,
 
 	_background.setSize(sf::Vector2f(_size.X, _size.Y));
 	_background.setPosition(0, 0);
-	_background.setFillColor(compStyle->bodyColor);
-	_background.setOutlineColor(compStyle->borderColor);
-	_background.setOutlineThickness(-compStyle->borderSize);
+	_background.setFillColor(compStyle->getBodyColor());
+	_background.setOutlineColor(compStyle->getBorderColor());
+	_background.setOutlineThickness(-compStyle->getBorderSize());
 
 	_visible = true;
 	_updating = true;
@@ -76,43 +76,18 @@ void GuiComponent::draw(sf::RenderTarget& target,
 	for (GuiEntry* entry : _entries) {
 		target.draw(*entry);
 	}
-
-	//sf::RectangleShape shape;
-	//shape.setFillColor(sf::Color::Transparent);
-	//shape.setOutlineColor(sf::Color::Cyan);
-	//shape.setOutlineThickness(-2.0f);
-	//shape.setSize(sf::Vector2f(_guiEntryStyle->dimensions.X,
-	//			_guiEntryStyle->dimensions.Y));
-
-	//sf::Text text;
-	//text.setOutlineColor(sf::Color::Black);
-	//text.setOutlineThickness(1.0f);
-	//text.setFillColor(sf::Color::White);
-	//text.setFont(FontCache::getDefaultFont());
-	//text.setCharacterSize(18);
-	//target.setView(target.getDefaultView());
-	//for (GuiEntry* entry : _entries) {
-	//	shape.setPosition(entry->getX(), entry->getY());
-	//	text.setPosition(entry->getX(), entry->getY());
-	//	text.setString(convert::format("[%g %g]",
-	//				entry->getX(), entry->getY()));
-	//	target.draw(shape);
-	//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
-	//		target.draw(text);
-	//	}
-	//}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Bounds methods
 ////////////////////////////////////////////////////////////////////////////////
 
-bool GuiComponent::contains(float x, float y) {
+bool GuiComponent::contains(float x, float y) const {
 	return (x >= _pos.X && x <= _size.X + _pos.X &&
 		y >= _pos.Y && y <= _size.Y + _pos.Y);
 }
 
-bool GuiComponent::hasClicked(float x, float y) {
+bool GuiComponent::hasClicked(float x, float y) const {
 	if (!_clickable) {
 		return false;
 	}
@@ -124,7 +99,7 @@ void GuiComponent::addEntry(GuiEntry* entry, float x, float y) {
 	_entries.push_back(entry);
 }
 
-GuiEntry* GuiComponent::getEntry(float x, float y) {
+GuiEntry* GuiComponent::getEntry(float x, float y) const {
 	for (unsigned int i = 0; i < _entries.size(); ++i) {
 		if (_entries[i]->contains(x, y)) {
 			return _entries[i];
@@ -157,7 +132,6 @@ void GuiComponent::onClick(int button, float window_x, float window_y,
 	GuiEntry* clicked = getEntry(window_x, window_y);
 
 	if (!clicked) {
-//		CORE_INFO("[GuiComp %x] No button");
 		return;
 	}
 

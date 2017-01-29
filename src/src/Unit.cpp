@@ -110,7 +110,7 @@ void Unit::onProjectileHit(Projectile* p) {
 }
 
 void Unit::onLevelUp() {
-	GameWindow::Emitter.emit(Databases::ParticleDefDatabase.get("level_up"),
+	GameWindow::Emitter.emit(&Databases::ParticleDefDatabase.get("level_up"),
 		getX(), getY(), 500, -1);
 
 	// Get the max health set by the Stats

@@ -4,14 +4,7 @@
 #include "GuiEntry.h"
 #include "Logger.h"
 
-struct GuiProgressBarStyle {
-	sf::Color minColor; // Color to draw the bar when value = 0
-	sf::Color maxColor; // Color to draw the bar when value = 100
-	sf::Color outlineColor; // Color of the outline around the bar
-	sf::Color backgroundColor; // Color to fill when the bar isn't full
-
-	bool vert; // If the bar should be up/down  TODO: Add this
-};
+#include "gui_style/GuiProgressBarStyle.h"
 
 class GuiProgressBar : public GuiEntry {
 public:
