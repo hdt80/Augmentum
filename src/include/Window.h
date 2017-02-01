@@ -43,9 +43,9 @@ public:
 
 	// Change the Window's state
 	virtual void setState(WindowState state);
-	const WindowState getState() { return _currState; }
-	const std::string getStateString();
-	const std::string getStateString(WindowState state);
+	WindowState getState() const { return _currState; }
+	std::string getStateString() const;
+	std::string getStateString(WindowState state) const;
 
 	// Set the size of the Window
 	// size - New size to make the Window
@@ -53,7 +53,7 @@ public:
 
 	// Get the size of this Window
 	// returns: _size
-	const Vector2& getSize() const { return _size; }
+	inline const Vector2& getSize() const { return _size; }
 
 	// Get the width of the Window
 	// returns: _size.Y

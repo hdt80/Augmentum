@@ -2,10 +2,10 @@
 
 #include "Logger.h"
 #include "Game.h"
-#include "ExperienceHelper.h"
 #include "LuaConfig.h"
 #include "Ship.h"
 #include "environment/Asteroid.h"
+#include "Database.h"
 
 #include "SkillTree.h"
 #include "SkillTreeWindow.h"
@@ -21,6 +21,7 @@
 #include "gui/GuiProgressBar.h"
 #include "gui/GuiExpProgressBar.h"
 
+#include "ExperienceHelper.h"
 #include "util/StringUtil.h"
 #include "util/SFMLUtil.h"
 #include "util/Random.h"
@@ -60,7 +61,7 @@ GameWindow::GameWindow(Vector2 size) {
 	_particleCountText.setOutlineColor(sf::Color::Black);
 	_particleCountText.setFillColor(sf::Color::White);
 
-	
+	GuiEntryStyle::loadFromFile("./lua/gui_styles/world_style.lua");
 
 //	// Style used in the debug panel
 //	GuiEntryStyle* debugStyle = new GuiEntryStyle(*worldStyle);

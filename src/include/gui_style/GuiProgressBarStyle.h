@@ -31,6 +31,51 @@ public:
 	//		will be initalized to zero
 	GuiProgressBarStyle();
 
+	// Static methods //////////////////////////////////////////////////////////
+	
+	// Use a file to create the GuiStyles can be found from that file. Each
+	//		GuiStyle will be found in a table with the name of the GuiStyle that
+	//		is being loaded. For example, when loading GuiEntryStyles from the
+	//		file "lua/gui_styles/GuiEntryStyles.lua", this method will look for
+	//		the table "GuiEntryStyle". That table will contain valid entries
+	//		that the GuiStyle that is being loaded can be created from. The
+	//		sub tables found in the root table will be named what that loaded
+	//		GuiStyle will be saved under in a Database
+	// filePath - Path to the file that the GuiStyles will be loaded from. The
+	//		path is relative to the program's current working directory. This
+	//		should include the file extension.
+	static void loadFromFile(const std::string& filePath) {
+		sol::state lua;
+
+		try {
+			lua.script_file(filePath);
+		} catch (const sol::error& e) {
+			CORE_ERROR("Failed to find file %s", filePath.c_str());
+			return;
+		}
+
+		sol::table table = lua["GuiProgressBarStyle"];
+		if (!table.valid()) {
+			return;
+		}
+
+		auto iter = table.begin();
+		while (iter != table.end()) {
+			CORE_INFO("key: %s", (*iter).first.as<std::string>().c_str());
+
+			sol::table val = (*iter).second.as<sol::table>();
+
+			++iter;
+
+			auto titer = val.begin();
+			while (titer != val.end()) {
+				CORE_INFO("tkey: %s", (*titer).first.as<std::string>().c_str());
+				++titer;
+			}
+
+		}
+	}
+
 	// Methods /////////////////////////////////////////////////////////////////
 	
 	// Load all the value from a sol::table, the table should have the same

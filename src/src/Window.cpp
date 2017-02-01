@@ -73,11 +73,11 @@ void Window::setState(WindowState state) {
 	_currState = state;
 }
 
-const std::string Window::getStateString() {
+std::string Window::getStateString() const {
 	return getStateString(_currState);
 }
 
-const std::string Window::getStateString(WindowState state) {
+std::string Window::getStateString(WindowState state) const {
 	if (state == Running) {
 		return "Running";
 	} else if (state == Paused) {

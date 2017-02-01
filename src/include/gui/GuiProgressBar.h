@@ -19,7 +19,7 @@ public:
 	// min - Min value that value can be
 	// max - Pointer to the max value that value can be
 	GuiProgressBar(GuiComponent* guiComp, const std::string& msg,
-			GuiProgressBarStyle* barStyle, float* value, float min, float* max);
+		GuiProgressBarStyle* barStyle, float* value, float min, float* max);
 
 	// GuiProgressBar dtor
 	virtual ~GuiProgressBar();

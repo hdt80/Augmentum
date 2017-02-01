@@ -6,6 +6,8 @@
 #include "GameWindow.h"
 #include "MainMenuWindow.h"
 
+#include <chrono>
+
 void Game::start() {
 	if (CurrentGameState != Uninitalized) {
 		CORE_ERROR("Attempted to start an initalized gamed");

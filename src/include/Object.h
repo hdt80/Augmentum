@@ -5,7 +5,6 @@
 
 #include "Box2D/Box2D.h"
 
-#include "SkillTree.h"
 #include "LuaScript.h"
 #include "Scriptable.h"
 

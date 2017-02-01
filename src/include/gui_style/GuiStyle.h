@@ -15,54 +15,13 @@ public:
 	// name - Name of the LuaConfigEntry that the values will be loaded from
 	GuiStyle(const std::string& name);
 
-	// Static methods //////////////////////////////////////////////////////////
-	
-	// Use a file to create the GuiStyles can be found from that file. Each
-	//		GuiStyle will be found in a table with the name of the GuiStyle that
-	//		is being loaded. For example, when loading GuiEntryStyles from the
-	//		file "lua/gui_styles/GuiEntryStyles.lua", this method will look for
-	//		the table "GuiEntryStyle". That table will contain valid entries
-	//		that the GuiStyle that is being loaded can be created from. The
-	//		sub tables found in the root table will be named what that loaded
-	//		GuiStyle will be saved under in a Database
-	// template T - Type that is being loaded. This is needed so we can pass
-	//		the Database of <T> that the loaded GuiStyles are being stored into
-	// filePath - Path to the file that the GuiStyles will be loaded from. The
-	//		path is relative to the program's current working directory. This
-	//		should include the file extension.
-	// typeName - Name of the type to load from. This is the name of the root
-	//		table all the sub tables are iterated for
-	// returns: A std::map of each loaded GuiStyle. The key is the name the
-	//		sub table was found under. The value is the loaded GuiStyle
-	//		that was loaded
-	template<typename T>
-	static std::map<std::string, T> loadFromFile(const std::string& filePath,
-		const std::string& typeName) {
-//
-//		sol::state lua;
-//		std::map<std::string, T> loaded;
-//
-//		if (!lua.load_file(filePath)) {
-//			CORE_ERROR("Failed to find file %s", filePath.c_str());
-//			return loaded;
-//		}
-//
-//		sol::table table = lua[typeName];
-//
-//		for (auto iter : table) {
-//			CORE_INFO("%s:%s", iter.first, iter.second);
-//		}
-//
-//		return loaded;
-	}
-
 	// Methods /////////////////////////////////////////////////////////////////
 	
 	// Load all the value from a sol::table, the table should have the same
 	//		name as _name
 	// table - Table to load the values from
-	virtual void readFromTable(const sol::table& table) {};
-	
+	virtual void readFromTable(const sol::table& table) = 0;
+
 protected:
 	// Methods /////////////////////////////////////////////////////////////////
 	

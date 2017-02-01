@@ -6,7 +6,7 @@
 #include "Vector2.h"
 
 class GuiComponent;
-struct GuiEntryStyle;
+class GuiEntryStyle;
 
 class GuiEntry : public sf::Drawable {
 public:

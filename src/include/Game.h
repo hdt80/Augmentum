@@ -2,7 +2,6 @@
 #define _GAME_H
 
 #include <SFML/Graphics.hpp>
-#include <chrono>
 
 #include "Window.h"
 #include "PauseWindow.h"
@@ -11,7 +10,6 @@
 #include "FPS.h"
 #include "DebugDraw.h"
 #include "Console.h"
-#include "Database.h"
 
 #define REFRESH_RATE 16666 // 60 FPS - 16.666ms between each frame
 

@@ -2,7 +2,9 @@
 #define _UNIT_H
 
 #include "Entity.h"
+
 #include "Cooldown.h"
+#include "SkillTree.h"
 
 // A Unit has all the properties of an Entity, but also has stats and perks 
 // that change how the Unit functions. A Unit takes and deals damage, typically

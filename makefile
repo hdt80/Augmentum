@@ -40,9 +40,7 @@ ifeq ($(VERBOSE), 1)
 endif
 
 # Enable all warnings but format and unused variables
-CXX_FLAGS += -Wall -Wno-format -Wno-unused-variable -Wno-varargs -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -std=c++14
 
-export CXX_FLAGS
 export CXX
 
 OUTPUT_NAME = Augmentum
@@ -56,6 +54,14 @@ CSRCS = $(wildcard $(SRCDIR)/*.c)
 # Where the compiled objects are located
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SRCS))
 COBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(CSRCS))
+
+CXX_FLAGS += -Wall -Wextra -Wno-unused-parameter -Wno-format -Wno-unused-variable -Wno-varargs -MMD -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -std=c++14
+
+DEPS := $(OBJS:.o=.d)
+
+-include $(DEPS)
+
+export CXX_FLAGS
 
 # Linking all the .o files and with the libs
 build: $(OBJS) $(COBJS)

@@ -1,4 +1,4 @@
-config = {
+GuiEntryStyle = {
 	world_style = {
 		fontName = "pixel",
 		bodyColor = {
