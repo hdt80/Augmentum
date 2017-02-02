@@ -1,5 +1,6 @@
 GuiEntryStyle = {
-	world_style = {
+
+	world = {
 		fontName = "pixel",
 		bodyColor = {
 			R = 128,
@@ -14,9 +15,9 @@ GuiEntryStyle = {
 			A = 255
 		},
 		textColor = {
-			R = 0,
-			G = 0,
-			B = 0,
+			R = 255,
+			G = 255,
+			B = 255,
 			A = 255
 		},
 		highlightedColor = {
@@ -46,7 +47,7 @@ GuiEntryStyle = {
 		textSize = -1
 	},
 
-	debug_style = {
+	debug = {
 		fontName = "pixel",
 		bodyColor = {
 			R = 0,
@@ -61,9 +62,9 @@ GuiEntryStyle = {
 			A = 0
 		},
 		textColor = {
-			R = 0,
-			G = 0,
-			B = 0,
+			R = 255,
+			G = 255,
+			B = 255,
 			A = 255
 		},
 		highlightedColor = {
@@ -93,7 +94,7 @@ GuiEntryStyle = {
 		textSize = -1
 	},
 
-	hud_style = {
+	hud = {
 		fontName = "pixel",
 		bodyColor = {
 			R = 0,
@@ -138,5 +139,52 @@ GuiEntryStyle = {
 		borderSize = 1,
 		padding = 0,
 		textSize = -1
-	}
+	},
+
+	toolbar = {
+		fontName = "pixel",
+		bodyColor = {
+			R = 0,
+			G = 0,
+			B = 0,
+			A = 0
+		},
+		borderColor = {
+			R = 0,
+			G = 0,
+			B = 0,
+			A = 0
+		},
+		textColor = {
+			R = 0,
+			G = 0,
+			B = 0,
+			A = 255
+		},
+		highlightedColor = {
+			R = 0,
+			G = 0,
+			B = 0,
+			A = 0
+		},
+		highlightedBorderColor = {
+			R = 0,
+			G = 0,
+			B = 0,
+			A = 0
+		},
+		highlightedTextColor = {
+			R = 0,
+			G = 0,
+			B = 0,
+			A = 0
+		},
+		dimensions = {
+			X = 64,
+			Y = 24
+		},
+		borderSize = 1,
+		padding = 0,
+		textSize = -1
+	},
 }

@@ -44,7 +44,7 @@ void GuiEntryStyle::readFromTable(const sol::table& table) {
 	_highlightedBorderColor = getSfColor(table["highlightedBorderColor"]);
 	_highlightedTextColor = getSfColor(table["highlightedTextColor"]);
 
-	_dimensions = Vector2(table["dimensions"]["X"], table["dimensions"]["X"]);
+	_dimensions = Vector2(table["dimensions"]["X"], table["dimensions"]["Y"]);
 
 	_borderSize = table.get<float>("borderSize");
 	_padding = table.get<int>("padding");

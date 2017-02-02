@@ -14,7 +14,7 @@ public:
 	// barStyle - Style to draw this GuiProgressBar
 	// unit - Unit to track to exp of
 	GuiExpProgressBar(GuiComponent* guiComp, const std::string& msg,
-		GuiProgressBarStyle* barStyle, Unit* unit);
+		const GuiProgressBarStyle* barStyle, Unit* unit);
 
 	// GuiExpProgressBar progress bar
 	virtual ~GuiExpProgressBar() {}
@@ -38,6 +38,8 @@ public:
 	virtual float getMin() const;
 
 protected:
+	// Vars ////////////////////////////////////////////////////////////////////
+	
 	Unit* _tracked; // Selected ship
 	int _prevLevel; // Previous level of the tracked unit
 	float _prevMax; // Previous exp needed to reach the next level

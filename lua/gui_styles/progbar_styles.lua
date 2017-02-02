@@ -13,9 +13,9 @@ GuiProgressBarStyle = {
 			A = 255
 		},
 		outlineColor = {
-			R = 255,
-			G = 255,
-			B = 255,
+			R = 0,
+			G = 0,
+			B = 0,
 			A = 255
 		},
 		backgroundColor = {
@@ -33,11 +33,16 @@ GuiProgressBarStyle = {
 			B = 0,
 			A = 255
 		},
-		maxColor = minColor,
-		outlineColor = {
+		maxColor = {
 			R = 255,
-			G = 255,
-			B = 255,
+			G = 215,
+			B = 0,
+			A = 255
+		},
+		outlineColor = {
+			R = 0,
+			G = 0,
+			B = 0,
 			A = 255
 		},
 		backgroundColor = {

@@ -8,7 +8,7 @@
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 GuiExpProgressBar::GuiExpProgressBar(GuiComponent* guiComp,
-		const std::string& msg, GuiProgressBarStyle* barStyle, Unit* unit)
+		const std::string& msg, const GuiProgressBarStyle* barStyle, Unit* unit)
 	: GuiProgressBar(guiComp, msg, barStyle, nullptr, 0, 0),
 		_tracked(unit) {
 

@@ -19,7 +19,8 @@ public:
 	// min - Min value that value can be
 	// max - Pointer to the max value that value can be
 	GuiProgressBar(GuiComponent* guiComp, const std::string& msg,
-		GuiProgressBarStyle* barStyle, float* value, float min, float* max);
+		const GuiProgressBarStyle* barStyle,
+		float* value, float min, float* max);
 
 	// GuiProgressBar dtor
 	virtual ~GuiProgressBar();
@@ -77,7 +78,7 @@ protected:
 	// Update the progress bar based on the current values
 	void updateBar();
 
-	GuiProgressBarStyle* _barStyle;
+	const GuiProgressBarStyle* _barStyle;
 
 	sf::RectangleShape _bar; // Bar to draw, colored portion
 	sf::RectangleShape _barOutline; // Outline of the bar

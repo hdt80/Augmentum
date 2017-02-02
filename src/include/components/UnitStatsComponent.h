@@ -8,6 +8,7 @@ class Entity;
 
 class UnitStatsComponent : public GuiComponent {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
 
 	// UnitStatsComponent ctor
 	// window - Window this GuiComponent is being drawn to
@@ -28,6 +29,8 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
+	// Vars ////////////////////////////////////////////////////////////////////
+	
 	Entity* _hovered; // Unit the mouse is hovering over
 
 	Map* _map; // Map to get the Units off of

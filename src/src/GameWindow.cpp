@@ -69,86 +69,85 @@ GameWindow::GameWindow(Vector2 size) {
 	GuiProgressBarStyle::loadFromFile("./lua/gui_styles/progbar_styles.lua");
 	GuiComponentStyle::loadFromFile("./lua/gui_styles/comp_styles.lua");
 
-//	// Style with a transparent background
-//	GuiComponentStyle* transStyle = new GuiComponentStyle();
-//	transStyle->bodyColor = sf::Color::Transparent;
-//	transStyle->borderColor = sf::Color::Transparent;
-//	transStyle->borderSize = 0;
-//	Databases::GuiComponentStyleDatabase.store("trans", *transStyle);
-//
-//	GuiEntryStyle* toolbarStyle = new GuiEntryStyle(*debugStyle);
-//	toolbarStyle->dimensions = Vector2(64, 24);
-//
-//	GuiToolbarComponent* hud = new GuiToolbarComponent(this, hudStyle, transStyle,
-//		Vector2(0, 0), Vector2(_size.X, 60), true);
-//
-//	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this, toolbarStyle,
-//		Databases::GuiComponentStyleDatabase.get("style"),
-//		Vector2(8, 8), Vector2(_size.X - 48, 96), true);
-//
-//	WorldComponent* worldComp = new WorldComponent(this, worldStyle, transStyle,
-//		Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
-//	
-//	DebugWorldComponent* dComp = new DebugWorldComponent(this, debugStyle,
-//		compStyle, Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
-//
-//	UnitStatsComponent* usComp = new UnitStatsComponent(this, debugStyle,
-//		transStyle, Vector2(8, 64), Vector2(240, _size.Y - 24));
-//
-//	hud->addEntry(new GuiProgressBar(hud, "HP", progBar,
-//		&Game::getMap().getSelected()->getHealth(), 0,
-//		&Game::getMap().getSelected()->getMaxHealth()));
-//
-//	hud->addEntry(new GuiExpProgressBar(hud,
-//		"EXP", expBarStyle, Game::getMap().getSelected()), 0, 48);
-//
-//	toolbar->addEntry(new GuiMenuButton(toolbar, "Debug", dComp));
-//
-//	//addComponent(toolbar);
-//	//addComponent(dComp);
-//	addComponent(hud);
-//	addComponent(worldComp);
-//	addComponent(usComp);
-//
-//	def.lifetime = 3.0f;
-//	def.coneOfDispersion = 15.0f;
-//	def.speedVariation = 0.0f;
-//	def.initColor = sf::Color(255, 0, 0);
-//	def.endColor = def.initColor;
-//	def.fade = true;
-//	def.speed = 30.0f;
-//	def.slowDown = false;
-//	Databases::ParticleDefDatabase.store("test_parts", def);
-//
-//	ParticleDef levelPDef;
-//	levelPDef.lifetime = 3.0f;
-//	levelPDef.coneOfDispersion = 360.0f;
-//	levelPDef.speedVariation = 20.0f;
-//	levelPDef.initColor = sf::Color(80, 80, 255);
-//	levelPDef.endColor = levelPDef.initColor;
-//	levelPDef.fade = true;
-//	levelPDef.speed = 50.0f;
-//	levelPDef.slowDown = false;
-//	Databases::ParticleDefDatabase.store("level_up", levelPDef);
-//
-//	ParticleDef asteroid_death;
-//	asteroid_death = levelPDef;
-//	asteroid_death.initColor = sf::Color(80, 80, 80);
-//	asteroid_death.endColor = asteroid_death.initColor;
-//	Databases::ParticleDefDatabase.store("asteroid_death", asteroid_death);
-//
-//	ParticleDef hitDef;
-//	hitDef.lifetime = 2.0f;
-//	hitDef.coneOfDispersion = 45.0f;
-//	hitDef.speedVariation = 20.0f;
-//	hitDef.initColor = sf::Color(255, 0, 0);
-//	hitDef.endColor = sf::Color(220, 0, 0);
-//	hitDef.fade = true;
-//	hitDef.speed = 30.0f;
-//	hitDef.slowDown = false;
-//	Databases::ParticleDefDatabase.store("hit", hitDef);
-//
+	GuiToolbarComponent* hud = new GuiToolbarComponent(this,
+		&Databases::GuiEntryStyleDatabase.get("hud"),
+		&Databases::GuiComponentStyleDatabase.get("trans"),
+		Vector2(0, 0), Vector2(_size.X, 60), true);
 
+	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this,
+		&Databases::GuiEntryStyleDatabase.get("toolbar"),
+		&Databases::GuiComponentStyleDatabase.get("style"),
+		Vector2(8, 8), Vector2(_size.X - 48, 96), true);
+
+	WorldComponent* worldComp = new WorldComponent(this,
+		&Databases::GuiEntryStyleDatabase.get("world"),
+		&Databases::GuiComponentStyleDatabase.get("trans"),
+		Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
+	
+	DebugWorldComponent* dComp = new DebugWorldComponent(this,
+		&Databases::GuiEntryStyleDatabase.get("debug"),
+		&Databases::GuiComponentStyleDatabase.get("style"),
+		Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
+
+	UnitStatsComponent* usComp = new UnitStatsComponent(this,
+		&Databases::GuiEntryStyleDatabase.get("debug"),
+		&Databases::GuiComponentStyleDatabase.get("trans"),
+		Vector2(8, 64), Vector2(240, _size.Y - 24));
+
+	hud->addEntry(new GuiProgressBar(hud, "HP",
+		&Databases::GuiProgressBarStyleDatabase.get("hp_bar"),
+		&Game::getMap().getSelected()->getHealth(), 0,
+		&Game::getMap().getSelected()->getMaxHealth()));
+
+	hud->addEntry(new GuiExpProgressBar(hud, "EXP",
+		&Databases::GuiProgressBarStyleDatabase.get("exp_bar"),
+		Game::getMap().getSelected()), 0, 48);
+
+	toolbar->addEntry(new GuiMenuButton(toolbar, "Debug", dComp));
+
+	//addComponent(toolbar);
+	//addComponent(dComp);
+	addComponent(hud);
+	addComponent(worldComp);
+	addComponent(usComp);
+
+	def.lifetime = 3.0f;
+	def.coneOfDispersion = 15.0f;
+	def.speedVariation = 0.0f;
+	def.initColor = sf::Color(255, 0, 0);
+	def.endColor = def.initColor;
+	def.fade = true;
+	def.speed = 30.0f;
+	def.slowDown = false;
+	Databases::ParticleDefDatabase.store("test_parts", def);
+
+	ParticleDef levelPDef;
+	levelPDef.lifetime = 3.0f;
+	levelPDef.coneOfDispersion = 360.0f;
+	levelPDef.speedVariation = 20.0f;
+	levelPDef.initColor = sf::Color(80, 80, 255);
+	levelPDef.endColor = levelPDef.initColor;
+	levelPDef.fade = true;
+	levelPDef.speed = 50.0f;
+	levelPDef.slowDown = false;
+	Databases::ParticleDefDatabase.store("level_up", levelPDef);
+
+	ParticleDef asteroid_death;
+	asteroid_death = levelPDef;
+	asteroid_death.initColor = sf::Color(80, 80, 80);
+	asteroid_death.endColor = asteroid_death.initColor;
+	Databases::ParticleDefDatabase.store("asteroid_death", asteroid_death);
+
+	ParticleDef hitDef;
+	hitDef.lifetime = 2.0f;
+	hitDef.coneOfDispersion = 45.0f;
+	hitDef.speedVariation = 20.0f;
+	hitDef.initColor = sf::Color(255, 0, 0);
+	hitDef.endColor = sf::Color(220, 0, 0);
+	hitDef.fade = true;
+	hitDef.speed = 30.0f;
+	hitDef.slowDown = false;
+	Databases::ParticleDefDatabase.store("hit", hitDef);
 }
 
 GameWindow::~GameWindow() {

@@ -29,7 +29,6 @@ struct ParticleDef {
 // Singleton class that does all the updating and emitting
 class ParticleEmitter : public sf::Drawable, public sf::Transformable {
 public:
-
 	// Ctor and Dtor ///////////////////////////////////////////////////////////
 	
 	// ParticleEmitter ctor
@@ -38,13 +37,15 @@ public:
 	// ParticleEmitter dtor
 	~ParticleEmitter();
 
-	// Emit particles
+	// Methods /////////////////////////////////////////////////////////////////
+	
+	// Emit particles at a position
 	// pDef - Particle Definition to use when emitting
 	// x - X coord to emit from
 	// y - Y coord to emit from
 	// amt - Amount of particles to add
 	// angle - Angle to shoot the particles at
-	//			If angle is < 0, then a random angle between 0-360 is picked
+	//		If angle is < 0, then a random angle between 0-360 is picked
 	void emit(const ParticleDef* pDef, float x, float y, int amt, float angle);
 
 	// Update all particles

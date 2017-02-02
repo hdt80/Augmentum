@@ -9,6 +9,12 @@ class WorldComponent : public GuiComponent {
 public:
 	// Ctor and dtor ///////////////////////////////////////////////////////////
 	
+	// WorldComponent ctor
+	// window - Window the WorldComponent is drawn in
+	// style - Style to draw the GuiEntrys as
+	// compStyle - Style to draw the WorldComponent as
+	// pos - Position of the WorldComponent relative to the window
+	// size - Size of the WorldComponent is pixels
 	WorldComponent(Window* window, const GuiEntryStyle* style,
 			const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size);		
 

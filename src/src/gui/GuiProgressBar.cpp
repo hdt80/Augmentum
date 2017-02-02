@@ -12,7 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 GuiProgressBar::GuiProgressBar(GuiComponent* guiComp,
-		const std::string& msg, GuiProgressBarStyle* barStyle,
+		const std::string& msg, const GuiProgressBarStyle* barStyle,
 		float* value, float min, float* max)
 	: GuiEntry(guiComp, msg),
 		_barStyle(barStyle), _value(value), _prevValue(-1),
