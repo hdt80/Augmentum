@@ -1,15 +1,10 @@
 #ifndef _DATABASE_H
 #define _DATABASE_H
 
+#include "Logger.h"
+
 #include <map>
 #include <string>
-
-// Types being put into a Database
-#include <SFML/Graphics.hpp>
-#include "gui_style/GuiEntryStyle.h"
-#include "gui_style/GuiComponentStyle.h"
-#include "gui_style/GuiProgressBarStyle.h"
-#include "ParticleEmitter.h"
 
 template<typename T>
 class Database {
@@ -35,8 +30,9 @@ public:
 		return _database.at(name);
 	}
 
-	// Check if an object is loaded
+	// Check if an object is loaded and stored in the Database
 	// name - Name to check for
+	// returns: If the name has a mapped value in the Database
 	bool isStored(const std::string& name) const {
 		return _database.find(name) != _database.end();
 	}
@@ -55,14 +51,5 @@ protected:
 	std::map<std::string, T> _database; // Mapped stored objects
 	 T _default; // Default value
 };
-
-// Database types that are allowed
-namespace Databases {
-	extern Database<sf::Font> FontDatabase;
-	extern Database<GuiEntryStyle> GuiEntryStyleDatabase;
-	extern Database<GuiComponentStyle> GuiComponentStyleDatabase;
-	extern Database<GuiProgressBarStyle> GuiProgressBarStyleDatabase;
-	extern Database<ParticleDef> ParticleDefDatabase;
-}
 
 #endif

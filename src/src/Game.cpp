@@ -184,3 +184,11 @@ FPS Game::Fps;
 sf::RenderWindow Game::_window;
 PauseWindow		 Game::_pauseWindow;
 Vector2			 Game::_size;
+
+namespace Databases {
+	Database<sf::Font> FontDatabase;
+	Database<GuiEntryStyle> GuiEntryStyleDatabase;
+	Database<GuiComponentStyle> GuiComponentStyleDatabase;
+	Database<GuiProgressBarStyle> GuiProgressBarStyleDatabase;
+	Database<ParticleDef> ParticleDefDatabase;
+}

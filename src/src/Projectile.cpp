@@ -9,7 +9,8 @@
 #include "Map.h"
 #include "BitWise.h"
 #include "GameWindow.h"
-#include "Database.h"
+#include "Game.h"
+
 #include "util/MathUtil.h"
 
 ////////////////////////////////////////////////////////////////////////////////

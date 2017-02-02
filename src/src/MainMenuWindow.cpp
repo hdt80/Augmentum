@@ -1,6 +1,6 @@
 #include "MainMenuWindow.h"
 
-#include "Database.h"
+#include "Game.h"
 #include "GameWindow.h"
 
 #include "gui/GuiComponent.h"

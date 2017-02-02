@@ -1,6 +1,6 @@
 #include "gui_style/GuiEntryStyle.h"
 
-#include "Database.h"
+#include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -56,31 +56,6 @@ void GuiEntryStyle::readFromTable(const sol::table& table) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void GuiEntryStyle::loadFromFile(const std::string& filePath) {
-	sol::state lua;
-
-	try {
-		lua.script_file(filePath);
-	} catch (const sol::error& e) {
-		CORE_ERROR("Failed to find file %s", filePath.c_str());
-		return;
-	}
-
-	sol::table table = lua["GuiEntryStyle"];
-	if (!table.valid()) {
-		return;
-	}
-
-	auto iter = table.begin();
-	while (iter != table.end()) {
-		CORE_INFO("key: %s", (*iter).first.as<std::string>().c_str());
-
-		std::string key = (*iter).first.as<std::string>();
-		sol::table val = (*iter).second.as<sol::table>();
-
-		++iter;
-
-		GuiEntryStyle style;
-		style.readFromTable(val);
-		Databases::GuiEntryStyleDatabase.store(key, style);
-	}
+	GuiStyle::loadFromFile<GuiEntryStyle>(filePath, "GuiEntryStyle",
+		Databases::GuiEntryStyleDatabase);
 }

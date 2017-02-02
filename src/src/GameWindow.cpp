@@ -21,6 +21,10 @@
 #include "gui/GuiProgressBar.h"
 #include "gui/GuiExpProgressBar.h"
 
+#include "gui_style/GuiEntryStyle.h"
+#include "gui_style/GuiComponentStyle.h"
+#include "gui_style/GuiProgressBarStyle.h"
+
 #include "ExperienceHelper.h"
 #include "util/StringUtil.h"
 #include "util/SFMLUtil.h"
@@ -61,44 +65,10 @@ GameWindow::GameWindow(Vector2 size) {
 	_particleCountText.setOutlineColor(sf::Color::Black);
 	_particleCountText.setFillColor(sf::Color::White);
 
-	GuiEntryStyle::loadFromFile("./lua/gui_styles/world_style.lua");
+	GuiEntryStyle::loadFromFile("./lua/gui_styles/entry_styles.lua");
+	GuiProgressBarStyle::loadFromFile("./lua/gui_styles/progbar_styles.lua");
+	GuiComponentStyle::loadFromFile("./lua/gui_styles/comp_styles.lua");
 
-//	// Style used in the debug panel
-//	GuiEntryStyle* debugStyle = new GuiEntryStyle(*worldStyle);
-//	debugStyle->bodyColor = sf::Color::Transparent;
-//	debugStyle->borderColor = sf::Color::Transparent;
-//	debugStyle->highlightedColor = sf::Color::Transparent;
-//	debugStyle->highlightedBorderColor = sf::Color::Transparent;
-//	debugStyle->highlightedTextColor = sf::Color::Transparent;
-//	Databases::GuiEntryStyleDatabase.store("debug_style", *debugStyle);
-//
-//	// Style used in the HUD
-//	GuiEntryStyle* hudStyle = new GuiEntryStyle(*debugStyle);
-//	hudStyle->dimensions = Vector2(_size.X, 30);
-//
-//	// Progress bar for a health bar
-//	GuiProgressBarStyle* progBar = new GuiProgressBarStyle();
-//	progBar->minColor = sf::Color::Red;
-//	progBar->maxColor = sf::Color::Green;
-//	progBar->outlineColor = sf::Color::Black;
-//	progBar->backgroundColor = sf::Color(60, 60, 60);
-//	Databases::GuiProgressBarStyleDatabase.store("hp_bar", *progBar);
-//
-//	// Progess bar for exp bar
-//	GuiProgressBarStyle* expBarStyle = new GuiProgressBarStyle();
-//	expBarStyle->minColor = sf::Color(255, 215, 0); // Goldish
-//	expBarStyle->maxColor = expBarStyle->minColor;
-//	expBarStyle->outlineColor = sf::Color::Black;
-//	expBarStyle->backgroundColor = sf::Color(238, 232, 170); // Light yellow
-//	Databases::GuiProgressBarStyleDatabase.store("exp_bar", *expBarStyle);
-//
-//	//
-//	GuiComponentStyle* compStyle = new GuiComponentStyle();
-//	compStyle->bodyColor = sf::Color(64, 64, 64);
-//	compStyle->borderColor = sf::Color(180, 180, 180);
-//	compStyle->borderSize = 1.0f;
-//	Databases::GuiComponentStyleDatabase.store("style", *compStyle);
-//
 //	// Style with a transparent background
 //	GuiComponentStyle* transStyle = new GuiComponentStyle();
 //	transStyle->bodyColor = sf::Color::Transparent;

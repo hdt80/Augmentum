@@ -10,6 +10,11 @@
 #include "FPS.h"
 #include "DebugDraw.h"
 #include "Console.h"
+#include "Database.h"
+#include "gui_style/GuiEntryStyle.h"
+#include "gui_style/GuiComponentStyle.h"
+#include "gui_style/GuiProgressBarStyle.h"
+#include "ParticleEmitter.h"
 
 #define REFRESH_RATE 16666 // 60 FPS - 16.666ms between each frame
 
@@ -84,5 +89,14 @@ protected:
 	static PauseWindow _pauseWindow; // Global pause window
 	static Vector2 _size; // Size of the window
 };
+
+// Global Databases that are used by lots of classes
+namespace Databases {
+	extern Database<sf::Font> FontDatabase;
+	extern Database<GuiEntryStyle> GuiEntryStyleDatabase;
+	extern Database<GuiComponentStyle> GuiComponentStyleDatabase;
+	extern Database<GuiProgressBarStyle> GuiProgressBarStyleDatabase;
+	extern Database<ParticleDef> ParticleDefDatabase;
+}
 
 #endif

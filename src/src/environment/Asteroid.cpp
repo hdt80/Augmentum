@@ -1,10 +1,11 @@
 #include "environment/Asteroid.h"
 
 #include "Map.h"
+#include "GameWindow.h"
+#include "Game.h"
+
 #include "util/Random.h"
 #include "util/MathUtil.h"
-#include "GameWindow.h"
-#include "Database.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Asteroid ctor and dtor

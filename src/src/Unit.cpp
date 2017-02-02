@@ -4,7 +4,7 @@
 #include "Projectile.h"
 #include "ExperienceHelper.h"
 #include "GameWindow.h"
-#include "Database.h"
+#include "Game.h"
 
 #include "util/MathUtil.h"
 #include "util/ObjectUtil.h"

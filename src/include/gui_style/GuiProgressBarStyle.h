@@ -44,37 +44,7 @@ public:
 	// filePath - Path to the file that the GuiStyles will be loaded from. The
 	//		path is relative to the program's current working directory. This
 	//		should include the file extension.
-	static void loadFromFile(const std::string& filePath) {
-		sol::state lua;
-
-		try {
-			lua.script_file(filePath);
-		} catch (const sol::error& e) {
-			CORE_ERROR("Failed to find file %s", filePath.c_str());
-			return;
-		}
-
-		sol::table table = lua["GuiProgressBarStyle"];
-		if (!table.valid()) {
-			return;
-		}
-
-		auto iter = table.begin();
-		while (iter != table.end()) {
-			CORE_INFO("key: %s", (*iter).first.as<std::string>().c_str());
-
-			sol::table val = (*iter).second.as<sol::table>();
-
-			++iter;
-
-			auto titer = val.begin();
-			while (titer != val.end()) {
-				CORE_INFO("tkey: %s", (*titer).first.as<std::string>().c_str());
-				++titer;
-			}
-
-		}
-	}
+	static void loadFromFile(const std::string& filePath);
 
 	// Methods /////////////////////////////////////////////////////////////////
 	
