@@ -63,7 +63,8 @@ namespace LuaDefines {
 			"removePerk", &Enemy::removePerk,
 			"hasPerk", &Enemy::hasPerk,
 			"getPerk", &Enemy::getPerk,
-			"getEnemyType", &Enemy::getEnemyType
+			"getEnemyType", &Enemy::getEnemyType,
+			"setToRemove", &Enemy::setToRemove
 		);
 	}
 };

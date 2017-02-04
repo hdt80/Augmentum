@@ -6,8 +6,10 @@ public:
 	// Ctor and dtor ///////////////////////////////////////////////////////////
 	
 	// Ctor for cooldown
-	// defaultCD = Default cooldown to use. A value of -1 means no default set
+	// maxCooldown = Default cooldown to use. A value of -1 means no default set
 	Cooldown(int maxCooldown = -1);
+
+	// Cooldown dtor
 	~Cooldown();
 
 	// Methods /////////////////////////////////////////////////////////////////

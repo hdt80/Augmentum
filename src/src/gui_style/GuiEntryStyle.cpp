@@ -50,12 +50,3 @@ void GuiEntryStyle::readFromTable(const sol::table& table) {
 	_padding = table.get<int>("padding");
 	_textSize = table.get<int>("textSize");
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// Static methods
-////////////////////////////////////////////////////////////////////////////////
-
-void GuiEntryStyle::loadFromFile(const std::string& filePath) {
-	GuiStyle::loadFromFile<GuiEntryStyle>(filePath, "GuiEntryStyle",
-		Databases::GuiEntryStyleDatabase);
-}

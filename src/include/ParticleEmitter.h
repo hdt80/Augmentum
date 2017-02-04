@@ -39,14 +39,26 @@ public:
 
 	// Methods /////////////////////////////////////////////////////////////////
 	
-	// Emit particles at a position
-	// pDef - Particle Definition to use when emitting
+	// Emit particles at a position by using a ParticleDef*
+	// pDef - Particle Definition to use when emitting. If pDef is nullptr then
+	//		no particles will be emitter
 	// x - X coord to emit from
 	// y - Y coord to emit from
 	// amt - Amount of particles to add
 	// angle - Angle to shoot the particles at
 	//		If angle is < 0, then a random angle between 0-360 is picked
 	void emit(const ParticleDef* pDef, float x, float y, int amt, float angle);
+	
+	// Emit particles at a position by using a name lookup
+	// name - Name of the ParticleDef to emit. The name lookup is done in
+	//		Database::ParticleDefDatabase. If no matching name is found then
+	//		the default ParticleDef will be used
+	// x - X coord to emit from
+	// y - Y coord to emit from
+	// amt - Amount of particles to add
+	// angle - Angle to shoot the particles at
+	//		If angle is < 0, then a random angle between 0-360 is picked
+	void emit(const std::string& name, float x, float y, int amt, float angle);
 
 	// Update all particles
 	// diff - Milliseconds since last update

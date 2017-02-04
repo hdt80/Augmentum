@@ -10,14 +10,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 GuiComponent::GuiComponent(Window* window, const GuiEntryStyle* style,
-		const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size) {
+		const GuiComponentStyle* compStyle, Vector2 pos, Vector2 size)
+	: _pos(pos), _size(size),
+		_guiEntryStyle(style), _highlightedEntry(nullptr),
+		_visible(true), _updating(true), _clickable(true),
+		_window(window) {
 
 	// Components start at (0, 0) and not the position because a view represents
 	// a view to a part of a drawing target, and we're drawn to (0, 0)
 	_view.reset(sf::FloatRect(0, 0, size.X, size.Y));
-
-	_pos = pos;
-	_size = size;
 
 	resize(window->getSize());
 
@@ -26,15 +27,6 @@ GuiComponent::GuiComponent(Window* window, const GuiEntryStyle* style,
 	_background.setFillColor(compStyle->getBodyColor());
 	_background.setOutlineColor(compStyle->getBorderColor());
 	_background.setOutlineThickness(-compStyle->getBorderSize());
-
-	_visible = true;
-	_updating = true;
-	_clickable = true;
-
-	_highlightedEntry = nullptr;
-	_guiEntryStyle = style;
-
-	_window = window;
 }
 
 GuiComponent::~GuiComponent() {

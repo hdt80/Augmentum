@@ -1,23 +1,8 @@
 GuiProgressBarStyle = {
 	hp_bar = {
-		minColor = {
-			R = 255,
-			G = 0,
-			B = 0,
-			A = 255
-		},
-		maxColor = {
-			R = 0,
-			G = 255,
-			B = 0,
-			A = 255
-		},
-		outlineColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 255
-		},
+		minColor = Colors.Red(),
+		maxColor = Colors.Green(),
+		outlineColor = Colors.Black(),
 		backgroundColor = {
 			R = 60,
 			G = 60,
@@ -39,12 +24,7 @@ GuiProgressBarStyle = {
 			B = 0,
 			A = 255
 		},
-		outlineColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 255
-		},
+		outlineColor = Colors.Black(),
 		backgroundColor = {
 			R = 238,
 			G = 232,

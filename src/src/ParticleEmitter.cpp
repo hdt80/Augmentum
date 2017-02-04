@@ -3,6 +3,8 @@
 #include <algorithm>
 
 #include "Logger.h"
+#include "Game.h"
+#include "Database.h"
 
 #include "util/Random.h"
 #include "util/MathUtil.h"
@@ -27,10 +29,18 @@ ParticleEmitter::~ParticleEmitter() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-void ParticleEmitter::emit(const ParticleDef* pDef,
-		float x, float y, int amt, float angle) {
+void ParticleEmitter::emit(const ParticleDef* pDef, float x, float y, int amt,
+	float angle) {
 
 	_particles.push_back(ParticleGroup(pDef, x, y, amt, angle));
+}
+
+void ParticleEmitter::emit(const std::string& name, float x, float y, int amt,
+	float angle) {
+
+	const ParticleDef* pDef = &Databases::ParticleDefDatabase.get(name);
+
+	emit(pDef, x, y, amt, angle);
 }
 
 void ParticleEmitter::update(int diff) {

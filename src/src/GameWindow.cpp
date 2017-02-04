@@ -65,9 +65,14 @@ GameWindow::GameWindow(Vector2 size) {
 	_particleCountText.setOutlineColor(sf::Color::Black);
 	_particleCountText.setFillColor(sf::Color::White);
 
-	GuiEntryStyle::loadFromFile("./lua/gui_styles/entry_styles.lua");
-	GuiProgressBarStyle::loadFromFile("./lua/gui_styles/progbar_styles.lua");
-	GuiComponentStyle::loadFromFile("./lua/gui_styles/comp_styles.lua");
+	Databases::GuiEntryStyleDatabase
+		.loadFromFile("./lua/gui_styles/entry_styles.lua", "GuiEntryStyle");
+
+	Databases::GuiComponentStyleDatabase
+		.loadFromFile("./lua/gui_styles/comp_styles.lua", "GuiComponentStyle");
+
+	Databases::GuiProgressBarStyleDatabase.loadFromFile(
+		"./lua/gui_styles/progbar_styles.lua", "GuiProgressBarStyle");
 
 	GuiToolbarComponent* hud = new GuiToolbarComponent(this,
 		&Databases::GuiEntryStyleDatabase.get("hud"),

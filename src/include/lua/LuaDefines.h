@@ -14,8 +14,8 @@ namespace LuaDefines {
 
 	void defineTarget(sol::state& lua);
 	void defineObject(sol::state& lua);
-	void defineCooldown(sol::state& lua); // TODO
-	void defineEnemy(sol::state& lua); // TODO
+	void defineCooldown(sol::state& lua);
+	void defineEnemy(sol::state& lua);
 	void defineGame(sol::state& lua);
 	void defineAsteroid(sol::state& lua);
 	void defineEntity(sol::state& lua);

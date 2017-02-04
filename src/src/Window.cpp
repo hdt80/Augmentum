@@ -175,31 +175,6 @@ void Window::render(sf::RenderWindow& target) {
 		}
 	}
 
-	// Draw the Bounds after so it's over the GuiComps
-	if (_drawCompBounds) {
-		// Draw to the main view
-		target.setView(target.getDefaultView());
-		sf::RectangleShape shape;
-		shape.setFillColor(sf::Color::Transparent);
-		shape.setOutlineColor(sf::Color::Green);
-		shape.setOutlineThickness(-2.0f);
-
-		for (GuiComponent* comp : _components) {
-			// Set the shape's pos to the same as the GuiComp's pos
-			shape.setPosition(comp->getX(), comp->getY());	
-			shape.setSize(sf::Vector2f(comp->getWidth(), comp->getHeight()));
-			target.draw(shape);
-		}
-		// Draw the selected GuiComp on top
-		if (_hoveredComp) {
-			shape.setPosition(_hoveredComp->getX(), _hoveredComp->getY());	
-			shape.setSize(sf::Vector2f(_hoveredComp->getWidth(),
-						_hoveredComp->getHeight()));
-			shape.setOutlineColor(sf::Color::Magenta);
-			target.draw(shape);
-		}
-	}
-
 	// After drawing all components reset where we're drawing to
 	target.setView(target.getDefaultView());
 }

@@ -31,21 +31,12 @@ SkillNode::SkillNode(SkillNode* parent, Perk* perk)
 		SKILL_TREE_NODE_HEIGHT * 2));
 }
 
-SkillNode::SkillNode() {
-	nodePrereq = nullptr;
-	perk = nullptr;
-	
-	left = nullptr;
-	right = nullptr;
+SkillNode::SkillNode()
+	: tree(nullptr), attached(nullptr), points(0), maxPoints(0), depth(0),
+		isLeft(false), nodePrereq(nullptr), perk(nullptr), left(nullptr),
+		right(nullptr) {
 
-    maxPoints = 0;
-    points = 0;
     setPoints(0);
-	depth = 0;
-
-    isLeft = false;
-    tree = nullptr;
-	attached = nullptr;
 
 	box.setSize(sf::Vector2f(SKILL_TREE_NODE_WIDTH * 2,
 		SKILL_TREE_NODE_HEIGHT * 2));

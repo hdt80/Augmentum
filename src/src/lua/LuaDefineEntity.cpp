@@ -39,7 +39,8 @@ namespace LuaDefines {
 				sol::resolve<float(void) const>(&Entity::getMaxHealth)),
 			"setMaxHealth", &Entity::setMaxHealth,
 			"isInvulerable", &Entity::isInvulerable,
-			"setInvulerable", &Entity::setInvulerable
+			"setInvulerable", &Entity::setInvulerable,
+			"setToRemove", &Entity::setToRemove
 		);
 	}
 };

@@ -16,8 +16,8 @@ public:
 	// size - How much of the screen this component takes up (pixels)
 	// vert - If all the GuiEntries are aligned vertically
 	GuiToolbarComponent(Window* window, const GuiEntryStyle* entryStyle,
-			const GuiComponentStyle* comStyle,
-			Vector2 pos, Vector2 size, bool vert);
+		const GuiComponentStyle* comStyle,
+		Vector2 pos, Vector2 size, bool vert);
 
 	// GuiToolbarComponent dtor
 	virtual ~GuiToolbarComponent();

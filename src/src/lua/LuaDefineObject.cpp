@@ -30,7 +30,8 @@ namespace LuaDefines {
 			"isToRemove", &Object::isToRemove,
 			"getVelocity", &Object::getVelocity,
 			"getX", &Object::getX,
-			"getY", &Object::getY
+			"getY", &Object::getY,
+			"setToRemove", &Object::setToRemove
 		);
 	}
 };

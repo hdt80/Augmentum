@@ -14,12 +14,7 @@ GuiEntryStyle = {
 			B = 180,
 			A = 255
 		},
-		textColor = {
-			R = 255,
-			G = 255,
-			B = 255,
-			A = 255
-		},
+		textColor = Colors.White(),
 		highlightedColor = {
 			R = 24,
 			G = 24,
@@ -49,42 +44,12 @@ GuiEntryStyle = {
 
 	debug = {
 		fontName = "pixel",
-		bodyColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		borderColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		textColor = {
-			R = 255,
-			G = 255,
-			B = 255,
-			A = 255
-		},
-		highlightedColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		highlightedBorderColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		highlightedTextColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
+		bodyColor = Colors.Transparent(),
+		borderColor = Colors.Transparent(),
+		textColor = Colors.White(),
+		highlightedColor = Colors.Transparent(),
+		highlightedBorderColor = Colors.Transparent(),
+		highlightedTextColor = Colors.Transparent(),
 		dimensions = {
 			X = 180,
 			Y = 20
@@ -96,42 +61,12 @@ GuiEntryStyle = {
 
 	hud = {
 		fontName = "pixel",
-		bodyColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		borderColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		textColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 255
-		},
-		highlightedColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		highlightedBorderColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		highlightedTextColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
+		bodyColor = Colors.Transparent(),
+		borderColor = Colors.Transparent(),
+		textColor = Colors.Black(),
+		highlightedColor = Colors.Transparent(),
+		highlightedBorderColor = Colors.Transparent(),
+		highlightedTextColor = Colors.Transparent(),
 		dimensions = {
 			X = 900,
 			Y = 30
@@ -143,42 +78,12 @@ GuiEntryStyle = {
 
 	toolbar = {
 		fontName = "pixel",
-		bodyColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		borderColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		textColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 255
-		},
-		highlightedColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		highlightedBorderColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
-		highlightedTextColor = {
-			R = 0,
-			G = 0,
-			B = 0,
-			A = 0
-		},
+		bodyColor = Colors.Transparent(),
+		borderColor = Colors.Transparent(),
+		textColor = Colors.White(),
+		highlightedColor = Colors.Transparent(),
+		highlightedBorderColor = Colors.Transparent(),
+		highlightedTextColor = Colors.Transparent(),
 		dimensions = {
 			X = 64,
 			Y = 24

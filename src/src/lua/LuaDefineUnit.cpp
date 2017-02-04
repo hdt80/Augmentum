@@ -64,7 +64,8 @@ namespace LuaDefines {
 			"addPerk", &Unit::addPerk,
 			"removePerk", &Unit::removePerk,
 			"hasPerk", &Unit::hasPerk,
-			"getPerk", &Unit::getPerk
+			"getPerk", &Unit::getPerk,
+			"setToRemove", &Unit::setToRemove
 		);
 	}
 };

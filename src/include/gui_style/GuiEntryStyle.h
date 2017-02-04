@@ -45,21 +45,6 @@ public:
 	//		the default properly
 	GuiEntryStyle();
 
-	// Static methods //////////////////////////////////////////////////////////
-	
-	// Use a file to create the GuiStyles can be found from that file. Each
-	//		GuiStyle will be found in a table with the name of the GuiStyle that
-	//		is being loaded. For example, when loading GuiEntryStyles from the
-	//		file "lua/gui_styles/GuiEntryStyles.lua", this method will look for
-	//		the table "GuiEntryStyle". That table will contain valid entries
-	//		that the GuiStyle that is being loaded can be created from. The
-	//		sub tables found in the root table will be named what that loaded
-	//		GuiStyle will be saved under in a Database
-	// filePath - Path to the file that the GuiStyles will be loaded from. The
-	//		path is relative to the program's current working directory. This
-	//		should include the file extension.
-	static void loadFromFile(const std::string& filePath);
-
 	// Methods /////////////////////////////////////////////////////////////////
 	
 	// Load all the value from a sol::table, the table should have the same

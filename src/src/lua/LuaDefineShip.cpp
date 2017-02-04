@@ -65,7 +65,8 @@ namespace LuaDefines {
 			"removePerk", &Ship::removePerk,
 			"hasPerk", &Ship::hasPerk,
 			"getPerk", &Ship::getPerk,
-			"getSideCount", &Ship::getSideCount
+			"getSideCount", &Ship::getSideCount,
+			"setToRemove", &Ship::setToRemove
 		);
 	}
 };
