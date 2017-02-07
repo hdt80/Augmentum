@@ -2,7 +2,7 @@
 
 #include "Map.h"
 #include "GameWindow.h"
-#include "Game.h"
+#include "Databases.h"
 
 #include "util/Random.h"
 #include "util/MathUtil.h"
@@ -137,6 +137,6 @@ void Asteroid::onDeath() {
 	Object::onDeath();
 
 	GameWindow::Emitter.emit(
-		&Databases::ParticleDefDatabase.get("asteroid_death"),
+		&Databases::ParticleDefs.get("asteroid_death"),
 		getX(), getY(), 100, -1);
 }

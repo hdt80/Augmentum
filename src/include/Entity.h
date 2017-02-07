@@ -104,6 +104,7 @@ public:
 	inline void setInvulerable(bool b) { _invulerable = b; }
 
 protected:
+	// Vars ////////////////////////////////////////////////////////////////////
 	
 	FloatingProgressBar _hpBar; // Health bar
 

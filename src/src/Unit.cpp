@@ -4,15 +4,15 @@
 #include "Projectile.h"
 #include "ExperienceHelper.h"
 #include "GameWindow.h"
-#include "Game.h"
+#include "Databases.h"
 
 #include "util/MathUtil.h"
 #include "util/ObjectUtil.h"
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
-///////////////////////////////////////////////////////////////////////////////
-//
+////////////////////////////////////////////////////////////////////////////////
+
 Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		int size, int sides, sf::Color c)
 	: Entity(map, x, y, size, 1),
@@ -84,12 +84,6 @@ Unit::~Unit() {
 		delete _tree;
 	}
 
-	// Deleting a Box2D body by calling the dtor will break a lot of things
-	if (_b2Box) {
-		_map->getWorld()->DestroyBody(_b2Box);
-		_b2Box = nullptr;
-	}
-
 	// Remove all the Perks
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		delete _perks[i];
@@ -110,7 +104,7 @@ void Unit::onProjectileHit(Projectile* p) {
 }
 
 void Unit::onLevelUp() {
-	GameWindow::Emitter.emit(&Databases::ParticleDefDatabase.get("level_up"),
+	GameWindow::Emitter.emit(&Databases::ParticleDefs.get("level_up"),
 		getX(), getY(), 500, -1);
 
 	// Get the max health set by the Stats

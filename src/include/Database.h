@@ -86,11 +86,11 @@ public:
 			return;
 		}
 
+		// Iterate thru the table and load all the valid entries
 		auto iter = table.begin();
 		while (iter != table.end()) {
 			std::string key = (*iter).first.as<std::string>();
 			sol::table val = (*iter).second.as<sol::table>();
-
 			++iter;
 
 			T entry;

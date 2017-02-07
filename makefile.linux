@@ -1,4 +1,4 @@
 # Cleaning everything up
 .PHONY: clean
 clean:
-	find $(BUILDDIR) -name "*.o" -type f  | xargs rm -f && rm $(EXEDIR)/$(OUTPUT_NAME)
+	find $(BUILDDIR) \( -name "*.o" -or -name "*.d" \) -type f  | xargs rm -f && rm $(EXEDIR)/$(OUTPUT_NAME)

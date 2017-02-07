@@ -1,15 +1,11 @@
 #include "Projectile.h"
 
-#include "Enemy.h"
-#include "ParticleEmitter.h"
-#include "Perk.h"
-#include "Common.h"
-#include "Unit.h"
 #include "Logger.h"
 #include "Map.h"
 #include "BitWise.h"
 #include "GameWindow.h"
 #include "Game.h"
+#include "Databases.h"
 
 #include "util/MathUtil.h"
 
@@ -88,7 +84,7 @@ void Projectile::onCollision(Object* o) {
 
 	float angle = MathUtil::radToDeg((-_direction).angle());
 
-	GameWindow::Emitter.emit(&Databases::ParticleDefDatabase.get("hit"),
+	GameWindow::Emitter.emit(&Databases::ParticleDefs.get("hit"),
 		getX(), getY(), 50, angle);
 
 	_toRemove = true;

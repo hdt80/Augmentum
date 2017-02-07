@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Database.h"
+#include "Databases.h"
 #include "Game.h"
 #include "Ship.h"
 #include "environment/Asteroid.h"
@@ -24,7 +25,7 @@
 Console::Console()
 	: _cursorPos(0) {
 
-	_inputText.setFont(Databases::FontDatabase.getDefault());
+	_inputText.setFont(Databases::Fonts.getDefault());
 	_inputText.setCharacterSize(16);
 	_inputText.setFillColor(sf::Color::White);
 	_inputText.setOutlineColor(sf::Color::Black);
@@ -199,7 +200,7 @@ void Console::handleMouseEvent(const sf::Event& e) {
 }
 
 void Console::addOutput(const std::string& line) {
-	sf::Text text(line, Databases::FontDatabase.getDefault(), 16);
+	sf::Text text(line, Databases::Fonts.getDefault(), 16);
 	text.setFillColor(sf::Color::White);
 	text.setOutlineColor(sf::Color::Black);
 	text.setOutlineThickness(1.0f);

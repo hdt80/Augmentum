@@ -1,6 +1,6 @@
 #include "MainMenuWindow.h"
 
-#include "Game.h"
+#include "Databases.h"
 #include "GameWindow.h"
 
 #include "gui/GuiComponent.h"
@@ -13,8 +13,8 @@ MainMenuWindow::MainMenuWindow(GameWindow* playWindow, Vector2 size)
 	: Window("Main Menu", size) {
 
 	_toolbar = new GuiComponent(this,
-		&Databases::GuiEntryStyleDatabase.get("world"),
-		&Databases::GuiComponentStyleDatabase.get("style"),
+		&Databases::GuiEntryStyles.get("world"),
+		&Databases::GuiComponentStyles.get("style"),
 		Vector2(0.0f, 0.0f), size);
 
 	_toolbar->addEntry(new GuiWindowButton(_toolbar, "Play", playWindow),

@@ -20,6 +20,9 @@ public:
 	// Nullary ctor
 	SkillNode();
 
+	// SkillNode ctor
+	// parent - Parent SkillNode in the SkillTree
+	// perk - Perk attached to this SkillNode
 	SkillNode(SkillNode* parent, Perk* perk);
 
 	// SkillNode dtor
@@ -36,7 +39,7 @@ public:
 	bool add(SkillNode* node);
 
 	// Print out the values of the SkillNode
-	void print();
+	void print() const;
 
 	// Unlocked if no parent, if parent is unlocked, and we dont have max points
 	// returns: If this SkillNode is unlocked
@@ -47,7 +50,7 @@ public:
 	const std::string& name() const { return perk->getName(); }
 
 	// Set the position of this SkillNode
-	// newPos - Position to set 
+	// newPos - Position to set
 	void setPos(Vector2 newPos) { pos = newPos; }
 
 	// Get the x coord of this SkillNode
@@ -62,7 +65,7 @@ public:
 	// x - X coord to check
 	// y - Y coord to check
 	// returns: If the point (x, y) is within the bounds of the SkillNode
-	bool contains(float x, float y);
+	bool contains(float x, float y) const;
 
 	// Set how many points the SkillNode has. This will also update the color
 	//		to draw the node as. Red means its locked and no points can be put
@@ -104,7 +107,7 @@ public:
 	
 	// SkillTree ctor
 	// size - Size to draw the SkillTree as
-	SkillTree(Vector2 size = Vector2(0.0f, 0.0f));
+	SkillTree(const Vector2& size = Vector2(0.0f, 0.0f));
 
 	// SkillTree dtor
 	~SkillTree();
@@ -114,7 +117,7 @@ public:
 	// Print out all the SkillNodes that make up the SkillTree
 	// node - Node to print
 	// pos - Should printing also print out the position of each SKillNode?
-	void print(SkillNode* node, bool pos = false);
+	void print(SkillNode* node, bool pos = false) const;
 
 	// Create a copy of the SkillTree
 	// returns: A copy of the SkillTree
@@ -150,7 +153,11 @@ public:
 
 	// Set the Unit the SkillTree is attached to
 	// o - Unit the SkillTree is attached to
-	void setAttached(Unit* o);// { _attached = o; }
+	void setAttached(Unit* o);
+
+	// Get the Unit the SkillTree is attached to
+	// returns: _attached
+	inline Unit* getAttached() const { return _attached; }
 
 	// Set the data of the SkillTree
 	// v - Vector of data to set
@@ -158,10 +165,6 @@ public:
 
 	// We've finished creating this Tree, create the drawable arrays
 	void end();
-
-	// Methods for creating the Arrays
-	void genLines();
-	void genNodes();
 
 	// Set the size of the SkillTree
 	// w - Width of the SkillTree
@@ -180,7 +183,7 @@ public:
 	// x - X coord of the point to check
 	// y - Y coord of the point to check
 	// returns: The SkillNode at that point, or nullptr if no Node was found
-	SkillNode* getNode(float x, float y);
+	SkillNode* getNode(float x, float y) const;
 
 	// Get the number of SkillNodes in the SkillTree
 	// returns: _count
@@ -188,29 +191,41 @@ public:
 
 	// Get the head SkillNode
 	// returns: _head
-	SkillNode* getHead() const { return _head; }
+	inline SkillNode* getHead() const { return _head; }
 
 	// Get the data of the SkillTree
 	// returns: _data
 	inline const std::vector<SkillNode*>& data() const { return _data; }
 
-	sf::VertexArray _lines;
-	sf::VertexArray _nodes;
-	Unit* _attached; // Object we're attached to
-
-    int nodeWidth;
-    int nodeHeight;
-
 protected:
+	// Methods ////////////////////////////////////////////////////////////////
+	
+	// Inherited from sf::Drawable
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
-	// Return the drawing position of a Node
+	// Set the position of a Node and return where its drawn
+	// node - Node to set and get the position of
+	// returns: The position of the Node from the top-left corner in pixels.
+	//		This is relative to the top-left corner of the window
 	Vector2 pos(SkillNode* node);
 
-	SkillNode* _head;
+	// Methods for creating the Arrays
+	void genLines();
+	void genNodes();
+
+	// Vars ////////////////////////////////////////////////////////////////////
+
+	sf::VertexArray _lines; // Lines between the Nodes
+	sf::VertexArray _nodes; // Boxes that represent the Nodes
+	Unit* _attached; // Object we're attached to
+
+    int nodeWidth; // Width of a single Node in pixels
+    int nodeHeight; // Height of a single Node in pixels
+
+	SkillNode* _head; // Head node, root
 	std::vector<SkillNode*> _data;
 
-	int _count;
+	int _count; // How many nodes are in the SkillTree
 	bool _comp; // If the tree is done being created
 
 	Vector2 _size; // Width and Height of the sf::Window it's being drawn to

@@ -4,6 +4,10 @@
 #include "Logger.h"
 #include "Game.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and dtor
+////////////////////////////////////////////////////////////////////////////////
+
 SkillTreeWindow::SkillTreeWindow(SkillTree* tree, Vector2 size) {
 	_size = size;
 	_name = "Skill Tree";
@@ -16,6 +20,10 @@ SkillTreeWindow::SkillTreeWindow(SkillTree* tree, Vector2 size) {
 SkillTreeWindow::~SkillTreeWindow() {
 	
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
 
 void SkillTreeWindow::init() {
     Window::init();
@@ -42,8 +50,8 @@ void SkillTreeWindow::mouseEvent(sf::Event& e) {
         if (node->unlocked()) {
             node->incPoints();
 			if (node->points > 0) {
-				node->attached = _tree->_attached;
-				_tree->_attached->addPerk(node->perk);
+				node->attached = _tree->getAttached();
+				_tree->getAttached()->addPerk(node->perk);
 			}
         }
     }

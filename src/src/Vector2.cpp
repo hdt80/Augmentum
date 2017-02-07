@@ -5,15 +5,15 @@
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-float Vector2::length() {
+float Vector2::length() const {
 	return sqrt(X * X + Y * Y);
 }
 
-float Vector2::sqrtLength() {
+float Vector2::sqrtLength() const {
 	return (X * X + Y * Y);
 }
 
-Vector2 Vector2::normalize() {
+Vector2 Vector2::normalize() const {
 	Vector2 v;
 	float length = this->length();
 
@@ -24,6 +24,6 @@ Vector2 Vector2::normalize() {
 	return v;
 }
 
-float Vector2::angle() {
+float Vector2::angle() const {
 	return std::atan2(Y, X);
 }

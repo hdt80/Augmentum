@@ -1,6 +1,6 @@
 #include "gui_style/GuiEntryStyle.h"
 
-#include "Game.h"
+#include "Databases.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -34,7 +34,7 @@ void GuiEntryStyle::readFromTable(const sol::table& table) {
 	// we take away that constness. We should never ever modify _font once
 	// we do this, or else undefined behaviour occurs
 	_font = const_cast<sf::Font*>
-		(&Databases::FontDatabase.get(table.get<std::string>("fontName")));
+		(&Databases::Fonts.get(table.get<std::string>("fontName")));
 
 	_bodyColor = getSfColor(table["bodyColor"]);
 	_borderColor = getSfColor(table["borderColor"]);

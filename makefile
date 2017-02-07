@@ -55,7 +55,7 @@ CSRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SRCS))
 COBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(CSRCS))
 
-CXX_FLAGS += -Wall -Wextra -Wno-unused-parameter -Wno-format -Wno-unused-variable -Wno-varargs -MMD -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -std=c++14
+CXX_FLAGS += -Wall -Wextra -Wno-unused-parameter -Wno-format -Wno-unused-variable -Wno-varargs -MMD -MP -c -g -O0 -Iinclude -I$(INCLUDEDIR) -fbuiltin -std=c++14
 
 DEPS := $(OBJS:.o=.d)
 

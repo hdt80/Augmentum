@@ -1,6 +1,7 @@
 #include "StateManager.h"
 
 #include "Logger.h"
+#include "Window.h"
 #include "Game.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -8,24 +9,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 StateManager::StateManager() {
-	_game = nullptr;
+
 }
 
 StateManager::~StateManager() {
-	_game = nullptr;	
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
-
-void StateManager::registerGame(Game* game) {
-	if (_game != nullptr) {
-		CORE_ERROR("A Game is already registerd in StateManager");
-		return;
-	}
-	_game = game;
-}
 
 bool StateManager::empty() const {
 	return (_stack.size() == 0);

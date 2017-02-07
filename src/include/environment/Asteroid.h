@@ -1,7 +1,7 @@
 #ifndef _ASTEROID_H
 #define _ASTEROID_H
 
-#include "Unit.h"
+#include "Entity.h"
 
 class Map;
 

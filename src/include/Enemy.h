@@ -20,7 +20,6 @@ protected:
 	EnemyType(int id, const std::string& name, int sides, Stats defStats,
 			Stats levelDiff);
 public:
-
 	// Methods /////////////////////////////////////////////////////////////////
 	
 	// Inherited from LuaConfigEntry
@@ -92,6 +91,8 @@ public:
 	static bool idInUse(unsigned int id);
 
 protected:
+	// Vars ////////////////////////////////////////////////////////////////////
+	
 	int _id; // ID to use internally
 	std::string _name; // Display name of the EnemyType
 	int _sides; // How many sides this EnemyType has, sides determines the type
@@ -142,6 +143,8 @@ public:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 protected:
+	// Vars ////////////////////////////////////////////////////////////////////
+
 	const EnemyType _enemyType; // Type of this Enemy
 };
 

@@ -15,10 +15,17 @@ GuiStyle::GuiStyle(const std::string& name)
 
 sf::Color GuiStyle::getSfColor(const sol::table& table) const {
 	sf::Color color;
-	color.r = table.get<int>("R");
-	color.g = table.get<int>("G");
-	color.b = table.get<int>("B");
-	color.a = table.get<int>("A");
+
+	if (!table.valid()) {
+		CORE_ERROR("Passed table is invalid. Returning default sf::Color");
+		return color;
+	}
+
+	// Default to black
+	color.r = table.get_or("R", 0);
+	color.g = table.get_or("G", 0);
+	color.b = table.get_or("B", 0);
+	color.a = table.get_or("A", 255);
 
 	return color;
 }

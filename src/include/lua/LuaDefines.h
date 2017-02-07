@@ -20,11 +20,11 @@ namespace LuaDefines {
 	void defineAsteroid(sol::state& lua);
 	void defineEntity(sol::state& lua);
 	void defineMap(sol::state& lua);
-	void defineParticleEmitter(sol::state& lua); // TODO
-	void definePerk(sol::state& lua); // TODO
-	void defineProjectile(sol::state& lua); // TODO
+	void defineParticleEmitter(sol::state& lua);
+	void definePerk(sol::state& lua);
+	void defineProjectile(sol::state& lua);
 	void defineShip(sol::state& lua);
-	void defineStats(sol::state& lua); // TODO
+	void defineStats(sol::state& lua);
 	void defineUnit(sol::state& lua);
 	void defineVector2(sol::state& lua); // TODO
 };

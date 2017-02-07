@@ -74,6 +74,10 @@ public:
 	// returns: Value of the stat, or 0 if that stat is not stored in this Stats
 	float getStat(const std::string& name) const;
 
+	// Check if the Stats is a percentage stat
+	// returns: percent
+	inline bool isPercentage() const { return percent; }
+
     //A percentage Stat is used by Perks. Percent stats take base stats
     //To calculate new values.
     //Eg. range(500) * range(0.5) = 250
@@ -82,7 +86,10 @@ public:
     bool percent;
 
 protected:
-	std::map<std::string, float> stats; // Stats
+	// Vars ////////////////////////////////////////////////////////////////////
+	
+	// Stats. Each stat is stored under a name
+	std::map<std::string, float> stats;
 };
 
 #endif

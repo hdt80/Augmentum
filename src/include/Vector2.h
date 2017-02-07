@@ -3,30 +3,35 @@
 
 class Vector2 {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
 	Vector2() : Vector2(0, 0) {}
 	Vector2(float X, float Y) : X(X), Y(Y) {}
 	Vector2(const Vector2& v) : X(v.X), Y(v.Y) {}
 	~Vector2() {};
 
+	// Methods /////////////////////////////////////////////////////////////////
+
 	// Get the Euclidean distance of this Vector
 	// returns: Euclidean distance of this Vector
-	float length();
+	float length() const;
 
 	// Get the Euclidean distance squared of this Vector
 	// returns: Euclidean distance of this Vector squared
-	float sqrtLength();
+	float sqrtLength() const;
 
 	// Turn this Vector into an angle
 	// returns: Angle of the Vector in degrees
-	float angle();
+	float angle() const;
 
 	// Normalize the Vector
 	// returns: This Vector normalized
-	Vector2 normalize();
+	Vector2 normalize() const;
 
 	float X, Y; // Coords of this Vector
 
-	void operator = (const Vector2& a_V) {
+	// Operator overloads //////////////////////////////////////////////////////
+
+	void operator= (const Vector2& a_V) {
 		X = a_V.X;
 		Y = a_V.Y;
 	}

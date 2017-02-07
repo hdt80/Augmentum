@@ -6,6 +6,7 @@
 #include "Ship.h"
 #include "environment/Asteroid.h"
 #include "Database.h"
+#include "Databases.h"
 
 #include "SkillTree.h"
 #include "SkillTreeWindow.h"
@@ -50,62 +51,62 @@ GameWindow::GameWindow(Vector2 size) {
 		CORE_WARN("Couldn't load \'%s\'", "Pixel.ttf");
 	}
 
-	Databases::FontDatabase.setDefault(font);
-	Databases::FontDatabase.store("pixel", font);
+	Databases::Fonts.setDefault(font);
+	Databases::Fonts.store("pixel", font);
 
 	_fpsText.setPosition(12, _size.Y - 40);
-	_fpsText.setFont(Databases::FontDatabase.getDefault());
+	_fpsText.setFont(Databases::Fonts.getDefault());
 	_fpsText.setOutlineThickness(1.0f);
 	_fpsText.setOutlineColor(sf::Color::Black);
 	_fpsText.setFillColor(sf::Color::White);
 
 	_particleCountText.setPosition(12, _size.Y - 80);
-	_particleCountText.setFont(Databases::FontDatabase.getDefault());
+	_particleCountText.setFont(Databases::Fonts.getDefault());
 	_particleCountText.setOutlineThickness(1.0f);
 	_particleCountText.setOutlineColor(sf::Color::Black);
 	_particleCountText.setFillColor(sf::Color::White);
 
-	Databases::GuiEntryStyleDatabase
+	Databases::GuiEntryStyles
 		.loadFromFile("./lua/gui_styles/entry_styles.lua", "GuiEntryStyle");
 
-	Databases::GuiComponentStyleDatabase
+	Databases::GuiComponentStyles
 		.loadFromFile("./lua/gui_styles/comp_styles.lua", "GuiComponentStyle");
 
-	Databases::GuiProgressBarStyleDatabase.loadFromFile(
+	Databases::GuiProgressBarStyles.loadFromFile(
 		"./lua/gui_styles/progbar_styles.lua", "GuiProgressBarStyle");
 
 	GuiToolbarComponent* hud = new GuiToolbarComponent(this,
-		&Databases::GuiEntryStyleDatabase.get("hud"),
-		&Databases::GuiComponentStyleDatabase.get("trans"),
+		&Databases::GuiEntryStyles.get("hud"),
+		&Databases::GuiComponentStyles.get("trans"),
 		Vector2(0, 0), Vector2(_size.X, 60), true);
 
 	GuiToolbarComponent* toolbar = new GuiToolbarComponent(this,
-		&Databases::GuiEntryStyleDatabase.get("toolbar"),
-		&Databases::GuiComponentStyleDatabase.get("style"),
+		&Databases::GuiEntryStyles.get("toolbar"),
+		&Databases::GuiComponentStyles.get("style"),
 		Vector2(8, 8), Vector2(_size.X - 48, 96), true);
 
 	WorldComponent* worldComp = new WorldComponent(this,
-		&Databases::GuiEntryStyleDatabase.get("world"),
-		&Databases::GuiComponentStyleDatabase.get("trans"),
+		&Databases::GuiEntryStyles.get("world"),
+		&Databases::GuiComponentStyles.get("trans"),
 		Vector2(0.0, 0.0), Vector2(_size.X, _size.Y));
 	
 	DebugWorldComponent* dComp = new DebugWorldComponent(this,
-		&Databases::GuiEntryStyleDatabase.get("debug"),
-		&Databases::GuiComponentStyleDatabase.get("style"),
+		&Databases::GuiEntryStyles.get("debug"),
+		&Databases::GuiComponentStyles.get("style"),
 		Vector2(_size.X - 180, 0), Vector2(180, _size.Y));
 
 	UnitStatsComponent* usComp = new UnitStatsComponent(this,
-		&Databases::GuiEntryStyleDatabase.get("debug"),
-		&Databases::GuiComponentStyleDatabase.get("trans"),
+		&Databases::GuiEntryStyles.get("debug"),
+		&Databases::GuiComponentStyles.get("trans"),
 		Vector2(8, 64), Vector2(240, _size.Y - 24));
 
 	hud->addEntry(new GuiProgressBar(hud, "HP",
-		&Databases::GuiProgressBarStyleDatabase.get("hp_bar"),
+		&Databases::GuiProgressBarStyles.get("hp_bar"),
 		&Game::getMap().getSelected()->getHealth(), 0,
 		&Game::getMap().getSelected()->getMaxHealth()));
 
 	hud->addEntry(new GuiExpProgressBar(hud, "EXP",
-		&Databases::GuiProgressBarStyleDatabase.get("exp_bar"),
+		&Databases::GuiProgressBarStyles.get("exp_bar"),
 		Game::getMap().getSelected()), 0, 48);
 
 	toolbar->addEntry(new GuiMenuButton(toolbar, "Debug", dComp));
@@ -124,7 +125,7 @@ GameWindow::GameWindow(Vector2 size) {
 	def.fade = true;
 	def.speed = 30.0f;
 	def.slowDown = false;
-	Databases::ParticleDefDatabase.store("test_parts", def);
+	Databases::ParticleDefs.store("test_parts", def);
 
 	ParticleDef levelPDef;
 	levelPDef.lifetime = 3.0f;
@@ -135,13 +136,13 @@ GameWindow::GameWindow(Vector2 size) {
 	levelPDef.fade = true;
 	levelPDef.speed = 50.0f;
 	levelPDef.slowDown = false;
-	Databases::ParticleDefDatabase.store("level_up", levelPDef);
+	Databases::ParticleDefs.store("level_up", levelPDef);
 
 	ParticleDef asteroid_death;
 	asteroid_death = levelPDef;
 	asteroid_death.initColor = sf::Color(80, 80, 80);
 	asteroid_death.endColor = asteroid_death.initColor;
-	Databases::ParticleDefDatabase.store("asteroid_death", asteroid_death);
+	Databases::ParticleDefs.store("asteroid_death", asteroid_death);
 
 	ParticleDef hitDef;
 	hitDef.lifetime = 2.0f;
@@ -152,7 +153,7 @@ GameWindow::GameWindow(Vector2 size) {
 	hitDef.fade = true;
 	hitDef.speed = 30.0f;
 	hitDef.slowDown = false;
-	Databases::ParticleDefDatabase.store("hit", hitDef);
+	Databases::ParticleDefs.store("hit", hitDef);
 }
 
 GameWindow::~GameWindow() {

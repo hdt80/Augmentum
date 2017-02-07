@@ -75,11 +75,11 @@ bool SkillNode::add(SkillNode* node) {
 	return true;
 }
 
-bool SkillNode::contains(float px, float py) {
+bool SkillNode::contains(float px, float py) const {
 	return (px >= getX() - SKILL_TREE_NODE_WIDTH &&
-			px <= getX() + SKILL_TREE_NODE_WIDTH &&
-			py >= getY() - SKILL_TREE_NODE_HEIGHT &&
-			py <= getY() + SKILL_TREE_NODE_HEIGHT);
+		px <= getX() + SKILL_TREE_NODE_WIDTH &&
+		py >= getY() - SKILL_TREE_NODE_HEIGHT &&
+		py <= getY() + SKILL_TREE_NODE_HEIGHT);
 }
 
 SkillNode* SkillNode::clone(std::vector<SkillNode*>* vec) {
@@ -114,7 +114,7 @@ SkillNode* SkillNode::clone(std::vector<SkillNode*>* vec) {
 	return node;
 }
 
-void SkillNode::print() {
+void SkillNode::print() const {
 	char rel = 'L';
 	if (nodePrereq != nullptr) {
 		if (nodePrereq->right == this) {
@@ -177,20 +177,16 @@ void SkillNode::setPoints(int p) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // SkillTree
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-SkillTree::SkillTree(Vector2 size) {
-	_size = size;
-	_attached = nullptr;
-	_head = nullptr;
-	_count = 0;
-	_comp = false;
+SkillTree::SkillTree(const Vector2& size)
+	: _head(nullptr), _count(0), _comp(false), _size(size) {
 
 	_lines.setPrimitiveType(sf::Lines);
 	_nodes.setPrimitiveType(sf::Quads);
@@ -213,7 +209,7 @@ SkillTree::~SkillTree() {
 // Methods
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkillTree::print(SkillNode* node, bool pos) {
+void SkillTree::print(SkillNode* node, bool pos) const {
 	if (node != nullptr) {
 		if (node->left) {
 			print(node->left, pos);
@@ -298,7 +294,7 @@ int SkillTree::childCount(const SkillNode* node) const {
 	return count + childCount(node->right);
 }
 
-SkillNode* SkillTree::getNode(float x, float y) {
+SkillNode* SkillTree::getNode(float x, float y) const {
 	for (unsigned int i = 0; i < _data.size(); ++i) {
 		if (_data[i]->contains(x, y)) {
 			return _data[i];

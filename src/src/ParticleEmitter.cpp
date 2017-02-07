@@ -4,7 +4,7 @@
 
 #include "Logger.h"
 #include "Game.h"
-#include "Database.h"
+#include "Databases.h"
 
 #include "util/Random.h"
 #include "util/MathUtil.h"
@@ -38,7 +38,7 @@ void ParticleEmitter::emit(const ParticleDef* pDef, float x, float y, int amt,
 void ParticleEmitter::emit(const std::string& name, float x, float y, int amt,
 	float angle) {
 
-	const ParticleDef* pDef = &Databases::ParticleDefDatabase.get(name);
+	const ParticleDef* pDef = &Databases::ParticleDefs.get(name);
 
 	emit(pDef, x, y, amt, angle);
 }

@@ -19,11 +19,7 @@ Ship::Ship(Map* map, float x, float y, Stats s,	Stats lvlDiff,
 }
 
 Ship::~Ship() {
-	// Deleting a Box2D body by calling the dtor will break a lot of things
-	if (_b2Box) {
-		_map->getWorld()->DestroyBody(_b2Box);
-		_b2Box = nullptr;
-	}
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
