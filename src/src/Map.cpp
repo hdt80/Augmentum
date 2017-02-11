@@ -6,7 +6,13 @@
 #include "Logger.h"
 #include "Ship.h"
 #include "Game.h"
+#include "Databases.h"
 #include "environment/Asteroid.h"
+
+#include "ContactListener.h"
+#include "Object.h"
+#include "Enemy.h"
+#include "Projectile.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
@@ -18,9 +24,6 @@ Map::Map()
 	reset();
 
 	_contactListener = new ContactListener(&_world);
-
-	EnemyType::loadEnemyType("./lua/config.lua");
-	EnemyType::loadEnemyType("./lua/et1.lua");
 
 //	CORE_INFO("Distances: ");
 //	int level = 0;
@@ -99,9 +102,11 @@ void Map::reset() {
 	Stats s;
 	s["speed"] = 20.0f;
 	s["projSpeed"] = 50.0f;
+	s["accel"] = 0.4;
 	_selected = new Ship(this, 0.0f, 0.0f, s, Stats(), 20, 4, sf::Color::Blue);
 	_selected->setMaxHealth(30.0f);
 	_selected->setObjectType(ObjectType::FRIENDLY);
+	_selected->setSkillTree(SkillTrees::basicTree);
 
 	addObject(_selected);
 
@@ -139,13 +144,13 @@ Object* Map::objectAt(Object* o, float x, float y) {
 	return nullptr;
 }
 
-void Map::spawnEnemy(float x, float y, int enemyId, int level) {
+void Map::spawnEnemy(float x, float y, const std::string& id, int level) {
 	Enemy* e = nullptr;
-	if (EnemyType::idInUse(enemyId)) {
-		e = new Enemy(this, x, y, 20, *EnemyType::getById(enemyId));	
+	if (Databases::EnemyTypes.has(id)) {
+		e = new Enemy(this, x, y, 20, Databases::EnemyTypes.get(id));
 	} else {
-		CORE_WARN("Id %d is not a valid id!", enemyId);
-		e = new Enemy(this, x, y, 20, *EnemyType::getDefaultType());
+		CORE_WARN("Id %s is not a valid id!", id.c_str());
+		e = new Enemy(this, x, y, 20, Databases::EnemyTypes.getDefault());
 	}
 
 	if (e == nullptr) {
@@ -162,7 +167,7 @@ void Map::spawnEnemy(float x, float y, int enemyId, int level) {
 	e->setLevel(level);
 
 	CORE_INFO("Spawning at enemy at (%g, %g), Type: %d, Level: %d",
-			x, y, enemyId, level);
+		x, y, id.c_str(), level);
 
 	addObject(e);
 }

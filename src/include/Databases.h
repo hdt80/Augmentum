@@ -8,6 +8,7 @@
 #include "gui_style/GuiComponentStyle.h"
 #include "gui_style/GuiProgressBarStyle.h"
 #include "ParticleEmitter.h"
+#include "EnemyType.h"
 
 // Global Databases that are used by lots of classes
 namespace Databases {
@@ -16,6 +17,7 @@ namespace Databases {
 	extern Database<GuiComponentStyle> GuiComponentStyles;
 	extern Database<GuiProgressBarStyle> GuiProgressBarStyles;
 	extern Database<ParticleDef> ParticleDefs;
+	extern Database<EnemyType> EnemyTypes;
 };
 
 #endif

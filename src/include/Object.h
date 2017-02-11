@@ -14,6 +14,7 @@
 
 class Map;
 class Perk;
+class Projectile;
 
 enum ObjectType {
 	DEFAULT		= 0x0001,

@@ -3,18 +3,25 @@
 #include "SkillTree.h"
 #include "Logger.h"
 #include "Game.h"
+#include "Unit.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-SkillTreeWindow::SkillTreeWindow(SkillTree* tree, Vector2 size) {
-	_size = size;
-	_name = "Skill Tree";
-	if (!tree) {
-		CORE_WARNING("[%s] Recived null tree", _name.c_str());
+SkillTreeWindow::SkillTreeWindow(SkillTree* tree, Vector2 size)
+	: Window("Skill Tree", size),
+		_backgroundDrawn(false), _tree(tree) {
+
+	if (_tree == nullptr) {
+		CORE_WARN("Null tree recieved");
 	}
-	_tree = tree;
+
+	_background.setPosition(0.0f, 0.0f);
+	_background.setFillColor(sf::Color(64, 64, 64, 48));
+	_background.setOutlineColor(sf::Color::Black);
+	_background.setOutlineThickness(-1.0f);
+	_background.setSize(sf::Vector2f(_size.X, _size.Y));
 }
 
 SkillTreeWindow::~SkillTreeWindow() {
@@ -25,12 +32,12 @@ SkillTreeWindow::~SkillTreeWindow() {
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-void SkillTreeWindow::init() {
-    Window::init();
+void SkillTreeWindow::pause() {
+	_backgroundDrawn = false;
 }
 
 void SkillTreeWindow::update(int diff) {
-
+	_cursor.update(diff);
 }
 
 void SkillTreeWindow::keyEvent(sf::Event& e) {
@@ -58,9 +65,17 @@ void SkillTreeWindow::mouseEvent(sf::Event& e) {
 }
 
 void SkillTreeWindow::render(sf::RenderWindow& window) {
+	window.clear(sf::Color(180, 180, 180));
+	Window::render(window);
+	if (!_backgroundDrawn) {
+		window.draw(_background);
+		_backgroundDrawn = true;
+	}
     if (_tree) {
         window.draw(*_tree);
     } else {
         CORE_WARNING("Tried to draw %x! An incomplete tree", _tree);
     }
+
+	window.draw(_cursor);
 }

@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "GameWindow.h"
 #include "Entity.h"
+#include "Enemy.h"
+#include "Unit.h"
 
 #include "util/StringUtil.h"
 #include "util/ObjectUtil.h"

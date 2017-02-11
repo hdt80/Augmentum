@@ -5,6 +5,7 @@
 
 #include "Logger.h"
 #include "Map.h"
+#include "Projectile.h"
 #include "Target.h"
 #include "Perk.h"
 #include "BitWise.h"

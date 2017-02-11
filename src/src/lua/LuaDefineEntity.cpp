@@ -1,7 +1,8 @@
 #include "lua/LuaDefines.h"
 
-#include "Object.h"
+//#include "Object.h"
 #include "Map.h" // Required for the sol::constructors
+#include "Entity.h"
 
 namespace LuaDefines {
 	void defineEntity(sol::state& lua) {

@@ -27,6 +27,8 @@ public:
 
 	// SkillNode dtor
 	~SkillNode();
+	
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// When cloning a Node, it must also be put into a vector for the new tree
 	// vec - std::vector to clone into

@@ -41,7 +41,8 @@ ParticleEmitter GameWindow::Emitter;
 // ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GameWindow::GameWindow(Vector2 size) {
+GameWindow::GameWindow(Vector2 size)
+	: _skillWindow(Game::getMap().getSelected()->getTree(), size) {
 	_size = size;
 	_name = "Game Window";
 	_drawFps = false;
@@ -74,6 +75,9 @@ GameWindow::GameWindow(Vector2 size) {
 
 	Databases::GuiProgressBarStyles.loadFromFile(
 		"./lua/gui_styles/progbar_styles.lua", "GuiProgressBarStyle");
+
+	Databases::EnemyTypes
+		.loadFromFile("./lua/enemies/enemies.lua", "EnemyType");
 
 	GuiToolbarComponent* hud = new GuiToolbarComponent(this,
 		&Databases::GuiEntryStyles.get("hud"),
@@ -166,7 +170,6 @@ GameWindow::~GameWindow() {
 
 void GameWindow::init() {
 	Window::init();
-	SkillTrees::createTrees(_size);
 }
 
 void GameWindow::reset() {
@@ -248,6 +251,8 @@ void GameWindow::keyEvent(sf::Event& e) {
 
 		Game::getMap().spawnAsteroid(
 			worldPos.X, worldPos.Y, Random::randFloat(30, 60));
+	} else if (e.key.code == sf::Keyboard::T) {
+		Game::followWindow(&_skillWindow);
 	}
 }
 
@@ -258,7 +263,7 @@ void GameWindow::mouseEvent(sf::Event& e) {
 	if (e.mouseButton.button == sf::Mouse::Left) {
 		Game::getMap().getSelected()->shoot(worldPos.X, worldPos.Y);
 	} else if (e.mouseButton.button == sf::Mouse::Right) {
-		Game::getMap().spawnEnemy(worldPos.X, worldPos.Y, 2, -1);
+		Game::getMap().spawnEnemy(worldPos.X, worldPos.Y, "lua_loaded_et1", -1);
 	}
 }
 

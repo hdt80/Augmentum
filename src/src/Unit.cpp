@@ -16,11 +16,11 @@
 Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		int size, int sides, sf::Color c)
 	: Entity(map, x, y, size, 1),
-		_reload(1), _levelDiff(lvlDiff),
+		_reload(1), _levelDiff(lvlDiff), _baseStats(s), _statMods(0.0f),
 		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
 
 	if (sides < 3 || sides > 8) {
-		CORE_WARN("Cannot have %d sides. Wrapping to valid values", sides);
+		// Wrap to valid sides
 		if (sides < 3) {
 			sides = 3;
 		} else {
@@ -71,7 +71,7 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 	b2FixtureDef fd;
 	fd.shape = &ps; // Set the shape we use
 	fd.density = 1.0f;
-	//fd.friction = 0.1f; // Have some accel and deccel
+	fd.friction = 0.4f; // Have some accel and deccel
 	fd.restitution = 1.0f; // Bounce completely off other b2 objects
 	_b2Box->CreateFixture(&fd);
 
@@ -125,7 +125,7 @@ void Unit::onEntityKilled(Entity* killed) {
 
 	Unit* unit = nullptr;
 	if ((unit = ObjectUtil::toType<Unit>(unit))) {
-			addExp(unit->getLevel());
+		addExp(unit->getLevel());
 	}
 }
 
@@ -136,7 +136,7 @@ void Unit::onEntityKilled(Entity* killed) {
 void Unit::shoot(float x, float y) {
 	if (_reload.done()) {
 		Projectile* p = new Projectile(_map, 5,
-				new Target(x, y), this, sf::Color::White);	
+			new Target(x, y), this, sf::Color::White);	
 		p->setObjectType(getObjectType());
 		p->addObjectTypeOption(ObjectType::PROJECTILE);
 
@@ -158,6 +158,7 @@ void Unit::setVelocity(float x, float y) {
 	// The speed stat isn't scaled to Box2D because the movement is noticed
 	// in the game scale, so scaling down the speed would be very noticable
 	b2Vec2 end(MathUtil::toB2(x) * getSpeed(), MathUtil::toB2(y) * getSpeed());
+	//b2Vec2 end(x * MathUtil::toB2(getSpeed()), y * MathUtil::toB2(getSpeed()));
 
 	// Diff the velocity needs to change to reach the wanted velocity
 	b2Vec2 diff = end - vel;

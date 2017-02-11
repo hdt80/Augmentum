@@ -6,6 +6,7 @@
 #include "ParticleEmitter.h"
 #include "Vector2.h"
 #include "Cursor.h"
+#include "SkillTreeWindow.h"
 
 class GameWindow : public Window {
 public:
@@ -56,6 +57,8 @@ protected:
 	bool _drawFps; // Draw the FPS counter
 	sf::Text _fpsText; // FPS text to draw
 	sf::Text _particleCountText; // Text displaying how many particles there are
+
+	SkillTreeWindow _skillWindow; // SkillTreeWindow of the selected object
 };
 
 #endif

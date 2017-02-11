@@ -2,6 +2,7 @@
 #include "Logger.h"
 
 #include "ExperienceHelper.h"
+#include "SkillTree.h"
 
 #include "GameWindow.h"
 #include "MainMenuWindow.h"
@@ -11,7 +12,7 @@
 void Game::start() {
 	if (CurrentGameState != Uninitalized) {
 		CORE_ERROR("Attempted to start an initalized gamed");
-		return; 
+		return;
 	}
 
 	// Set the antialiasing of the game
@@ -30,6 +31,7 @@ void Game::start() {
 	b2DebugDrawer.setRenderWindow(&_window);
 	DebugConsole.setPosition(_size);
 	ExperienceHelper::populateList();
+	SkillTrees::createTrees(_size);
 
 	_pauseWindow.setSize(_size);
 
@@ -90,7 +92,6 @@ void Game::step(long long diff) {
 			}
 		} else if (e.type == sf::Event::KeyPressed
 				&& isReservedKey(e.key.code)) {
-
 			handleKeyPress(e);
 		} else {
 			CurrentWindow->handleEvent(e);
@@ -109,6 +110,10 @@ void Game::step(long long diff) {
 	}
 
 	Fps.update();
+
+	if (Fps.isVisible()) {
+		_window.draw(Fps);
+	}
 	_window.display();
 }
 
@@ -130,6 +135,8 @@ void Game::handleKeyPress(const sf::Event& e) {
 		Game::pause();
 	} else if (e.key.code == Console::HOTKEY) {
 		Game::DebugConsole.setOpened(!Game::DebugConsole.isOpened());	
+	} else if (e.key.code == sf::Keyboard::F3) {
+		Fps.setVisible(!Fps.isVisible());
 	} else {
 		CORE_WARN("Invalid key press handled by Game: %d", e.key.code);
 	}
@@ -138,7 +145,8 @@ void Game::handleKeyPress(const sf::Event& e) {
 bool Game::isReservedKey(const sf::Keyboard::Key& key) {
 	return (key == sf::Keyboard::Pause
 		|| key == sf::Keyboard::Escape
-		|| key == Console::HOTKEY);
+		|| key == Console::HOTKEY
+		|| key == sf::Keyboard::F3);
 }
 
 void Game::followWindow(Window* w) {

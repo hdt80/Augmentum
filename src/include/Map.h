@@ -2,9 +2,6 @@
 #define _MAP_H
 
 #include "Object.h"
-#include "Enemy.h"
-#include "Projectile.h"
-#include "ContactListener.h"
 
 #include <vector>
 #include <string>
@@ -12,6 +9,8 @@
 #include "Box2D/Box2D.h"
 
 class Ship;
+class ContactListener;
+class Object;
 
 class Map {
 public:
@@ -88,10 +87,10 @@ public:
 	// Spawn a new Enemy of the type at the map coords (x, y)
 	// x - X coord of the map to spawn at
 	// y - Y coord of the map to spawn at
-	// enemyId - What type the Enemy should be
+	// id - What type the Enemy should be
 	// level - What level to spawn the Enemy at, -1 means use the distance from
 	//		the map's origin as the level
-	void spawnEnemy(float x, float y, int enemyId, int level = -1);
+	void spawnEnemy(float x, float y, const std::string& id, int level = -1);
 
 	// Spawn a new Asteroid at the map coords (x, y)
 	// x - X coord of the map to spawn at

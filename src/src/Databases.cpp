@@ -7,4 +7,5 @@ namespace Databases {
 	Database<GuiComponentStyle> GuiComponentStyles;
 	Database<GuiProgressBarStyle> GuiProgressBarStyles;
 	Database<ParticleDef> ParticleDefs;
+	Database<EnemyType> EnemyTypes;
 }

@@ -39,6 +39,11 @@ public:
 		return _database.find(name) != _database.end();
 	}
 
+	// Check if an object is loaded and stored in the Database
+	// name - Name to check for
+	// returns: If the name has a mapped value in the Database
+	inline bool has(const std::string& name) const { return isStored(name); }
+
 	// Get the default value to return if no obj under a name if found
 	// returns: Copy of the default value
 	inline const T& getDefault() const { return _default; }

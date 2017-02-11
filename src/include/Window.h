@@ -13,10 +13,14 @@ class GuiComponent;
 // movement between Windows.
 class Window {
 public:
+	// Ctor and dtor ///////////////////////////////////////////////////////////
+	
 	Window(const std::string& name, Vector2 size = Vector2(0.0f, 0.0f));
 	virtual ~Window();
 
 	enum WindowState {Running, Paused, Uninitalized};
+
+	// Methods /////////////////////////////////////////////////////////////////
 
 	// Initalize the window.
 	// Called when the Window is first pushed onto the state stack and another
@@ -88,6 +92,7 @@ public:
 	GuiComponent* getComponentAt(float x, float y);
 
 protected:
+	// Nullary ctor
 	Window();
 
 	// Add a new GuiComp to this Window

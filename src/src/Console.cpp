@@ -8,6 +8,7 @@
 #include "Databases.h"
 #include "Game.h"
 #include "Ship.h"
+#include "Enemy.h"
 #include "environment/Asteroid.h"
 #include "Projectile.h"
 

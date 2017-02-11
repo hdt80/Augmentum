@@ -3,8 +3,10 @@
 
 #include "Window.h"
 #include "Vector2.h"
+#include "Cursor.h"
 
 class SkillTree;
+class Unit;
 
 class SkillTreeWindow : public Window {
 public:
@@ -20,8 +22,9 @@ public:
 
 	// Methods /////////////////////////////////////////////////////////////////
 
-	// Window initalization
-	virtual void init();
+	// Pause the window, stop updating
+	// Called when we change our current Window to another one
+	virtual void pause();
 
 	// Update the SkillTreeWindow
 	// diff - Microseconds to update for
@@ -42,6 +45,11 @@ public:
 protected:
 	// Vars ////////////////////////////////////////////////////////////////////
 	
+	bool _backgroundDrawn; // If the background has been drawn yet
+	sf::RectangleShape _background; // Background
+
+	Cursor _cursor; // Cursor drawn
+
 	SkillTree* _tree; // The SkillTree to draw
 };
 
