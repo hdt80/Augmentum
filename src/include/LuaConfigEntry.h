@@ -2,7 +2,9 @@
 #define _LUA_CONFIG_ENTRY_H
 
 #include "LuaConfig.h"
+
 #include <string>
+#include <SFML/Graphics.hpp>
 
 class LuaConfigEntry {
 public:
@@ -37,6 +39,17 @@ public:
 	inline const std::string& getName() const { return _name; }
 
 protected:
+	// Methods /////////////////////////////////////////////////////////////////
+	
+	// Get the sf::Color from a color table entry. The sf::Color is created by
+	//		looking for the values of RGBA, each with the value of 0 to 255. Any
+	//		value not specified is assumed to be zero. Any value not in the
+	//		range of 0 to 255 will be wrapped back to a valid value
+	// table - Table to load the values from. The values will be loaded from the
+	//		values of RGBA
+	// returns: The sf::Color the color table represent
+	sf::Color getSfColor(const sol::table& table) const;
+
 	// Vars ////////////////////////////////////////////////////////////////////
 	
 	std::string _name; // Name of the sub table all the info is located at

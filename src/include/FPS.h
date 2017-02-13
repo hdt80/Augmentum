@@ -34,14 +34,14 @@ public:
 private:
 	// Vars ////////////////////////////////////////////////////////////////////
 	
-    unsigned int _frame;
-    unsigned int _fps;
+    unsigned int _frame; // Current frame being drawn
+    unsigned int _fps; // Current frames per second
 
-	sf::Text _fpsText;
+	sf::Text _fpsText; // Text to draw the FPS
 
-    sf::Clock clock;
+    sf::Clock clock; // Clock to measure FPS
 
-	bool _visible;
+	bool _visible; // If the FPS is being drawn
 };
 
 

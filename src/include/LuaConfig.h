@@ -23,15 +23,15 @@ public:
 
 	// Check if the config file is loaded
 	// returns: _loaded
-	bool isLoaded() { return _loaded; }
+	inline bool isLoaded() const { return _loaded; }
 
 	// Set of the config file is loaded
 	// b - Is the file loaded or not
-	void setLoaded(bool b) { _loaded = b; }
+	inline void setLoaded(bool b) { _loaded = b; }
 
 	// Get the name of the file loaded
 	// returns: _name
-	inline const std::string& getName() { return _name; }
+	inline const std::string& getName() const { return _name; }
 
 	// Get the config table used in LuaConfig
 	// returns: A reference to _configTable

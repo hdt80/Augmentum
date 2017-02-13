@@ -79,6 +79,9 @@ GameWindow::GameWindow(Vector2 size)
 	Databases::EnemyTypes
 		.loadFromFile("./lua/enemies/enemies.lua", "EnemyType");
 
+	Databases::ParticleDefs
+		.loadFromFile("./lua/particles/parts.lua", "ParticleDef");
+
 	GuiToolbarComponent* hud = new GuiToolbarComponent(this,
 		&Databases::GuiEntryStyles.get("hud"),
 		&Databases::GuiComponentStyles.get("trans"),
@@ -120,44 +123,6 @@ GameWindow::GameWindow(Vector2 size)
 	addComponent(hud);
 	addComponent(worldComp);
 	addComponent(usComp);
-
-	def.lifetime = 3.0f;
-	def.coneOfDispersion = 15.0f;
-	def.speedVariation = 0.0f;
-	def.initColor = sf::Color(255, 0, 0);
-	def.endColor = def.initColor;
-	def.fade = true;
-	def.speed = 30.0f;
-	def.slowDown = false;
-	Databases::ParticleDefs.store("test_parts", def);
-
-	ParticleDef levelPDef;
-	levelPDef.lifetime = 3.0f;
-	levelPDef.coneOfDispersion = 360.0f;
-	levelPDef.speedVariation = 20.0f;
-	levelPDef.initColor = sf::Color(80, 80, 255);
-	levelPDef.endColor = levelPDef.initColor;
-	levelPDef.fade = true;
-	levelPDef.speed = 50.0f;
-	levelPDef.slowDown = false;
-	Databases::ParticleDefs.store("level_up", levelPDef);
-
-	ParticleDef asteroid_death;
-	asteroid_death = levelPDef;
-	asteroid_death.initColor = sf::Color(80, 80, 80);
-	asteroid_death.endColor = asteroid_death.initColor;
-	Databases::ParticleDefs.store("asteroid_death", asteroid_death);
-
-	ParticleDef hitDef;
-	hitDef.lifetime = 2.0f;
-	hitDef.coneOfDispersion = 45.0f;
-	hitDef.speedVariation = 20.0f;
-	hitDef.initColor = sf::Color(255, 0, 0);
-	hitDef.endColor = sf::Color(220, 0, 0);
-	hitDef.fade = true;
-	hitDef.speed = 30.0f;
-	hitDef.slowDown = false;
-	Databases::ParticleDefs.store("hit", hitDef);
 }
 
 GameWindow::~GameWindow() {

@@ -7,7 +7,7 @@
 #include "gui_style/GuiEntryStyle.h"
 #include "gui_style/GuiComponentStyle.h"
 #include "gui_style/GuiProgressBarStyle.h"
-#include "ParticleEmitter.h"
+#include "ParticleDef.h"
 #include "EnemyType.h"
 
 // Global Databases that are used by lots of classes

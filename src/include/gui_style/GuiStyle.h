@@ -22,20 +22,6 @@ public:
 	//		name as _name
 	// table - Table to load the values from
 	virtual void readFromTable(const sol::table& table) = 0;
-
-protected:
-	// Methods /////////////////////////////////////////////////////////////////
-	
-	// Get the sf::Color from a color table entry. The sf::Color is created by
-	//		looking for the values of RGBA, each with the value of 0 to 255. Any
-	//		value not specified is assumed to be zero. Any value not in the
-	//		range of 0 to 255 will be wrapped back to a valid value
-	// table - Table to load the values from. The values will be loaded from the
-	//		values of RGBA
-	// returns: The sf::Color the color table represent
-	sf::Color getSfColor(const sol::table& table) const;
-
-	// Vars ////////////////////////////////////////////////////////////////////
 };
 
 #endif

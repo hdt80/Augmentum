@@ -4,15 +4,13 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-class Window;
-
 class Cursor : public sf::Drawable {
 public:
 	// Ctor and dtor ///////////////////////////////////////////////////////////
 	
 	// Cursor ctor
 	// window - Window the Cursor is drawn to
-	Cursor(Window* window);
+	Cursor();
 
 	// Cursot dtor
 	~Cursor();
@@ -71,9 +69,6 @@ private:
 	// Position of the Cursor relative to the Window being drawn to
 	float _x;
 	float _y;
-
-	// Window the Cursor is drawn to
-	Window* _window;
 };
 
 #endif

@@ -50,9 +50,7 @@ public:
 protected:
 	// Vars ////////////////////////////////////////////////////////////////////
 	
-	ParticleDef def;
-
-	Cursor _cursor;
+	Cursor _cursor; // Cursor drawn to the Window
 
 	bool _drawFps; // Draw the FPS counter
 	sf::Text _fpsText; // FPS text to draw

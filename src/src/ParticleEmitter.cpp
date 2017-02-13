@@ -98,14 +98,14 @@ ParticleGroup::ParticleGroup(const ParticleDef* def, float x, float y, int amt,
 	_vertices.resize(amt);
 
 	for (int i = 0; i < amt; ++i) {
-		float rSpeed = def->speed +
-			Random::randInt(-def->speedVariation, def->speedVariation);
+		float rSpeed = def->getSpeed() +
+			Random::randInt(-def->getSpeedVariation(), def->getSpeedVariation());
 
 		float dirAng;
 		if (angle >= 0) {
 			// Random angle between the angle and the dispersion
-			dirAng = Random::randInt(-def->coneOfDispersion / 2.0f,
-				def->coneOfDispersion / 2.0f) + angle;
+			dirAng = Random::randInt(-def->getConeOfDispersion() / 2.0f,
+				def->getConeOfDispersion() / 2.0f) + angle;
 		} else {
 			dirAng = Random::randInt(0, 360);
 		}
@@ -113,13 +113,13 @@ ParticleGroup::ParticleGroup(const ParticleDef* def, float x, float y, int amt,
 		dirAng = MathUtil::degToRad(dirAng);
 
 		_particles[i].pDef = def;
-		_particles[i].lifeLeft = _particles[i].pDef->lifetime;
+		_particles[i].lifeLeft = _particles[i].pDef->getLifetime();
 		_particles[i].done = false;
 		_particles[i].velocity = sf::Vector2f(std::cos(dirAng) * rSpeed,
 				std::sin(dirAng) * rSpeed);
 
 		_vertices[i].position = sf::Vector2f(x, y);
-		_vertices[i].color = def->initColor;
+		_vertices[i].color = def->getInitColor();
 	}
 }
 
@@ -157,13 +157,13 @@ void ParticleGroup::update(int diff) {
 				_vertices[i] = sf::Vertex();
 			}
 
-			float ratioDone = p.lifeLeft / p.pDef->lifetime;
+			float ratioDone = p.lifeLeft / p.pDef->getLifetime();
 
 			_vertices[i].position += p.velocity * (float)diff * 0.000001f;
-			if (p.pDef->slowDown) {
+			if (p.pDef->isSlowDown()) {
 				p.velocity /= ratioDone;
 			}
-			if (p.pDef->fade) {
+			if (p.pDef->isFade()) {
 				_vertices[i].color.a = ratioDone * 255;
 			}
 		}

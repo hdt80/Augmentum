@@ -7,24 +7,8 @@
 
 #include "Vector2.h"
 
-class ParticleGroup; // Forward declaration of a class defined later
-
-// Definition of a particle
-struct ParticleDef {
-	// How many seconds this particle will last for
-	float lifetime;
-
-	// When given an angle to emit from how much varience will there be?
-	float coneOfDispersion;
-	float speedVariation; // How much faster or slow to go
-
-	sf::Color initColor; // What color the particles will start with
-	sf::Color endColor; // What color the particles will be just before removal
-	bool fade; // If the particles will fade the longer they're around
-
-	float speed; // How many pixels/second the particle will move from origin
-	bool slowDown; // If the particles should slow down to 0 as they update
-};
+class ParticleGroup;
+class ParticleDef;
 
 // Singleton class that does all the updating and emitting
 class ParticleEmitter : public sf::Drawable, public sf::Transformable {
@@ -46,7 +30,8 @@ public:
 	// y - Y coord to emit from
 	// amt - Amount of particles to add
 	// angle - Angle to shoot the particles at
-	//		If angle is < 0, then a random angle between 0-360 is picked
+	//		If angle is < 0, then a random angle between 0-360 is picked for
+	//		each particle emitter
 	void emit(const ParticleDef* pDef, float x, float y, int amt, float angle);
 	
 	// Emit particles at a position by using a name lookup
@@ -69,9 +54,10 @@ public:
 	int getParticleCount() const;
 
 protected:
-
 	// Inherited from sf::Drawable
 	virtual void draw(sf::RenderTarget&, sf::RenderStates states) const;
+
+	// Vars ////////////////////////////////////////////////////////////////////
 
 	// Particles being drawn
 	std::vector<ParticleGroup> _particles;
@@ -82,7 +68,6 @@ protected:
 // the ParticleEmitter manages all ParticleGroup
 class ParticleGroup : public sf::Drawable, public sf::Transformable {
 public:
-	
 	// ParticleGroup ctor and dtor /////////////////////////////////////////////
 	
 	// Ctor for a ParticleGroup
