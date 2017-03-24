@@ -11,7 +11,6 @@ namespace ColorUtil {
 	// t - Percent to interpolate as in decimal form
 	sf::Color colorInterpolate(sf::Color min, sf::Color max, float t);
 
-
 	namespace HSVConvert {
 
 		// Represents a HSVColor

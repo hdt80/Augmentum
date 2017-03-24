@@ -137,9 +137,11 @@ void SkillNode::print() const {
 }
 
 bool SkillNode::unlocked() const {
+	// No parent means head node, so it must be unlocked
     if (!nodePrereq) {
         return true;
     }
+	// If the parent is unlocked and points have been put into it
     if (nodePrereq->unlocked() && nodePrereq->points >= nodePrereq->maxPoints) {
         return true;
     }
@@ -200,9 +202,6 @@ SkillTree::SkillTree(const Vector2& size)
 }
 
 SkillTree::~SkillTree() {
-	if (_head) {
-		delete _head;
-	}
 	for (unsigned int i = 0; i < _data.size(); ++i) {
 		delete _data[i];
 	}
@@ -330,6 +329,7 @@ SkillNode* SkillTree::addPerk(SkillNode* parent, Perk* perk) {
 	parent->add(node);
 	// Update the Node to tell us if it's to the left or right of the head Node
 	if (parent == _head) {
+		// Determine if the Node is on the left of the SkillTree or the right
 		if (_head->left == node) {
 			node->isLeft = true;
 		} else {

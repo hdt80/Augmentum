@@ -21,7 +21,7 @@ Perk::Perk(const std::string& name, Stats s, float dur, bool lua, int maxStacks)
 	}
 
 	if (lua) {
-		_lua.loadScript("./lua/" + name + ".lua");
+		_script.loadScript("./lua/" + name + ".lua");
 		loadLua();
 	}
 }
@@ -34,24 +34,26 @@ Perk::Perk(const Perk& perk)
 	
 }
 
-Perk::~Perk() {}
+Perk::~Perk() {
+	_attached = nullptr;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods
 ////////////////////////////////////////////////////////////////////////////////
 
 void Perk::loadLua() {
-	if (_lua.isLoaded()) {
-		CORE_WARNING("[Perk %x] Loading a loaded script [%x]", this, &_lua);
+	if (_script.isLoaded()) {
+		CORE_WARNING("[Perk %x] Loading a loaded script [%x]", this, &_script);
 	}
 
-	_lua.lua.set_function("getObjectsInRange",
+	_script.lua.set_function("getObjectsInRange",
 			[this](float x, float y, float r) {
 		return _attached->getMap()->getObjectsInRange(x, y, r);	
 	});
 
-	_lua.lua.set("attached", _attached);
-	_lua.lua.set("me", this);
+	_script.lua.set("attached", _attached);
+	_script.lua.set("me", this);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,5 +106,5 @@ void Perk::addStack() {
 void Perk::setAttached(Unit* attached) {
 	_attached = attached;
 	// Make sure to update what Object we're attached to
-	_lua.lua.set("attached", _attached);
+	_script.lua.set("attached", _attached);
 }

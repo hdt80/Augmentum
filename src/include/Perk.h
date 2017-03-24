@@ -125,10 +125,6 @@ public:
 protected:
 	std::string _name; // Display name of the perk
 
-	// Scripts to be called when the Object calls each respective Method
-	// _name is the path of the script under ./lua/$(_name).lua
-	LuaScript _lua;
-
 	Unit* _attached; // Object we're attached to
 
 	Stats _stats; // Stats applied to the Object

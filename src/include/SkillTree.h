@@ -53,7 +53,7 @@ public:
 
 	// Set the position of this SkillNode
 	// newPos - Position to set
-	void setPos(Vector2 newPos) { pos = newPos; }
+	inline void setPos(const Vector2& newPos) { pos = newPos; }
 
 	// Get the x coord of this SkillNode
 	// returns: pos.X
