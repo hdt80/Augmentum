@@ -25,6 +25,7 @@ SkillGrid::~SkillGrid() {
 ////////////////////////////////////////////////////////////////////////////////
 
 const GridNode& SkillGrid::getNode(int row, int column) const {
+	// Make sure the SkillNode gotten exists
 	if (row > _rows || row < 0) {
 		return _defaultNode;
 	}
@@ -39,7 +40,7 @@ const GridNode& SkillGrid::getNode(int row, int column) const {
 bool SkillGrid::contains(int row, int column) const {
 	const GridNode& node = getNode(row, column);
 
-	return node == _defaultNode;
+	return (node == _defaultNode);
 }
 
 unsigned int SkillGrid::nodeCount() const {

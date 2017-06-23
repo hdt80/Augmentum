@@ -17,7 +17,7 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 		int size, int sides, sf::Color c)
 	: Entity(map, x, y, size, 1),
 		_reload(1), _levelDiff(lvlDiff), _baseStats(s), _statMods(0.0f),
-		_exp(0.0f),	_prevLevel(-1), _tree(nullptr) {
+		_exp(0.0f),	_prevLevel(-1) {
 
 	if (sides < 3 || sides > 8) {
 		// Wrap to valid sides
@@ -80,10 +80,6 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 }
 
 Unit::~Unit() {
-	if (_tree) {
-		delete _tree;
-	}
-
 	// Remove all the Perks
 	for (unsigned int i = 0; i < _perks.size(); ++i) {
 		delete _perks[i];
@@ -285,9 +281,4 @@ int Unit::getLevel() const {
 
 void Unit::setLevel(int level) {
 	_exp = ExperienceHelper::levelToExp(level);
-}
-
-void Unit::setSkillTree(SkillTree* tree) {
-	_tree = tree->clone();
-	_tree->setAttached(this);
 }

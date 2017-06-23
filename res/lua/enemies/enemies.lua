@@ -1,4 +1,4 @@
-EnemyType = {
+nemyType = {
 	lua_loaded_et1 = {
 		name = "LUA_LOADED_et1",
 		sides = 3,

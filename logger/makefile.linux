@@ -1,0 +1,5 @@
+# Cleaning all the files produced by calling make build
+.PHONY: clean
+clean:
+	find $(BUILDDIR) \( -name "*.o" -or -name "*.d" \) -type f | xargs rm -f \
+		&& rm $(EXEDIR)/$(OUTPUT_NAME).a
