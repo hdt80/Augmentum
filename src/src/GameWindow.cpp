@@ -41,7 +41,8 @@ ParticleEmitter GameWindow::Emitter;
 // ctor and dtor
 ////////////////////////////////////////////////////////////////////////////////
 
-GameWindow::GameWindow(Vector2 size) {
+GameWindow::GameWindow(Vector2 size)
+	: _skillWindow(Game::getMap().getSelected()->getTree(), size) {
 	_size = size;
 	_name = "Game Window";
 	_drawFps = false;
@@ -216,7 +217,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 		Game::getMap().spawnAsteroid(
 			worldPos.X, worldPos.Y, Random::randFloat(30, 60));
 	} else if (e.key.code == sf::Keyboard::T) {
-		//Game::followWindow(&_skillWindow);
+		Game::followWindow(&_skillWindow);
 	}
 }
 
