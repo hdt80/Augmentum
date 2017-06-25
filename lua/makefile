@@ -12,6 +12,9 @@ TESTDIR = test
 OUTPUT_NAME = libAG-Llua
 TEST_OUTPUT_NAME = ag_lua
 
+# Name to store under the root directory's include folder
+LIB_NAME = lua
+
 # Export variables used in other makefiles (cleaning, testing programs)
 export BUILDDIR
 export EXEDIR
@@ -37,8 +40,12 @@ OBJS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SRCS))
 CXX_WARNS += -Wall -Wextra -Wno-unused-parameter -Wno-format \
 			 -Wno-unused-variable -Wno-varargs
 
+# Directories to include during compliation
+CXX_INCLUDES += -I$(INCLUDEDIR) -I../lib/include/
+
 # Flags used to compile .cpp files
-CXX_FLAGS += $(CXX_WARNS) -c -g -O2 -I$(INCLUDEDIR) -std=c++14
+CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14 \
+			 -ftemplate-depth=4096
 
 # Compiling all the .cpp files into .o files
 $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
@@ -48,7 +55,12 @@ $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 .PHONY: build
 build: $(OBJS)
 	ar rcs $(EXEDIR)/$(OUTPUT_NAME).a $^
+
+# Copy the header files into the ../lib/include/ folder
+.PHONY: copy
+copy:
 	cp $(INCLUDEDIR)/*.h $(TESTDIR)/$(INCLUDEDIR)
+	cp $(INCLUDEDIR)/*.h ../lib/include/$(LIB_NAME)
 
 # Run the test program
 .PHONY: run

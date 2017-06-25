@@ -13,7 +13,7 @@ OUTPUT_NAME = libAG-Logger
 TEST_OUTPUT_NAME = ag_logger
 
 # Name to store under the root directory's include folder
-LIB_NAME = Logger
+LIB_NAME = logger
 
 # Export variables used in other makefiles (cleaning, testing programs)
 export BUILDDIR

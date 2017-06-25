@@ -1,0 +1,5 @@
+# Delete the files created by calling make build
+.PHONY: clean
+clean:
+	del /s $(BUILDDIR)\*.o
+	del $(EXEDIR)\$(OUTPUT_NAME)*

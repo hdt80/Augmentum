@@ -1,0 +1,40 @@
+#include "game/Cooldown.h"
+
+#include "logger/Logger.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// Ctor and Dtor
+////////////////////////////////////////////////////////////////////////////////
+
+Cooldown::Cooldown(int maxCooldown)
+	: _timeLeft(0), _maxCooldown(maxCooldown) {
+
+}
+
+Cooldown::~Cooldown() {
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods
+////////////////////////////////////////////////////////////////////////////////
+
+void Cooldown::start() {
+	if (!done()) {
+		AG_WARN("[Cooldown %x] Not done, triggering anyways", this);		
+	}
+	_timeLeft = _maxCooldown;
+}
+
+void Cooldown::addTime(int i) {
+	_timeLeft += i;
+}
+
+void Cooldown::update(int diff) {
+	if (_timeLeft < 0) {
+		return;
+	}
+	_timeLeft -= diff;
+}
+
