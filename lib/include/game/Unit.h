@@ -105,6 +105,16 @@ public:
 	// level - Level to set the Unit to
 	void setLevel(int level);
 
+	// Skill tree methods //////////////////////////////////////////////////////
+
+	// Set the SkillTree
+	// tree - SkillTree to copy
+	void setSkillTree(SkillTree* tree);
+
+	// Get the SkillTree this Object uses
+	// returns: Pointer to the SkillTree this Object uses
+	inline SkillTree* getTree() const { return _tree; }
+
 	// Stat methods ////////////////////////////////////////////////////////////
 	
 	// Apply new stats to the object
@@ -130,7 +140,7 @@ public:
 
 	// Specific stat getters ///////////////////////////////////////////////////
 	
-	// Getters for stats
+	// Getters
 	inline float getSpeed() const { return getStat("speed"); }
 	inline float getRange() const { return getStat("range"); }
 	inline float getFireRate() const { return getStat("fireRate"); }
@@ -138,7 +148,7 @@ public:
 	inline float getAccel() const { return getStat("accel"); }
 	inline float getProjSpeed() const { return getStat("projSpeed"); }
 
-	// Setters for stats
+	// Setters
 	inline void setRange(int r) { setStat("range", r); }
 	inline void setFireRate(float r) { setStat("fireRate", r); }
 	inline void setDamage(float d) { setStat("damage", d); }
@@ -200,4 +210,6 @@ protected:
 
 	float _exp; // Current experience of this Unit
 	int _prevLevel; // Used to check if the Unit has gone up a level
+
+	SkillTree* _tree; // Skill tree attached to this Unit
 };
