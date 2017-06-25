@@ -1,10 +1,6 @@
 #include "game/Stats.h"
 
-<<<<<<< HEAD:src/src/Stats.cpp
-#include "Logger.h"
-=======
 #include "logger/Logger.h"
->>>>>>> dev:game/src/Stats.cpp
 
 ////////////////////////////////////////////////////////////////////////////////
 // Stats ctor

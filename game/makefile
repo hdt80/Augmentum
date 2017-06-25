@@ -51,7 +51,7 @@ $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 
 # Building the program and copying all the headers into the lib include folder
 .PHONY: build
-build: copy $(OBJS)
+build: $(OBJS)
 	$(CXX) $(LINKER_FLAGS) $^ -o ./$(EXEDIR)/$(OUTPUT_NAME)
 
 # Copy the header files into the ../lib/include/ folder
