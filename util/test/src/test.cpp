@@ -1,8 +1,11 @@
 #include "util/Vec3.h"
 #include "util/Vec2.h"
 #include "util/UtilRandom.h"
+#include "util/UtilMath.h"
 
 #include "logger/Logger.h"
+
+#include <vector>
 
 int main() {
 
@@ -64,7 +67,48 @@ int main() {
 	for (unsigned int i = 0; i < 100; ++i) {
 		SINFO("\t%d", ag::Random::randInt(0, i));
 	}
+
+	SINFO("");
+	SINFO("");
+	SINFO("");
+	SINFO("");
+	SINFO("");
+	SINFO("");
+
+	SINFO("Testing Math");
 	
+	std::vector<ag::Vec2f> poly = ag::Math::generateConvexPolygon(5, 10);
+
+	SINFO("Points of the convex polygon:");
+	for (const ag::Vec2f& v : poly) {
+		SINFO("(%g, %g)", v.x, v.y);
+	}
+
+	SINFO("Testing for correct concavity");
+
+	if (ag::Math::isValidConvexPolygon(poly) == true) {
+		SINFO("Polygon was fine");
+	} else {
+		AG_WARN("Polygon generated was not valid");
+	}
+
+	SINFO("Testing 1,000 polygons");
+
+	for (unsigned int i = 0; i < 1000; ++i) {
+		std::vector<ag::Vec2f> poly = ag::Math::generateConvexPolygon(5, 10);
+
+		if (ag::Math::isValidConvexPolygon(poly) == false) {
+			AG_WARN("Polygon %d was not valid", i);
+		}
+	}
+
+	SINFO("Testing angles");
+
+	ag::Vec2f v1(-1, 0);
+	ag::Vec2f v2(0, 0);
+	ag::Vec2f v3(1, 0);
+
+	SINFO("Angle: %g", ag::Math::radToDeg(ag::Math::getAngle(v1, v2, v3)));
 
 	return 0;
 }

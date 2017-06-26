@@ -44,8 +44,7 @@ CXX_WARNS += -Wall -Wextra -Wno-unused-parameter -Wno-format \
 CXX_INCLUDES += -I$(INCLUDEDIR) -I../lib/include/
 
 # Flags used to compile .cpp files
-CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14 \
-			 -ftemplate-depth=4096
+CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14
 
 # Compiling all the .cpp files into .o files
 $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
@@ -53,7 +52,8 @@ $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 
 # Compile and copy the library into the correct folders
 .PHONY: build
-build: compile copy
+build: copy compile
+	cp $(EXEDIR)/$(OUTPUT_NAME).a ../lib/
 
 # Building the library file
 .PHONY: compile
@@ -65,11 +65,10 @@ compile: $(OBJS)
 copy:
 	cp $(INCLUDEDIR)/*.h $(TESTDIR)/$(INCLUDEDIR)
 	cp $(INCLUDEDIR)/*.h ../lib/include/$(LIB_NAME)
-	cp $(EXEDIR)/$(OUTPUT_NAME).a ../lib/
 
 # Run the test program
 .PHONY: run
-run:
+run: test
 	./$(TESTDIR)/$(EXEDIR)/$(TEST_OUTPUT_NAME)
 
 # Run test program in gdb

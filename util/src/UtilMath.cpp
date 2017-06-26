@@ -96,6 +96,20 @@ namespace Math {
 		return true;
 	}
 
+	float getAngle(const Vec2f& v1, const Vec2f& v2, const Vec2f& v3) {
+
+		// Length vec of v1 to v2
+		Vec2f v12 = v1 - v2;
+
+		// Length vec of v3 to v1
+		Vec2f v31 = v3 - v1;
+
+		float dot = v12.x * v31.x + v12.y * v31.y;
+		float cross = v12.x * v31.y - v12.y * v31.x;
+
+		return atan2(cross, dot);
+	}
+
 }; // namespace ag::Math
 
 }; // namespace ag

@@ -43,6 +43,9 @@ CXX_WARNS += -Wall -Wextra -Wno-unused-parameter -Wno-format \
 # Directories to include during compliation
 CXX_INCLUDES += -I$(INCLUDEDIR) -I../lib/include/
 
+# Libraries to link to
+CXX_LIBS += -llua
+
 # Flags used to compile .cpp files
 CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14 \
 			 -ftemplate-depth=4096

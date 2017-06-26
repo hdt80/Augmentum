@@ -36,11 +36,15 @@ CXX_WARNS += -Wall -Wextra -Wno-unused-parameter -Wno-format -Wno-varargs \
 			 -Wno-unused-variable
 
 # Directories to include during compliation
-# NOTE: Only the files included fomr ../lib/include/ are included, not the ones
+# NOTE: Only the files included from ../lib/include/ are included, not the ones
 # 		in the include folder. This is to ensure that everyone is using the same
 # 		header files.
 # 		The files in include are copies to ../lib/include/ before compiliation
 CXX_INCLUDES += -I../lib/include/
+
+# Libraries to link against
+CXX_LIBS += -llua -lsfml-graphics -lsfml-window -lsfml-system \
+			-L../lib -lAG-Logger -lAG-Lua -lAG-Util
 
 # Flags used to compile .cpp files
 CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14
@@ -52,7 +56,7 @@ $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 # Building the program and copying all the headers into the lib include folder
 .PHONY: build
 build: $(OBJS)
-	$(CXX) $(LINKER_FLAGS) $^ -o ./$(EXEDIR)/$(OUTPUT_NAME)
+	$(CXX) $^ $(CXX_LIBS) -o ./$(EXEDIR)/$(OUTPUT_NAME)
 
 # Copy the header files into the ../lib/include/ folder
 .PHONY: copy
