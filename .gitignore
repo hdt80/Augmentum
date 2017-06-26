@@ -8,6 +8,9 @@
 *.so
 *.a
 
+# Dependency files
+*.d
+
 # Executables
 *.exe
 *.out
