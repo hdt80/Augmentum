@@ -51,8 +51,14 @@ $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 .PHONY: build
 build: $(OBJS)
 	ar rcs $(EXEDIR)/$(OUTPUT_NAME).a $^
+
+# Copy the header files and library file into the root lib dir
+.PHONY: copy
+copy:
 	cp $(INCLUDEDIR)/*.h $(TESTDIR)/$(INCLUDEDIR)
 	cp $(INCLUDEDIR)/*.h ../lib/include/$(LIB_NAME)
+	cp $(EXEDIR)/$(OUTPUT_NAME).a ../lib/
+
 
 # Run the test program
 .PHONY: run

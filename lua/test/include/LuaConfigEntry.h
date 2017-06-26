@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LuaConfig.h"
+#include "lua/LuaConfig.h"
 
 #include <string>
 #include <SFML/Graphics.hpp>

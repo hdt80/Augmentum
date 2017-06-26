@@ -1,4 +1,4 @@
-#include "LuaDefines.h"
+#include "lua/LuaDefines.h"
 
 namespace LuaDefines {
 	void defineClasses(sol::state& lua) {

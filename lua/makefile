@@ -9,7 +9,7 @@ INCLUDEDIR = include
 TESTDIR = test
 
 # Output name of the compiled library
-OUTPUT_NAME = libAG-Llua
+OUTPUT_NAME = libAG-Lua
 TEST_OUTPUT_NAME = ag_lua
 
 # Name to store under the root directory's include folder
@@ -51,9 +51,13 @@ CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14 \
 $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CXX) $(CXX_FLAGS) -o "$@" "$<"
 
-# Building the library file
+# Real building target, done this way to compiling doesn't depend on copy
 .PHONY: build
-build: $(OBJS)
+build: compile copy
+
+# Building the library file
+.PHONY: compile
+compile: $(OBJS)
 	ar rcs $(EXEDIR)/$(OUTPUT_NAME).a $^
 
 # Copy the header files into the ../lib/include/ folder
@@ -61,6 +65,7 @@ build: $(OBJS)
 copy:
 	cp $(INCLUDEDIR)/*.h $(TESTDIR)/$(INCLUDEDIR)
 	cp $(INCLUDEDIR)/*.h ../lib/include/$(LIB_NAME)
+	cp $(EXEDIR)/$(OUTPUT_NAME).a ../lib/
 
 # Run the test program
 .PHONY: run

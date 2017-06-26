@@ -1,5 +1,4 @@
-#ifndef _LUA_CONFIG
-#define _LUA_CONFIG
+#pragma once
 
 #include <string>
 
@@ -95,5 +94,3 @@ protected:
 	// Name of the loaded lua file
 	std::string _name;
 };
-
-#endif

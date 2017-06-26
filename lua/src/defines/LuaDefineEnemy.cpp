@@ -1,4 +1,4 @@
-#include "LuaDefines.h"
+#include "lua/LuaDefines.h"
 
 #include "game/Enemy.h"
 #include "game/Map.h"

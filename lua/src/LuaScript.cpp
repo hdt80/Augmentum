@@ -1,6 +1,6 @@
-#include "LuaScript.h"
+#include "lua/LuaScript.h"
 
-#include "LuaDefines.h"
+#include "lua/LuaDefines.h"
 
 #include "game/Object.h"
 #include "game/Map.h"

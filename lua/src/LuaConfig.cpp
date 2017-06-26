@@ -1,4 +1,4 @@
-#include "LuaConfig.h"
+#include "lua/LuaConfig.h"
 
 #include "logger/Logger.h"
 

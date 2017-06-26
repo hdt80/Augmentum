@@ -1,4 +1,4 @@
-#include "LuaDefines.h"
+#include "lua/LuaDefines.h"
 
 #include "game/Object.h"
 #include "game/Map.h" // Required for the sol::constructors
