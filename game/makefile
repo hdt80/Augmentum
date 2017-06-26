@@ -43,8 +43,8 @@ CXX_WARNS += -Wall -Wextra -Wno-unused-parameter -Wno-format -Wno-varargs \
 CXX_INCLUDES += -I../lib/include/
 
 # Libraries to link against
-CXX_LIBS += -llua -lsfml-graphics -lsfml-window -lsfml-system \
-			-L../lib -lAG-Logger -lAG-Lua -lAG-Util
+CXX_LIBS += -llua -ldl -lsfml-graphics -lsfml-window -lsfml-system \
+			-L../lib -lAG-Logger -lAG-Lua -lAG-Util -lBox2D
 
 # Flags used to compile .cpp files
 CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14
