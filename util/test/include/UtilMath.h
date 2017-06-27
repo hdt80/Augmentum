@@ -64,7 +64,7 @@ inline float fromB2(float f) { return f * B2BOX_SCALE; }
 // returns: A vector containing the points used to represent a regular polygon.
 //		The points are defined in a clockwise fashion
 //
-std::vector<Vec2f> generateRandomPolygon(int sides, float size);
+std::vector<Vec2f> generatePolygon(int sides, float size);
 
 // Generate a random non-regular polygon
 //

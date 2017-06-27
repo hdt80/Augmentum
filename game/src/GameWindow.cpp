@@ -20,13 +20,14 @@
 #include "game/gui_style/GuiComponentStyle.h"
 #include "game/gui_style/GuiProgressBarStyle.h"
 #include "game/ExperienceHelper.h"
-#include "game/util/StringUtil.h"
 #include "game/util/SFMLUtil.h"
-#include "game/util/Random.h"
 
 #include "logger/Logger.h"
 
 #include "lua/LuaConfig.h"
+
+#include "util/UtilString.h"
+#include "util/UtilRandom.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static vars
@@ -169,8 +170,8 @@ void GameWindow::update(int diff) {
 	_cursor.update(diff);
 
 	if (_drawFps) {
-		_fpsText.setString(StringUtil::format("%d", Game::Fps.getFPS()));
-		_particleCountText.setString(StringUtil::format(
+		_fpsText.setString(ag::String::format("%d", Game::Fps.getFPS()));
+		_particleCountText.setString(ag::String::format(
 			"%d", GameWindow::Emitter.getParticleCount()));
 	}
 }
@@ -212,7 +213,7 @@ void GameWindow::keyEvent(sf::Event& e) {
 			pixelPos.x, pixelPos.y, this);
 
 		Game::getMap().spawnAsteroid(
-			worldPos.X, worldPos.Y, Random::randFloat(30, 60));
+			worldPos.X, worldPos.Y, ag::Random::randFloat(30, 60));
 	} else if (e.key.code == sf::Keyboard::T) {
 		Game::followWindow(&_skillWindow);
 	}

@@ -7,12 +7,13 @@
 #include "game/Enemy.h"
 #include "game/environment/Asteroid.h"
 #include "game/Projectile.h"
-#include "game/util/StringUtil.h"
 #include "game/util/SFMLUtil.h"
 #include "game/util/ObjectUtil.h"
 
 #include "lua/LuaScript.h"
 #include "lua/LuaDefines.h"
+
+#include "util/UtilString.h"
 
 #include <cctype>
 #include <cstdio>
@@ -84,7 +85,7 @@ void Console::executeCommand(const std::string& cmd) {
 }
 
 void Console::addObject(void* obj) {
-	_lua.set(StringUtil::format("0x%X", obj), obj);
+	_lua.set(ag::String::format("0x%X", obj), obj);
 }
 
 void Console::addNamedObject(const std::string& name, void* obj) {

@@ -1,7 +1,8 @@
 #include "game/FPS.h"
 
 #include "game/Databases.h"
-#include "game/util/StringUtil.h"
+
+#include "util/UtilString.h"
 
 #include "logger/Logger.h"
 
@@ -25,7 +26,7 @@ void FPS::update() {
        	_frame = 0;
        	clock.restart();
 
-		_fpsText.setString(StringUtil::format("%d", _fps));
+		_fpsText.setString(ag::String::format("%d", _fps));
     }
     ++_frame;
 }

@@ -5,8 +5,9 @@
 #include "game/Entity.h"
 #include "game/Enemy.h"
 #include "game/Unit.h"
-#include "game/util/StringUtil.h"
 #include "game/util/ObjectUtil.h"
+
+#include "util/UtilString.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // UnitStatsComponent ctor and dtor
@@ -69,35 +70,35 @@ void UnitStatsComponent::update(int diff) {
 		worldPos.x, worldPos.y));
 
 	if (_hovered) {
-		_unitPos->setMessage(StringUtil::format("Pos [%g, %g]",
+		_unitPos->setMessage(ag::String::format("Pos [%g, %g]",
 			_hovered->getX(), _hovered->getY()));
-		_unitVelocity->setMessage(StringUtil::format("Vel [%g, %g]",
+		_unitVelocity->setMessage(ag::String::format("Vel [%g, %g]",
 			_hovered->getVelocity().X, _hovered->getVelocity().Y));
-		_unitHp->setMessage(StringUtil::format("Health: %g",
+		_unitHp->setMessage(ag::String::format("Health: %g",
 			_hovered->getHealth()));
-		_unitMaxHp->setMessage(StringUtil::format("Max health: %g",
+		_unitMaxHp->setMessage(ag::String::format("Max health: %g",
 			_hovered->getMaxHealth()));
 
 		Unit* u = nullptr;
 		if ((u = ObjectUtil::toType<Unit>(_hovered))) {
-			_unitLevel->setMessage(StringUtil::format("Lvl: %d, Exp: %g",
+			_unitLevel->setMessage(ag::String::format("Lvl: %d, Exp: %g",
 				u->getLevel(), u->getExp()));
-			_unitSpeed->setMessage(StringUtil::format("Speed: %g", 
+			_unitSpeed->setMessage(ag::String::format("Speed: %g", 
 				u->getSpeed()));
-			_unitRange->setMessage(StringUtil::format("Range: %g",
+			_unitRange->setMessage(ag::String::format("Range: %g",
 				u->getRange()));
-			_unitDamage->setMessage(StringUtil::format("Damage: %g",
+			_unitDamage->setMessage(ag::String::format("Damage: %g",
 				u->getDamage()));
-			_unitFireRate->setMessage(StringUtil::format("FireRate: %g",
+			_unitFireRate->setMessage(ag::String::format("FireRate: %g",
 				u->getFireRate()));
-			_unitAccel->setMessage(StringUtil::format("Accel: %g",
+			_unitAccel->setMessage(ag::String::format("Accel: %g",
 				u->getAccel()));
-			_unitProjSpeed->setMessage(StringUtil::format("ProjSpeed: %g",
+			_unitProjSpeed->setMessage(ag::String::format("ProjSpeed: %g",
 				u->getProjSpeed()));
 
 			Enemy* e = nullptr;
 			if ((e = ObjectUtil::toType<Enemy>(_hovered))) {
-				_unitName->setMessage(StringUtil::format("Type: %s",
+				_unitName->setMessage(ag::String::format("Type: %s",
 					e->getEnemyType().getName().c_str()));
 			}
 		}

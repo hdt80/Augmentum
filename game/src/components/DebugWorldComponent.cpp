@@ -4,7 +4,8 @@
 #include "game/Ship.h"
 #include "game/Game.h"
 #include "game/FPS.h"
-#include "game/util/StringUtil.h"
+
+#include "util/UtilString.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor
@@ -35,13 +36,13 @@ DebugWorldComponent::DebugWorldComponent(Window* window,
 void DebugWorldComponent::update(int diff) {
 	GuiComponent::update(diff);
 	Ship* ship = _map->getSelected();
-	_fps->setMessage(StringUtil::format("FPS: %u", Game::Fps.getFPS()));
-	_pos->setMessage(StringUtil::format("Pos [%g %g]",
+	_fps->setMessage(ag::String::format("FPS: %u", Game::Fps.getFPS()));
+	_pos->setMessage(ag::String::format("Pos [%g %g]",
 		ship->getX(), ship->getY()));
-	_speed->setMessage(StringUtil::format("Speed [%g %g]",
+	_speed->setMessage(ag::String::format("Speed [%g %g]",
 		ship->getVelocity().X, ship->getVelocity().Y));
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(Game::getRenderWindow());
-	_mousePos->setMessage(StringUtil::format("Mouse [%d %d]",
+	_mousePos->setMessage(ag::String::format("Mouse [%d %d]",
 		mousePos.x, mousePos.y));
 }

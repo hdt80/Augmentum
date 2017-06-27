@@ -1,11 +1,12 @@
 #include "game/gui/GuiProgressBar.h"
 
 #include "game/gui/GuiComponent.h"
-#include "game/util/StringUtil.h"
-#include "game/util/MathUtil.h"
 #include "game/util/ColorUtil.h"
 
 #include "logger/Logger.h"
+
+#include "util/UtilString.h"
+#include "util/UtilMath.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -35,7 +36,7 @@ GuiProgressBar::GuiProgressBar(GuiComponent* guiComp,
 	_zeroText.setFillColor(barStyle->getMinColor());
 	_zeroText.setOutlineThickness(1.0f);
 	_zeroText.setOutlineColor(sf::Color::Black);
-	_zeroText.setString(StringUtil::format("%g", _min));
+	_zeroText.setString(ag::String::format("%g", _min));
 	_zeroText.setCharacterSize(_text.getCharacterSize());
 
 	_currentText.setFont(*_text.getFont());
@@ -47,7 +48,7 @@ GuiProgressBar::GuiProgressBar(GuiComponent* guiComp,
 	if (_value == nullptr) {
 		_currentText.setString("0");
 	} else {
-		_currentText.setString(StringUtil::toString(getCurrentValue()));
+		_currentText.setString(ag::String::toString(getCurrentValue()));
 	}
 
 	_maxText.setFont(*_text.getFont());
@@ -59,7 +60,7 @@ GuiProgressBar::GuiProgressBar(GuiComponent* guiComp,
 	if (_max == nullptr) {
 		_maxText.setString("0");
 	} else {
-		_maxText.setString(StringUtil::toString(getMax()));
+		_maxText.setString(ag::String::toString(getMax()));
 	}
 }
 
@@ -99,8 +100,8 @@ void GuiProgressBar::updateBar() {
 	_bar.setFillColor(ColorUtil::colorInterpolate(
 		_barStyle->getMinColor(), _barStyle->getMaxColor(), getRatioDone()));
 
-	_currentText.setString(StringUtil::toString(getCurrentValue()));
-	_maxText.setString(StringUtil::toString(getMax()));
+	_currentText.setString(ag::String::toString(getCurrentValue()));
+	_maxText.setString(ag::String::toString(getMax()));
 
 	_currentText.setPosition(getX() + (_style->getDimensions().X / 2.0f)
 		- _currentText.getLocalBounds().width / 2.0f, getY());
@@ -113,12 +114,12 @@ void GuiProgressBar::updateBar() {
 
 void GuiProgressBar::setMin(float m) {
 	_min = m;
-	_zeroText.setString(StringUtil::format("%g", _min));
+	_zeroText.setString(ag::String::format("%g", _min));
 }
 	
 void GuiProgressBar::setMax(float m) {
 	*_max = m;
-	_maxText.setString(StringUtil::format("%g", getMax()));
+	_maxText.setString(ag::String::format("%g", getMax()));
 }
 
 void GuiProgressBar::setPosition(float x, float y) {

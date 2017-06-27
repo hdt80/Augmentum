@@ -2,10 +2,11 @@
 
 #include "game/Game.h"
 #include "game/Databases.h"
-#include "game/util/Random.h"
-#include "game/util/MathUtil.h"
 
 #include "logger/Logger.h"
+
+#include "util/UtilRandom.h"
+#include "util/UtilMath.h"
 
 #include <algorithm>
 
@@ -98,19 +99,19 @@ ParticleGroup::ParticleGroup(const ParticleDef* def, float x, float y, int amt,
 	_vertices.resize(amt);
 
 	for (int i = 0; i < amt; ++i) {
-		float rSpeed = def->getSpeed() +
-			Random::randInt(-def->getSpeedVariation(), def->getSpeedVariation());
+		float rSpeed = def->getSpeed() + ag::Random
+			::randInt(-def->getSpeedVariation(), def->getSpeedVariation());
 
 		float dirAng;
 		if (angle >= 0) {
 			// Random angle between the angle and the dispersion
-			dirAng = Random::randInt(-def->getConeOfDispersion() / 2.0f,
+			dirAng = ag::Random::randInt(-def->getConeOfDispersion() / 2.0f,
 				def->getConeOfDispersion() / 2.0f) + angle;
 		} else {
-			dirAng = Random::randInt(0, 360);
+			dirAng = ag::Random::randInt(0, 360);
 		}
 
-		dirAng = MathUtil::degToRad(dirAng);
+		dirAng = ag::Math::degToRad(dirAng);
 
 		_particles[i].pDef = def;
 		_particles[i].lifeLeft = _particles[i].pDef->getLifetime();

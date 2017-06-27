@@ -1,7 +1,8 @@
 #include "game/gui/GuiExpProgressBar.h"
 
 #include "game/ExperienceHelper.h"
-#include "game/util/StringUtil.h"
+
+#include "util/UtilString.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor
@@ -19,8 +20,8 @@ GuiExpProgressBar::GuiExpProgressBar(GuiComponent* guiComp,
 	_prevLevel = 0;
 
 	_zeroText.setString("0");
-	_currentText.setString(StringUtil::format("%g", _tracked->getExp()));
-	_maxText.setString(StringUtil::format("%g", getMax()));
+	_currentText.setString(ag::String::format("%g", _tracked->getExp()));
+	_maxText.setString(ag::String::format("%g", getMax()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -31,8 +32,8 @@ void GuiExpProgressBar::update(int diff) {
 	if (_prevValue != getCurrentValue()) {
 		_min = getMin();
 		setMax(getMax());
-		_zeroText.setString(StringUtil::format("%g", getMin()));
-		_maxText.setString(StringUtil::format("%g", getMax()));
+		_zeroText.setString(ag::String::format("%g", getMin()));
+		_maxText.setString(ag::String::format("%g", getMax()));
 		setPosition(getX(), getY()); // Reposition the texts
 	}
 	GuiProgressBar::update(diff);

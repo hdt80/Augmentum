@@ -8,7 +8,7 @@ namespace ag {
 
 namespace Math {
 
-	int linearInterpolate(float max, float cur, float dt) {
+	float approach(float max, float cur, float dt) {
 		return max * (1 - dt) + cur * dt;
 	}
 

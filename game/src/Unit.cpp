@@ -5,8 +5,10 @@
 #include "game/ExperienceHelper.h"
 #include "game/GameWindow.h"
 #include "game/Databases.h"
-#include "game/util/MathUtil.h"
 #include "game/util/ObjectUtil.h"
+
+#include "util/UtilMath.h"
+#include "util/Vec2.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor and deconstructor
@@ -50,18 +52,18 @@ Unit::Unit(Map* map, float x, float y, Stats s, Stats lvlDiff,
 
 	b2BodyDef bdf;
 	bdf.type = b2_dynamicBody;
-	bdf.position.Set(MathUtil::toB2(x), MathUtil::toB2(y));
+	bdf.position.Set(ag::Math::toB2(x), ag::Math::toB2(y));
 	bdf.angle = 0; // Radians
 	bdf.fixedRotation = true; // Prevent rotaton
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
-	std::vector<b2Vec2> points = MathUtil::generatePolygon(sides, size);
+	std::vector<ag::Vec2f> points = ag::Math::generatePolygon(sides, size);
 
 	// Convert the points into B2's scale
 	std::vector<b2Vec2> b2Points(points.size());
 	for (unsigned int i = 0; i < points.size(); ++i) {
 		b2Points[i] =
-			b2Vec2(MathUtil::toB2(points[i].x), MathUtil::toB2(points[i].y));
+			b2Vec2(ag::Math::toB2(points[i].x), ag::Math::toB2(points[i].y));
 	}
 	b2PolygonShape ps;
 	ps.Set(&b2Points[0], points.size());
@@ -156,7 +158,7 @@ void Unit::setVelocity(float x, float y) {
 
 	// The speed stat isn't scaled to Box2D because the movement is noticed
 	// in the game scale, so scaling down the speed would be very noticable
-	b2Vec2 end(MathUtil::toB2(x) * getSpeed(), MathUtil::toB2(y) * getSpeed());
+	b2Vec2 end(ag::Math::toB2(x) * getSpeed(), ag::Math::toB2(y) * getSpeed());
 	//b2Vec2 end(x * MathUtil::toB2(getSpeed()), y * MathUtil::toB2(getSpeed()));
 
 	// Diff the velocity needs to change to reach the wanted velocity
@@ -166,7 +168,7 @@ void Unit::setVelocity(float x, float y) {
 	// so only bother to apply acceleration and the force if there will be one
 	if (diff.x != 0.0f || diff.y != 0.0f) {
 		// The accel stat is a percent increase
-		diff *= (1 + MathUtil::toB2(getAccel()));
+		diff *= (1 + ag::Math::toB2(getAccel()));
 		_b2Box->ApplyLinearImpulseToCenter(diff, true);
 	}
 }

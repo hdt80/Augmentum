@@ -5,9 +5,10 @@
 #include "game/GameWindow.h"
 #include "game/Game.h"
 #include "game/Databases.h"
-#include "game/util/MathUtil.h"
 
 #include "logger/Logger.h"
+
+#include "util/UtilMath.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -27,8 +28,8 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 
 	// Set the angle we move at towards the enemy
 	_direction = (Vector2(t->getX(), t->getY()) - Vector2(x, y)).normalize();
-	_direction.X = MathUtil::toB2(_direction.X);
-	_direction.Y = MathUtil::toB2(_direction.Y);
+	_direction.X = ag::Math::toB2(_direction.X);
+	_direction.Y = ag::Math::toB2(_direction.Y);
 
 	_shape.setFillColor(_color);
 	_shape.setOutlineColor(sf::Color::Black);
@@ -42,13 +43,13 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 
 	b2BodyDef bdf;
 	bdf.type = b2_dynamicBody;
-	bdf.position.Set(MathUtil::toB2(x), MathUtil::toB2(y));
+	bdf.position.Set(ag::Math::toB2(x), ag::Math::toB2(y));
 	bdf.angle = 0; // Radians
 	_b2Box = _map->getWorld()->CreateBody(&bdf);
 
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);
-	cs.m_radius = MathUtil::toB2(size / 2);
+	cs.m_radius = ag::Math::toB2(size / 2);
 
 	b2FixtureDef fd;
 	fd.shape = &cs;
@@ -61,7 +62,7 @@ Projectile::Projectile(Map* map, int size, Target* t, Unit* shoot, sf::Color c)
 		_b2Box->SetUserData(this);
 	}
 
-	float speed = MathUtil::toB2(getSpeed());
+	float speed = ag::Math::toB2(getSpeed());
 	setVelocity(_direction.X * speed, _direction.Y * speed);
 }
 
@@ -82,7 +83,7 @@ void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void Projectile::onCollision(Object* o) {
 	o->onProjectileHit(this);
 
-	float angle = MathUtil::radToDeg((-_direction).angle());
+	float angle = ag::Math::radToDeg((-_direction).angle());
 
 	GameWindow::Emitter.emit(&Databases::ParticleDefs.get("hit"),
 		getX(), getY(), 50, angle);

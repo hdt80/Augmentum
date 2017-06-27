@@ -3,9 +3,10 @@
 #include "game/gui/GuiButton.h"
 #include "game/Window.h"
 #include "game/Game.h"
-#include "game/util/StringUtil.h"
 
 #include "logger/Logger.h"
+
+#include "util/UtilString.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ctor and dtor

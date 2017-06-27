@@ -42,43 +42,76 @@ CXX_WARNS += -Wall -Wextra -Wno-unused-parameter -Wno-format -Wno-varargs \
 # 		The files in include are copies to ../lib/include/ before compiliation
 CXX_INCLUDES += -I../lib/include/
 
-# Libraries to link against
+# Libraries to link against. Libraries provided by the system go before the line
+# break, while user libraries come after
 CXX_LIBS += -llua -ldl -lsfml-graphics -lsfml-window -lsfml-system \
 			-L../lib -lAG-Logger -lAG-Lua -lAG-Util -lBox2D
 
 # Flags used to compile .cpp files
 CXX_FLAGS += $(CXX_WARNS) -c -g -O2 $(CXX_INCLUDES) -std=c++14
 
+################################################################################
+### Targets
+################################################################################
+
+################################################################################
 # Compiling all the .cpp files into .o files
+################################################################################
 $(OBJS): $(BUILDDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CXX) $(CXX_FLAGS) -o "$@" "$<"
 
-# Building the program and copying all the headers into the lib include folder
+################################################################################
+# Build the program completely, generating an executable and copying the header
+# files into the correct location. The copy must be done first as compile
+# depends on the header files placed by copy. compile does not call copy as the
+# special variable $^ will match copy if it is a target
+################################################################################
 .PHONY: build
-build: $(OBJS)
+build: copy compile
+
+################################################################################
+# Link the program all together, using the object files created from $(OBJS)
+################################################################################
+.PHONY: compile
+compile: $(OBJS)
 	$(CXX) $^ $(CXX_LIBS) -o ./$(EXEDIR)/$(OUTPUT_NAME)
 
-# Copy the header files into the ../lib/include/ folder
+################################################################################
+# Copy the headers used to compile into ../lib/include, where all the includes
+# are located at. When compiling, the include/ folder will not be used,
+# ../lib/include/ will be used instead. This is to ensure consistent header 
+# files across all libraries
+################################################################################
 .PHONY: copy
 copy:
+	find ../lib/include/game/ -type f -name \*.h -exec rm {} +
 	cp -r $(INCLUDEDIR)/* ../lib/include/game/
 
-# Running the program
+################################################################################
+# Run the program
+################################################################################
 .PHONY: run
 run:
 	./$(EXEDIR)/$(OUTPUT_NAME)
 
-# Run test program in gdb
+################################################################################
+# Run program in gdb
+################################################################################
 .PHONY: debug
 debug:
 	gdb ./$(EXEDIR)/$(OUTPUT_NAME)
 
-# Run the test program in valgrind
+################################################################################
+# Run the program in valgrind
+################################################################################
 .PHONY: val
 val:
 	valgrind ./$(EXEDIR)/$(OUTPUT_NAME)
 	
-# Cleaning everything up
+################################################################################
+# Clean all the files created during building. This is done by calling the
+# makefile for the proper environment
+################################################################################
 .PHONY: clean
 clean:
 	$(MAKE) -f makefile.$(ARCH) clean

@@ -3,7 +3,8 @@
 #include "game/Object.h"
 #include "game/Unit.h"
 #include "game/Map.h"
-#include "game/util/StringUtil.h"
+
+#include "util/UtilString.h"
 
 #include "logger/Logger.h"
 
@@ -28,7 +29,7 @@ Perk::Perk(const std::string& name, Stats s, float dur, bool lua, int maxStacks)
 
 Perk::Perk(const Perk& perk)
 	: _name(perk._name), _attached(perk._attached), _stats(perk._stats),
-		_duration(perk._duration), _maxDuration(perk._maxDuration), 
+		_duration(perk._duration), _maxDuration(perk._maxDuration),
 		_stacks(perk._stacks), _maxStacks(perk._maxStacks),
 		_stackable(perk._stackable), _toRemove(perk._toRemove) {
 	
@@ -76,8 +77,8 @@ void Perk::update(int diff) {
 ///////////////////////////////////////////////////////////////////////////////
 
 std::string Perk::getTitle() const {
-	return (getName() + "(" + StringUtil::toString(getStacks()) + "/" +
-		StringUtil::toString(getMaxStacks()) + ")");
+	return (getName() + "(" + ag::String::toString(getStacks()) + "/" +
+		ag::String::toString(getMaxStacks()) + ")");
 }
 
 void Perk::setStacks(int c) {

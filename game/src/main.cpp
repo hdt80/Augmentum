@@ -1,8 +1,10 @@
 #include "game/Game.h"
 
-#include "game/util/StringUtil.h"
-
 #include "logger/Logger.h"
+
+#include "util/UtilFile.h"
+#include "util/UtilString.h"
+#include "util/UtilRandom.h"
 
 #include <Box2D/Box2D.h>
 
@@ -36,12 +38,12 @@ int main(int argc, char** argv) {
 #	endif // _WIN32
 
 	// Seed the rng from the current time
-	srand(time(0));
+	ag::Random::Seed(time(0));
 
 	AG_INFO("Box2D version: %d.%d.%d",
 		b2_version.major, b2_version.minor, b2_version.revision);
 
-	AG_INFO("Running from: %s", StringUtil::getWorkingDir().c_str());
+	AG_INFO("Running from: %s", ag::File::getCurrentWorkingDir().c_str());
 
 	// Start the game
    	Game::start();

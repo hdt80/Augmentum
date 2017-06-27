@@ -3,8 +3,10 @@
 #include "game/Map.h"
 #include "game/GameWindow.h"
 #include "game/Databases.h"
-#include "game/util/Random.h"
-#include "game/util/MathUtil.h"
+
+#include "util/UtilRandom.h"
+#include "util/UtilMath.h"
+#include "util/Vec2.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Asteroid ctor and dtor
@@ -29,13 +31,14 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 
 	b2BodyDef bdf;
 	bdf.type = b2_dynamicBody;
-	bdf.position.Set(MathUtil::toB2(x), MathUtil::toB2(y));
-	bdf.angle = Random::randFloat(0, MathUtil::PI); // Radians
+	bdf.position.Set(ag::Math::toB2(x), ag::Math::toB2(y));
+	bdf.angle = ag::Random::randFloat(0, ag::Math::PI); // Radians
 
 	_b2Box = map->getWorld()->CreateBody(&bdf);
 
 	// Get the verticies that define this Asteroid
-	std::vector<b2Vec2> points = MathUtil::generateConvexPolygon(8, maxRadius);
+	std::vector<ag::Vec2f> points =
+		ag::Math::generateConvexPolygon(8, maxRadius);
 
 	// Because I request an 8 sides convex polygon, but I'm not guaranteed to
 	// get one I use points.size() to determine the size of the rest of the
@@ -46,7 +49,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	for (unsigned int i = 0; i < points.size(); ++i) {
 		// Scale all the points to the scale Box2D uses
 		b2Points[i] =
-			b2Vec2(MathUtil::toB2(points[i].x), MathUtil::toB2(points[i].y));
+			b2Vec2(ag::Math::toB2(points[i].x), ag::Math::toB2(points[i].y));
 	}
 
 	b2PolygonShape pShape;
@@ -67,7 +70,7 @@ Asteroid::Asteroid(Map* map, float x, float y, float maxRadius)
 	_conShape.setOutlineColor(sf::Color::Black);
 	_conShape.setOutlineThickness(-3.0f);
 	_conShape.setFillColor(sf::Color(96, 96, 96));
-	_conShape.setRotation(MathUtil::radToDeg(bdf.angle));
+	_conShape.setRotation(ag::Math::radToDeg(bdf.angle));
 
 	setObjectType(ObjectType::BOUNDARY);
 
@@ -94,7 +97,7 @@ void Asteroid::updatePosition(float x, float y) {
 
 void Asteroid::setVelocity(float x, float y) {
 	// Don't bother accelerating to the velocity
-	_b2Box->SetLinearVelocity(b2Vec2(MathUtil::toB2(x), MathUtil::toB2(y)));
+	_b2Box->SetLinearVelocity(b2Vec2(ag::Math::toB2(x), ag::Math::toB2(y)));
 }
 
 void Asteroid::setDrift(const Vector2& drift) {

@@ -5,10 +5,11 @@
 #include "game/Target.h"
 #include "game/Perk.h"
 #include "game/BitWise.h"
-#include "game/util/MathUtil.h"
-#include "game/util/StringUtil.h"
 
 #include "logger/Logger.h"
+
+#include "util/UtilMath.h"
+#include "util/UtilString.h"
 
 #include <string>
 #include <algorithm>
@@ -130,26 +131,26 @@ void Object::setVelocity(float x, float y) {
 }
 
 Vector2 Object::getVelocity() const {
-	return Vector2(MathUtil::fromB2(_b2Box->GetLinearVelocity().x),
-		MathUtil::fromB2(_b2Box->GetLinearVelocity().y));
+	return Vector2(ag::Math::fromB2(_b2Box->GetLinearVelocity().x),
+		ag::Math::fromB2(_b2Box->GetLinearVelocity().y));
 }
 
 void Object::setPosition(float x, float y) {
 	if (!_b2Box) {
 		return;
 	}
-	_b2Box->SetTransform(b2Vec2(MathUtil::toB2(x), MathUtil::toB2(y)),
+	_b2Box->SetTransform(b2Vec2(ag::Math::toB2(x), ag::Math::toB2(y)),
 		_b2Box->GetAngle());
 
 	updatePosition(x, y);
 }
 
 float Object::getX() const {
-	return MathUtil::fromB2(_b2Box->GetPosition().x);
+	return ag::Math::fromB2(_b2Box->GetPosition().x);
 }
 
 float Object::getY() const {
-	return MathUtil::fromB2(_b2Box->GetPosition().y);
+	return ag::Math::fromB2(_b2Box->GetPosition().y);
 }
 
 void Object::updatePosition(float x, float y) {
@@ -183,7 +184,7 @@ bool Object::hasCollision(Object* o) const {
 
 bool Object::contains(float px, float py) const {
 	// Use the correct scale
-	b2Vec2 vec(MathUtil::toB2(px), MathUtil::toB2(py));
+	b2Vec2 vec(ag::Math::toB2(px), ag::Math::toB2(py));
 	for (b2Fixture* fix = _b2Box->GetFixtureList(); fix; fix = fix->GetNext()) {
 		if (fix->TestPoint(vec)) {
 			return true;
